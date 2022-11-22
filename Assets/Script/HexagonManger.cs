@@ -29,9 +29,9 @@ public class HexagonManger : StrixBehaviour
         
     }
 
-    public Vector2 GetMapPos(MapIndex index) {
+    public Vector3 GetMapPos(MapIndex index) {
         Vector3 pos = map[index.y, index.x].transform.position;
-        return new Vector2(pos.x, pos.y);
+        return pos;
 
     }
 
