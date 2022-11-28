@@ -77,4 +77,6 @@ public class Hexagon : MonoBehaviour
 
     public MapIndex GetMapIndex() { return new MapIndex(index.x,index.y); }
 
+    public void SetMapindex(int X, int Y) { index.x = X; index.y = Y; }
+
 }
