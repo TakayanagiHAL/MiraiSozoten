@@ -109,4 +109,7 @@ public class Hexagon : MonoBehaviour
         GetComponent<SpriteRenderer>().sprite = useSprites.GetSprite(hexagonType);
     }
 
+    public void SetMapindex(int X, int Y) { index.x = X; index.y = Y; }
+
+
 }
