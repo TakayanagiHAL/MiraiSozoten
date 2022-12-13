@@ -4,7 +4,14 @@ using UnityEngine;
 
 public class PlayerState
 {
-    public virtual void TurnInit(Player player) { }
+    protected HexagonManger hexagonManger;
+
+    protected TurnContllor turnContllor;
+
+    public virtual void TurnInit(Player player, HexagonManger hexagon, TurnContllor turn) {
+        hexagonManger = hexagon;
+        turnContllor = turn;
+    }
 
     public virtual void TurnUpdate(Player player) { }
 }
