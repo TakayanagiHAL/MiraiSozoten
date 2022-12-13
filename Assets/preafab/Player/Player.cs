@@ -9,6 +9,17 @@ using SoftGear.Strix.Client.Core;
 [System.Serializable]
 public struct SeaResource
 {
+    public static SeaResource operator +(SeaResource a, SeaResource b)
+    {
+        b.plastic += a.plastic;
+        b.ePlastic += a.ePlastic;
+        b.wood += a.wood;
+        b.steel += a.steel;
+        b.seaFood += a.seaFood;
+
+        return b;
+    }
+
     public int plastic;
     public int ePlastic;
     public int wood;
@@ -47,13 +58,6 @@ public class Player : StrixBehaviour
     public SeaResource seaResource;
 
     //ì‡ïîÉpÉâÉÅÅ[É^
-    [SerializeField] Text scoreUI;
-    public Text diceUI;
-
-    [StrixSyncField]
-    public int moveVol;
-
-    public Canvas comandCanvas;
 
     [StrixSyncField]
     public TurnState nowState;
@@ -65,13 +69,13 @@ public class Player : StrixBehaviour
 
     TurnContllor turnContllor;
 
+    UIManager uiManager;
+
     [StrixSyncField]
     public int turnNum;
 
     [StrixSyncField]
     public bool isTurn;
-
-    public MapIndex[] movePoints;
 
     PlayerState playerState;
 
@@ -106,6 +110,8 @@ public class Player : StrixBehaviour
         seaResource.seaFood = 0;
         seaResource.steel = 15;
         seaResource.wood = 45;
+
+        FindObjectOfType<ResourceUI>().SetResource(seaResource);
     }
 
     // Update is called once per frame
@@ -119,11 +125,11 @@ public class Player : StrixBehaviour
             {
                 case TurnState.PLAYER_MOVE:
                     playerState = new MoveState();
-                    playerState.TurnInit(this,hexagonManger,turnContllor);
+                    playerState.TurnInit(this,hexagonManger,turnContllor,uiManager);
                     break;
                 case TurnState.SELECT_COMAND:
                     playerState = new CommandState();
-                    playerState.TurnInit(this, hexagonManger, turnContllor);
+                    playerState.TurnInit(this, hexagonManger, turnContllor,uiManager);
                     break;
             }
             nowState = nextState;
@@ -140,6 +146,8 @@ public class Player : StrixBehaviour
 
         turnContllor = FindObjectOfType<TurnContllor>();
 
+        uiManager = FindObjectOfType<UIManager>();
+
         nowState = TurnState.TURN_WAIT;
         nextState = TurnState.TURN_WAIT;
 
@@ -147,7 +155,6 @@ public class Player : StrixBehaviour
 
         playerPos.x = 0;
         playerPos.y = 0;
-        moveVol = -1;
     }
 
     public void CallRPCOwner(RpcFunctionName fName,params object[] param)
