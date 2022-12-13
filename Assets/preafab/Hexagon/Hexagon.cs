@@ -1,4 +1,5 @@
 using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -37,17 +38,43 @@ class HexagonMethod
     public virtual void OnReach(Player player) { }
 }
 
+[Serializable]
+public struct HexagonSpritePair
+{
+    public HexagonType hexagonType;
+    public Sprite sprite;
+}
+
+[Serializable]
+public class HexagonSpriteDictionary
+{
+    public List<HexagonSpritePair> keyValuePairs;
+
+    public Sprite GetSprite(HexagonType type)
+    {
+        for(int i = 0; i < keyValuePairs.Count; i++)
+        {
+            if(type == keyValuePairs[i].hexagonType)
+            {
+                return keyValuePairs[i].sprite;
+            }
+        }
+        return null;
+    }
+}
+
 
 public class Hexagon : MonoBehaviour
 {
 
     [SerializeField] MapIndex index;
-    [SerializeField] HexagonType squareType;
+    [SerializeField] HexagonType hexagonType;
+    [SerializeField] HexagonSpriteDictionary useSprites;
     HexagonMethod hexagonMethod;
     // Start is called before the first frame update
     void Start()
     {
-        switch (squareType)
+        switch (hexagonType)
         {
             case HexagonType.COAST:
                 hexagonMethod = new CoastHexagon();
@@ -76,5 +103,13 @@ public class Hexagon : MonoBehaviour
     public void OnReach(Player player) { hexagonMethod.OnReach(player); }
 
     public MapIndex GetMapIndex() { return new MapIndex(index.x,index.y); }
+
+    public void SetSprite()
+    {
+        GetComponent<SpriteRenderer>().sprite = useSprites.GetSprite(hexagonType);
+    }
+
+    public void SetMapindex(int X, int Y) { index.x = X; index.y = Y; }
+
 
 }

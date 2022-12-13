@@ -9,11 +9,11 @@ using SoftGear.Strix.Client.Core;
 [System.Serializable]
 public struct SeaResource
 {
-    public float plastic;
-    public float ePlastic;
-    public float wood;
-    public float steel;
-    public float seaFood;
+    public int plastic;
+    public int ePlastic;
+    public int wood;
+    public int steel;
+    public int seaFood;
 }
 
 public class Player : StrixBehaviour
@@ -21,14 +21,26 @@ public class Player : StrixBehaviour
     //表示パラメータ
     string playerName;
     [StrixSyncField]
-    public float money = 1000;
+    public int money = 1000;
     [StrixSyncField]
     int shipLevel;
-    public MapIndex playerPos;
-    int speed;
 
-    float resourceStack = 1200;
-    float getPower = 100;
+    public List<Item> items;
+    public MapIndex playerPos;
+    public int speed = 1;
+
+    public int resourceStack = 1200;
+    int getPower = 100;
+
+    int getDepth;
+    int searchPower;
+
+    //クラフト対象
+    int dieselEngine;
+    int shipBody;
+    int whaleMouse;
+    int crane;
+    int sonar;
 
     //資源
     [StrixSyncField]
@@ -36,7 +48,7 @@ public class Player : StrixBehaviour
 
     //内部パラメータ
     [SerializeField] Text scoreUI;
-    [SerializeField] Text diceUI;
+    public Text diceUI;
 
     [StrixSyncField]
     public int moveVol;
@@ -51,7 +63,7 @@ public class Player : StrixBehaviour
 
     HexagonManger hexagonManger;
 
-    public TurnContllor turnContllor;
+    TurnContllor turnContllor;
 
     [StrixSyncField]
     public int turnNum;
@@ -59,7 +71,7 @@ public class Player : StrixBehaviour
     [StrixSyncField]
     public bool isTurn;
 
-    MapIndex[] movePoints;
+    public MapIndex[] movePoints;
 
     PlayerState playerState;
 
@@ -72,9 +84,6 @@ public class Player : StrixBehaviour
     public enum RpcFunctionName
     {
         INIT_PLAYER,
-        TRHOW_DICE,
-        MOVE_HEXAGON,
-        GET_MOVE_SCORES,
         SET_TURN,
         SET_WAIT,
         SET_MOVE_STATE,
@@ -84,9 +93,6 @@ public class Player : StrixBehaviour
     Dictionary<RpcFunctionName, string> rpcFunctions = new Dictionary<RpcFunctionName, string>()
     {
         {RpcFunctionName.INIT_PLAYER , "Init"},
-        {RpcFunctionName.TRHOW_DICE , "ThrowDice"},
-        {RpcFunctionName.MOVE_HEXAGON , "MoveHexagon"},
-        {RpcFunctionName.GET_MOVE_SCORES , "GetMoveScores"},
         {RpcFunctionName.SET_TURN, "SetTurn"},
         { RpcFunctionName.SET_WAIT, "SetWait"},
         {RpcFunctionName.SET_MOVE_STATE, "SetMoveState"},
@@ -113,11 +119,11 @@ public class Player : StrixBehaviour
             {
                 case TurnState.PLAYER_MOVE:
                     playerState = new MoveState();
-                    playerState.TurnInit(this);
+                    playerState.TurnInit(this,hexagonManger,turnContllor);
                     break;
                 case TurnState.SELECT_COMAND:
                     playerState = new CommandState();
-                    playerState.TurnInit(this);
+                    playerState.TurnInit(this, hexagonManger, turnContllor);
                     break;
             }
             nowState = nextState;
@@ -169,271 +175,6 @@ public class Player : StrixBehaviour
     {
         RpcToRoomOwner(rpcFunctions[fName], param);
         Debug.Log(fName + "Called");
-    }
-
-    public void SetTurnPlayer(bool turn)
-    {
-        if (turn)
-        {
-
-        }
-        else
-        {
-
-        }
-    }
-
-    int GetLStickAllow()
-    {
-        int allow = 5;
-
-        if (Gamepad.current == null) return 0;
-        if (Gamepad.current.bButton.wasPressedThisFrame)
-        {
-
-
-            if (Gamepad.current.leftStick.y.ReadValue() > 0.1)
-            {
-                allow += 3;
-            }
-            else if (Gamepad.current.leftStick.y.ReadValue() < -0.1)
-            {
-                allow -= 3;
-            }
-
-            if (Gamepad.current.leftStick.x.ReadValue() > 0.25)
-            {
-                allow += 1;
-            }
-            else if (Gamepad.current.leftStick.x.ReadValue() < -0.25)
-            {
-                allow -= 1;
-            }
-        }
-        return allow;
-    }
-
-    [StrixRpc]
-    public void ThrowDice()
-    {
-        moveVol = Random.RandomRange(1, 6);
-
-        movePoints = new MapIndex[moveVol];
-    }
-
-    [StrixRpc]
-    public void MoveHexagon()
-    {
-        MapIndex mapScale = hexagonManger.GetMapScale();
-
-        int newPos;
-
-        if (Input.GetKeyDown(KeyCode.W))
-        {
-            newPos = playerPos.y - 1;
-            if (newPos >= 0)
-            {
-                playerPos.y = newPos;
-                moveVol--;
-                movePoints[moveVol] = playerPos;
-            }
-        }
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            newPos = playerPos.x - 1;
-            if (newPos >= 0)
-            {
-                playerPos.x = newPos;
-                moveVol--;
-                movePoints[moveVol] = playerPos;
-            }
-        }
-        if (Input.GetKeyDown(KeyCode.S))
-        {
-            newPos = playerPos.y + 1;
-            if (newPos < mapScale.y)
-            {
-                playerPos.y = newPos;
-                moveVol--;
-                movePoints[moveVol] = playerPos;
-            }
-        }
-        if (Input.GetKeyDown(KeyCode.D))
-        {
-            newPos = playerPos.x + 1;
-            if (newPos < mapScale.x)
-            {
-                playerPos.x = newPos;
-                moveVol--;
-                movePoints[moveVol] = playerPos;
-            }
-        }
-        int allow = GetLStickAllow();
-
-        Debug.Log("Allow:" + allow);
-        
-        switch (allow)
-        {
-            case 1:
-                if ((playerPos.x % 2) == 0)
-                {
-                    newPos = playerPos.x - 1;
-                    if (newPos >= 0)
-                    {
-                        playerPos.x = newPos;
-                        moveVol--;
-                        movePoints[moveVol] = playerPos;
-                    }
-                }
-                else
-                {
-                    newPos = playerPos.y + 1;
-                    if (newPos < mapScale.y)
-                    {
-                        newPos = playerPos.x - 1;
-                        if (newPos >= 0)
-                        {
-                            playerPos.x = newPos;
-                            playerPos.y += 1;
-                            moveVol--;
-                            movePoints[moveVol] = playerPos;
-                        }
-                    }
-                }
-                break;
-            case 2:
-                newPos = playerPos.y + 1;
-                if (newPos < mapScale.y)
-                {
-                    playerPos.y = newPos;
-                    moveVol--;
-                    movePoints[moveVol] = playerPos;
-                }
-                break;
-            case 3:
-                if ((playerPos.x % 2) == 0)
-                {
-                    newPos = playerPos.x + 1;
-                    if (newPos < mapScale.x)
-                    {
-                        playerPos.x = newPos;
-                        moveVol--;
-                        movePoints[moveVol] = playerPos;
-                    }
-                }
-                else
-                {
-                    newPos = playerPos.y + 1;
-                    if (newPos < mapScale.y)
-                    {
-                        newPos = playerPos.x + 1;
-                        if (newPos < mapScale.x)
-                        {
-                            playerPos.x = newPos;
-                            playerPos.y += 1;
-                            moveVol--;
-                            movePoints[moveVol] = playerPos;
-                        }
-                    }
-                }
-                break;
-            case 7:
-                if ((playerPos.x % 2) == 0)
-                {
-                    newPos = playerPos.y - 1;
-                    if (newPos >= 0)
-                    {
-                        newPos = playerPos.x - 1;
-                        if (newPos >= 0)
-                        {
-                            playerPos.x = newPos;
-                            playerPos.y -= 1;
-                            moveVol--;
-                            movePoints[moveVol] = playerPos;
-                        }
-                    }
-                }
-                else
-                {
-                    newPos = playerPos.x - 1;
-                    if (newPos >= 0)
-                    {
-                        playerPos.x = newPos;
-                        moveVol--;
-                        movePoints[moveVol] = playerPos;
-                    }
-                }
-                break;
-            case 8:
-                newPos = playerPos.y - 1;
-                if (newPos >= 0)
-                {
-                    playerPos.y = newPos;
-                    moveVol--;
-                    movePoints[moveVol] = playerPos;
-                }
-                break;
-            case 9:
-                if ((playerPos.x % 2) == 0)
-                {
-                    newPos = playerPos.y - 1;
-                    if (newPos >= 0)
-                    {
-                        newPos = playerPos.x + 1;
-                        if (newPos < mapScale.x)
-                        {
-                            playerPos.x = newPos;
-                            playerPos.y -= 1;
-                            moveVol--;
-                            movePoints[moveVol] = playerPos;
-                        }
-                    }
-                }
-                else
-                {
-                    newPos = playerPos.x + 1;
-                    if (newPos < mapScale.x)
-                    {
-                        playerPos.x = newPos;
-                        moveVol--;
-                        movePoints[moveVol] = playerPos;
-                    }
-                }
-                break;
-
-        }
-
-
-
-        diceUI.text = moveVol.ToString();
-
-        Vector2 pos = hexagonManger.GetMapPos(playerPos);
-
-        transform.position = new Vector3(pos.x, pos.y, 0);
-    }
-
-    [StrixRpc]
-    public void GetMoveScores()
-    {
-        Hexagon hexagon;
-        for (int i = 0; i < movePoints.Length; i++)
-        {
-            hexagon = hexagonManger.GetHexagon(movePoints[i]);
-            hexagon.OnPassage(this);
-        }
-
-        seaResource.plastic += 0.45f * 100 * getRVol;
-        seaResource.ePlastic += 0.25f * 100 * getRVol;
-        seaResource.wood += 0.15f * 100 * getRVol;
-        seaResource.steel += 0.05f * 100 * getRVol;
-        seaResource.seaFood += 0.1f * 100 * getRVol;
-
-        getRVol = 0;
-
-        hexagonManger.GetHexagon(playerPos).OnReach(this);
-
-        Debug.Log(seaResource);
-        moveVol = -1;
     }
 
     [StrixRpc]

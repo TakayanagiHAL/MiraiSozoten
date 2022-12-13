@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class CommandState : PlayerState
 {
-    public override void TurnInit(Player player)
+    public override void TurnInit(Player player, HexagonManger hexagon, TurnContllor turn)
     {
+        base.TurnInit(player, hexagon, turn);
         player.nowState = TurnState.SELECT_COMAND;
         player.comandCanvas.gameObject.SetActive(true);
     }
