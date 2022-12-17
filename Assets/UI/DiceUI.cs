@@ -15,6 +15,7 @@ public class DiceUI : MonoBehaviour
     [SerializeField] Text rollDice;
     [SerializeField] Text diceVol;
     [SerializeField] GameObject stopUI;
+    [SerializeField] GameObject rollButton;
 
     MoveSelect isMoveOK = MoveSelect.WAIT;
 
@@ -37,11 +38,13 @@ public class DiceUI : MonoBehaviour
             diceVol.text = "";
 
             stopUI.SetActive(false);
+            rollButton.active = true;
         }
         else if (moveVol > 0)
         {
             diceVol.text = "あと" + moveVol.ToString()　+　"マス" ;
             stopUI.SetActive(false);
+            rollButton.active = false;
         }
         else if(moveVol == 0)
         {

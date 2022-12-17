@@ -25,6 +25,8 @@ class PortHexagon : HexagonMethod
 
         player.money += player.seaResource.seaFood*12;
         player.seaResource.seaFood = 0;
+
+        player.SetWait();
     }
 }
 

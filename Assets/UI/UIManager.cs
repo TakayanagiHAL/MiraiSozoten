@@ -11,7 +11,8 @@ public enum CanvasName
     RESOURCE_UI,
     COMMAND_UI,
     DICE_UI,
-    R_EFFECT_UI
+    R_EFFECT_UI,
+    HAPPNING_UI
 }
 
 [Serializable]

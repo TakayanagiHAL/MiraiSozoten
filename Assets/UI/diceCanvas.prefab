@@ -682,6 +682,7 @@ MonoBehaviour:
   rollDice: {fileID: 5507783311460578645}
   diceVol: {fileID: 6015625056497602235}
   stopUI: {fileID: 8026766213306613161}
+  rollButton: {fileID: 1596966528531725047}
 --- !u!1 &4490307580961284877
 GameObject:
   m_ObjectHideFlags: 0

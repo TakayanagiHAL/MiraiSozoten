@@ -4,8 +4,17 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 
+
 public class MoveState : PlayerState
 {
+    enum MState
+    {
+        ROLL_DICE,
+        MOVE_INPUT,
+        MOVING,
+        MOVE_FINISH
+    }
+
     ResourceUI resourceUI;
     ResourceEffectUI effectUI;
     DiceUI diceUI;
@@ -14,7 +23,11 @@ public class MoveState : PlayerState
     int moveVol;
     MapIndex[] movePoints;
 
-    MapIndex[] dice = new MapIndex[]
+    float speed = 0.25f;
+
+    MState state;
+
+     MapIndex[] dice = new MapIndex[]
     {
         new MapIndex(1,6),
         new MapIndex(2,7),
@@ -69,280 +82,308 @@ public class MoveState : PlayerState
 
         moveVol = -1;
         diceUI.SetMoveVol(-1);
+
+        state = MState.ROLL_DICE;
     }
     override public void TurnUpdate(Player player)
     {
-        if (moveVol < 0)
+        Debug.Log(state);
+        switch (state)
         {
-            moveVol = diceUI.GetMoveVol();
+            case MState.ROLL_DICE:
+                moveVol = diceUI.GetMoveVol();
 
-            if (moveVol > 0)
-            {
-                movePoints = new MapIndex[moveVol + 1];
-                movePoints[moveVol] = player.playerPos;
-            }
-        }
-        else if (moveVol == 0)
-        {
-            switch (diceUI.GetMoveOK())
-            {
-                case MoveSelect.NO:
-                    diceUI.SetMoveWAIT();
-                    moveVol = 1;
-                    player.playerPos = movePoints[moveVol];
-                    player.transform.position = hexagonManger.GetMapPos(player.playerPos);
-
-                    diceUI.SetMoveVol(moveVol);
-                    break;
-                case MoveSelect.OK:
-                    Hexagon hexagon;
-                    for (int i = 0; i < movePoints.Length-1; i++)
-                    {
-                        hexagon = hexagonManger.GetHexagon(movePoints[i]);
-                        hexagon.OnPassage(player);
-                    }
-
-                    SeaResource getResource;
-
-                    getResource.plastic = (int)(0.45f * 100 * player.getRVol);
-                    getResource.ePlastic = (int)(0.25f * 100 * player.getRVol);
-                    getResource.wood = (int)(0.15f * 100 * player.getRVol);
-                    getResource.steel = (int)(0.05f * 100 * player.getRVol);
-                    getResource.seaFood = (int)(0.10f * 100 * player.getRVol);
-
-                    player.seaResource = player.seaResource + getResource;
-
-                    player.getRVol = 0;
-
-                    if (player.seaResource.plastic +
-                       player.seaResource.ePlastic +
-                       player.seaResource.wood +
-                       player.seaResource.steel +
-                       player.seaResource.seaFood > player.resourceStack)
-                    {
-                        int nowRVol =
-                        player.seaResource.plastic +
-                        player.seaResource.ePlastic +
-                        player.seaResource.wood +
-                        player.seaResource.steel +
-                        player.seaResource.seaFood;
-
-                        if (nowRVol - player.resourceStack <= player.seaResource.plastic)
-                        {
-                            player.seaResource.plastic -= (nowRVol - player.resourceStack);
-                        }
-                        else
-                        {
-                            player.seaResource.plastic = 0;
-                            nowRVol -= player.seaResource.plastic;
-                            player.seaResource.ePlastic -= (nowRVol - player.resourceStack);
-                        }
-                    }
-
-                    effectUI.SetAction(getResource);
-
-                    resourceUI.SetResource(player.seaResource);
-
-                    hexagonManger.GetHexagon(player.playerPos).OnReach(player);
-
-                    moveVol = -1;
-
-                    turnContllor.SetNextTurnPlayerRPC();
-
-                    player.SetWait();
-
-                    diceUI.SetMoveWAIT();
-
-                    uiManager.SetCanvas(CanvasName.DICE_UI, false);
-                    break;
-            }   
-        }
-        else
-        {
-            MapIndex mapScale = hexagonManger.GetMapScale();
-
-            int newPos;
-
-            if (Input.GetKeyDown(KeyCode.W))
-            {
-                newPos = player.playerPos.y - 1;
-                if (newPos >= 0)
+                if (moveVol > 0)
                 {
-                    player.playerPos.y = newPos;
-                    moveVol--;
+                    movePoints = new MapIndex[moveVol + 1];
                     movePoints[moveVol] = player.playerPos;
-                }
-            }
-            if (Input.GetKeyDown(KeyCode.A))
-            {
-                newPos = player.playerPos.x - 1;
-                if (newPos >= 0)
-                {
-                    player.playerPos.x = newPos;
-                    moveVol--;
-                    movePoints[moveVol] = player.playerPos;
-                }
-            }
-            if (Input.GetKeyDown(KeyCode.S))
-            {
-                newPos = player.playerPos.y + 1;
-                if (newPos < mapScale.y)
-                {
-                    player.playerPos.y = newPos;
-                    moveVol--;
-                    movePoints[moveVol] = player.playerPos;
-                }
-            }
-            if (Input.GetKeyDown(KeyCode.D))
-            {
-                newPos = player.playerPos.x + 1;
-                if (newPos < mapScale.x)
-                {
-                    player.playerPos.x = newPos;
-                    moveVol--;
-                    movePoints[moveVol] = player.playerPos;
-                }
-            }
-            int allow = GetLStickAllow();
+                    state = MState.MOVE_INPUT;
+                }   
+                break;
+            case MState.MOVE_INPUT:
+                MapIndex mapScale = hexagonManger.GetMapScale();
 
-            Debug.Log("Allow:" + allow);
+                int newPos;
 
-            switch (allow)
-            {
-                case 1:
-                    if ((player.playerPos.x % 2) == 0)
-                    {
-                        newPos = player.playerPos.x - 1;
-                        if (newPos >= 0)
-                        {
-                            player.playerPos.x = newPos;
-                            moveVol--;
-                            movePoints[moveVol] = player.playerPos;
-                        }
-                    }
-                    else
-                    {
-                        newPos = player.playerPos.y + 1;
-                        if (newPos < mapScale.y)
-                        {
-                            newPos = player.playerPos.x - 1;
-                            if (newPos >= 0)
-                            {
-                                player.playerPos.x = newPos;
-                                player.playerPos.y += 1;
-                                moveVol--;
-                                movePoints[moveVol] = player.playerPos;
-                            }
-                        }
-                    }
-                    break;
-                case 2:
-                    newPos = player.playerPos.y + 1;
-                    if (newPos < mapScale.y)
-                    {
-                        player.playerPos.y = newPos;
-                        moveVol--;
-                        movePoints[moveVol] = player.playerPos;
-                    }
-                    break;
-                case 3:
-                    if ((player.playerPos.x % 2) == 0)
-                    {
-                        newPos = player.playerPos.x + 1;
-                        if (newPos < mapScale.x)
-                        {
-                            player.playerPos.x = newPos;
-                            moveVol--;
-                            movePoints[moveVol] = player.playerPos;
-                        }
-                    }
-                    else
-                    {
-                        newPos = player.playerPos.y + 1;
-                        if (newPos < mapScale.y)
-                        {
-                            newPos = player.playerPos.x + 1;
-                            if (newPos < mapScale.x)
-                            {
-                                player.playerPos.x = newPos;
-                                player.playerPos.y += 1;
-                                moveVol--;
-                                movePoints[moveVol] = player.playerPos;
-                            }
-                        }
-                    }
-                    break;
-                case 7:
-                    if ((player.playerPos.x % 2) == 0)
-                    {
-                        newPos = player.playerPos.y - 1;
-                        if (newPos >= 0)
-                        {
-                            newPos = player.playerPos.x - 1;
-                            if (newPos >= 0)
-                            {
-                                player.playerPos.x = newPos;
-                                player.playerPos.y -= 1;
-                                moveVol--;
-                                movePoints[moveVol] = player.playerPos;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        newPos = player.playerPos.x - 1;
-                        if (newPos >= 0)
-                        {
-                            player.playerPos.x = newPos;
-                            moveVol--;
-                            movePoints[moveVol] = player.playerPos;
-                        }
-                    }
-                    break;
-                case 8:
+                if (Input.GetKeyDown(KeyCode.W))
+                {
                     newPos = player.playerPos.y - 1;
                     if (newPos >= 0)
                     {
                         player.playerPos.y = newPos;
                         moveVol--;
                         movePoints[moveVol] = player.playerPos;
+                        state = MState.MOVING;
                     }
-                    break;
-                case 9:
-                    if ((player.playerPos.x % 2) == 0)
+                }
+                if (Input.GetKeyDown(KeyCode.A))
+                {
+                    newPos = player.playerPos.x - 1;
+                    if (newPos >= 0)
                     {
-                        newPos = player.playerPos.y - 1;
-                        if (newPos >= 0)
+                        player.playerPos.x = newPos;
+                        moveVol--;
+                        movePoints[moveVol] = player.playerPos;
+                        state = MState.MOVING;
+                    }
+                }
+                if (Input.GetKeyDown(KeyCode.S))
+                {
+                    newPos = player.playerPos.y + 1;
+                    if (newPos < mapScale.y)
+                    {
+                        player.playerPos.y = newPos;
+                        moveVol--;
+                        movePoints[moveVol] = player.playerPos;
+                        state = MState.MOVING;
+                    }
+                }
+                if (Input.GetKeyDown(KeyCode.D))
+                {
+                    newPos = player.playerPos.x + 1;
+                    if (newPos < mapScale.x)
+                    {
+                        player.playerPos.x = newPos;
+                        moveVol--;
+                        movePoints[moveVol] = player.playerPos;
+                        state = MState.MOVING;
+                    }
+                }
+                int allow = GetLStickAllow();
+
+                Debug.Log("Allow:" + allow);
+
+                switch (allow)
+                {
+                    case 1:
+                        if ((player.playerPos.x % 2) == 0)
+                        {
+                            newPos = player.playerPos.x - 1;
+                            if (newPos >= 0)
+                            {
+                                player.playerPos.x = newPos;
+                                moveVol--;
+                                movePoints[moveVol] = player.playerPos;
+                            }
+                        }
+                        else
+                        {
+                            newPos = player.playerPos.y + 1;
+                            if (newPos < mapScale.y)
+                            {
+                                newPos = player.playerPos.x - 1;
+                                if (newPos >= 0)
+                                {
+                                    player.playerPos.x = newPos;
+                                    player.playerPos.y += 1;
+                                    moveVol--;
+                                    movePoints[moveVol] = player.playerPos;
+                                }
+                            }
+                        }
+                        break;
+                    case 2:
+                        newPos = player.playerPos.y + 1;
+                        if (newPos < mapScale.y)
+                        {
+                            player.playerPos.y = newPos;
+                            moveVol--;
+                            movePoints[moveVol] = player.playerPos;
+                        }
+                        break;
+                    case 3:
+                        if ((player.playerPos.x % 2) == 0)
                         {
                             newPos = player.playerPos.x + 1;
                             if (newPos < mapScale.x)
                             {
                                 player.playerPos.x = newPos;
-                                player.playerPos.y -= 1;
                                 moveVol--;
                                 movePoints[moveVol] = player.playerPos;
                             }
                         }
-                    }
-                    else
-                    {
-                        newPos = player.playerPos.x + 1;
-                        if (newPos < mapScale.x)
+                        else
                         {
-                            player.playerPos.x = newPos;
+                            newPos = player.playerPos.y + 1;
+                            if (newPos < mapScale.y)
+                            {
+                                newPos = player.playerPos.x + 1;
+                                if (newPos < mapScale.x)
+                                {
+                                    player.playerPos.x = newPos;
+                                    player.playerPos.y += 1;
+                                    moveVol--;
+                                    movePoints[moveVol] = player.playerPos;
+                                }
+                            }
+                        }
+                        break;
+                    case 7:
+                        if ((player.playerPos.x % 2) == 0)
+                        {
+                            newPos = player.playerPos.y - 1;
+                            if (newPos >= 0)
+                            {
+                                newPos = player.playerPos.x - 1;
+                                if (newPos >= 0)
+                                {
+                                    player.playerPos.x = newPos;
+                                    player.playerPos.y -= 1;
+                                    moveVol--;
+                                    movePoints[moveVol] = player.playerPos;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            newPos = player.playerPos.x - 1;
+                            if (newPos >= 0)
+                            {
+                                player.playerPos.x = newPos;
+                                moveVol--;
+                                movePoints[moveVol] = player.playerPos;
+                            }
+                        }
+                        break;
+                    case 8:
+                        newPos = player.playerPos.y - 1;
+                        if (newPos >= 0)
+                        {
+                            player.playerPos.y = newPos;
                             moveVol--;
                             movePoints[moveVol] = player.playerPos;
                         }
+                        break;
+                    case 9:
+                        if ((player.playerPos.x % 2) == 0)
+                        {
+                            newPos = player.playerPos.y - 1;
+                            if (newPos >= 0)
+                            {
+                                newPos = player.playerPos.x + 1;
+                                if (newPos < mapScale.x)
+                                {
+                                    player.playerPos.x = newPos;
+                                    player.playerPos.y -= 1;
+                                    moveVol--;
+                                    movePoints[moveVol] = player.playerPos;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            newPos = player.playerPos.x + 1;
+                            if (newPos < mapScale.x)
+                            {
+                                player.playerPos.x = newPos;
+                                moveVol--;
+                                movePoints[moveVol] = player.playerPos;
+                            }
+                        }
+                        break;
+                }
+
+                player.transform.LookAt(hexagonManger.GetMapPos(player.playerPos));
+
+                //player.transform.position = hexagonManger.GetMapPos(player.playerPos);
+
+                diceUI.SetMoveVol(moveVol);
+
+                if(allow!=0&&allow!=5) state = MState.MOVING; 
+                break;
+            case MState.MOVING:
+                Vector3 dir = hexagonManger.GetMapPos(player.playerPos) - player.transform.position;
+                player.transform.Translate(dir / dir.magnitude*speed,Space.World);
+
+                if(dir.magnitude < 0.25)
+                {
+                    player.transform.position = hexagonManger.GetMapPos(player.playerPos);
+                    if (moveVol == 0)
+                    {
+                        state = MState.MOVE_FINISH;
                     }
-                    break;
-            }
+                    else
+                    {
+                        state = MState.MOVE_INPUT;
+                    }
+                }
+               
+                break;
+            case MState.MOVE_FINISH:
+                switch (diceUI.GetMoveOK())
+                {
+                    case MoveSelect.NO:
+                        diceUI.SetMoveWAIT();
+                        moveVol = 1;
+                        player.playerPos = movePoints[moveVol];
+                        //player.transform.position = hexagonManger.GetMapPos(player.playerPos);
+                        player.transform.LookAt(hexagonManger.GetMapPos(player.playerPos));
+                        diceUI.SetMoveVol(moveVol);
+                        state = MState.MOVING;
+                        break;
+                    case MoveSelect.OK:
+                        Hexagon hexagon;
+                        for (int i = 0; i < movePoints.Length - 1; i++)
+                        {
+                            hexagon = hexagonManger.GetHexagon(movePoints[i]);
+                            hexagon.OnPassage(player);
+                        }
 
-            player.transform.LookAt(hexagonManger.GetMapPos(player.playerPos));
-            
-            player.transform.position = hexagonManger.GetMapPos(player.playerPos);
+                        SeaResource getResource;
 
-            diceUI.SetMoveVol(moveVol);
+                        getResource.plastic = (int)(0.45f * 100 * player.getRVol);
+                        getResource.ePlastic = (int)(0.25f * 100 * player.getRVol);
+                        getResource.wood = (int)(0.15f * 100 * player.getRVol);
+                        getResource.steel = (int)(0.05f * 100 * player.getRVol);
+                        getResource.seaFood = (int)(0.10f * 100 * player.getRVol);
+
+                        player.seaResource = player.seaResource + getResource;
+
+                        player.getRVol = 0;
+
+                        if (player.seaResource.plastic +
+                           player.seaResource.ePlastic +
+                           player.seaResource.wood +
+                           player.seaResource.steel +
+                           player.seaResource.seaFood > player.resourceStack)
+                        {
+                            int nowRVol =
+                            player.seaResource.plastic +
+                            player.seaResource.ePlastic +
+                            player.seaResource.wood +
+                            player.seaResource.steel +
+                            player.seaResource.seaFood;
+
+                            if (nowRVol - player.resourceStack <= player.seaResource.plastic)
+                            {
+                                player.seaResource.plastic -= (nowRVol - player.resourceStack);
+                            }
+                            else
+                            {
+                                player.seaResource.plastic = 0;
+                                nowRVol -= player.seaResource.plastic;
+                                player.seaResource.ePlastic -= (nowRVol - player.resourceStack);
+                            }
+                        }
+
+                        effectUI.SetAction(getResource);
+
+                        resourceUI.SetResource(player.seaResource);
+
+                        hexagonManger.GetHexagon(player.playerPos).OnReach(player);
+
+                        moveVol = -1;
+
+                        turnContllor.SetNextTurnPlayerRPC();
+
+                        diceUI.SetMoveWAIT();
+
+                        uiManager.SetCanvas(CanvasName.DICE_UI, false);
+                        break;
+                }
+                break; 
         }
+        
 
     }
 

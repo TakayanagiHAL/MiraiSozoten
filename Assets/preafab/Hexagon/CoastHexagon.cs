@@ -10,6 +10,7 @@ using UnityEngine;
     }
 
     public override void OnReach(Player player) {
+        player.SetWait();
     }
 }
 

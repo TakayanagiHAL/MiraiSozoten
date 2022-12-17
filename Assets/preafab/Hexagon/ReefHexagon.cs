@@ -12,6 +12,7 @@ class ReefHexagon : HexagonMethod
 
     public override void OnReach(Player player)
     {
+        player.SetWait();
     }
 }
 

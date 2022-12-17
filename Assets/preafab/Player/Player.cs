@@ -91,16 +91,18 @@ public class Player : StrixBehaviour
         SET_TURN,
         SET_WAIT,
         SET_MOVE_STATE,
-        SET_COMAND_STATE
+        SET_COMAND_STATE,
+        RANDAM_TELEPORT
     }
 
     Dictionary<RpcFunctionName, string> rpcFunctions = new Dictionary<RpcFunctionName, string>()
     {
         {RpcFunctionName.INIT_PLAYER , "Init"},
         {RpcFunctionName.SET_TURN, "SetTurn"},
-        { RpcFunctionName.SET_WAIT, "SetWait"},
+        {RpcFunctionName.SET_WAIT, "SetWait"},
         {RpcFunctionName.SET_MOVE_STATE, "SetMoveState"},
-        {RpcFunctionName.SET_COMAND_STATE , "SetComandState" }
+        {RpcFunctionName.SET_COMAND_STATE , "SetComandState" },
+        {RpcFunctionName.RANDAM_TELEPORT,"RandomTeleport" }
     };
     // Start is called before the first frame update
     void Start()
@@ -155,6 +157,8 @@ public class Player : StrixBehaviour
 
         playerPos.x = 0;
         playerPos.y = 0;
+
+        transform.position = hexagonManger.GetMapPos(playerPos);
     }
 
     public void CallRPCOwner(RpcFunctionName fName,params object[] param)
@@ -211,6 +215,17 @@ public class Player : StrixBehaviour
         nextState = TurnState.SELECT_COMAND;
 
         Debug.Log("SetComandState");
+    }
+
+    [StrixRpc]
+    public void RandomTeleport()
+    {
+        MapIndex mapIndex;
+        mapIndex.x = Random.Range(0, hexagonManger.GetMapScale().x + 1);
+        mapIndex.y = Random.Range(0, hexagonManger.GetMapScale().y + 1);
+
+        playerPos = mapIndex;
+        transform.position = hexagonManger.GetMapPos(mapIndex);
     }
 
     public TurnState GetNextState()
