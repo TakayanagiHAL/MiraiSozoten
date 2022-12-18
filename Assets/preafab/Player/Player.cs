@@ -27,7 +27,7 @@ public class Player : StrixBehaviour
 
     public List<Item> items;
     public MapIndex playerPos;
-    public int speed = 1;
+    int speed;
 
     public int resourceStack = 1200;
     int getPower = 100;

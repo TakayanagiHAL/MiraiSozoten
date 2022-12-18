@@ -28,6 +28,6 @@ public class TemporaryConnectManager : StrixBehaviour
     [StrixRpc]
     public void SceneJumpAllMember()
     {
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(2);
     }
 }

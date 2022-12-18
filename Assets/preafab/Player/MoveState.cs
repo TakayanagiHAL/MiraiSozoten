@@ -3,18 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-
 public class MoveState : PlayerState
 {
-    MapIndex[] dice = new MapIndex[]
-    {
-        new MapIndex(1,6),
-        new MapIndex(2,7),
-        new MapIndex(2,8),
-        new MapIndex(2,9),
-        new MapIndex(2,10),
-        new MapIndex(2,11),
-    };
     int GetLStickAllow()
     {
         int allow = 5;
@@ -55,8 +45,7 @@ public class MoveState : PlayerState
     {
         if (player.moveVol < 0)
         {
-            MapIndex useDice = dice[player.speed/6];
-            player.moveVol = Random.RandomRange(useDice.x, useDice.y);
+            player.moveVol = Random.RandomRange(1, 6);
 
             player.movePoints = new MapIndex[player.moveVol];
         }
