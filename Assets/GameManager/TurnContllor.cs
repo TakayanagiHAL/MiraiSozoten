@@ -9,6 +9,7 @@ public enum TurnState
     TURN_WAIT,
     SELECT_COMAND,
     PLAYER_MOVE,
+    HAPPNING_EVENT
 
 }
 
@@ -17,7 +18,7 @@ public class TurnContllor : StrixBehaviour
 
     HexagonManger hexagonManger;
 
-    [SerializeField] Player[] players;
+    public Player[] players;
 
     [SerializeField] int playerVol;
 
