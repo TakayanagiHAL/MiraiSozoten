@@ -27,6 +27,8 @@ class PortHexagon : HexagonMethod
         player.seaResource.seaFood = 0;
 
         player.SetWait();
+
+        player.turnContllor.SetNextTurnPlayerRPC();
     }
 }
 

@@ -111,3 +111,5 @@ MonoBehaviour:
       sprite: {fileID: 21300000, guid: 3ab1d065a5600ec48a91eb573c2c908c, type: 3}
     - hexagonType: 3
       sprite: {fileID: 21300000, guid: 75842860adc1a3941a1129e3d6c931bf, type: 3}
+    - hexagonType: 4
+      sprite: {fileID: 21300000, guid: b472677b15796e24f855262f0c68b27d, type: 3}

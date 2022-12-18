@@ -44,11 +44,23 @@ public class HappningUI : MonoBehaviour
     {
         state = HappenState.WAIT;
         useHappen = Random.Range(0, 7);
+        useHappen = 0;
         selectUI.active = false;
     }
 
     public int GetHappen()
     {
-        return useHappen;
+        int b = -1;
+        if (useHappen > -1)
+        {
+            b = useHappen;
+            useHappen = -1;
+        }
+        return b;
+    }
+
+    public void SetSelect()
+    {
+        state = HappenState.EVENT_SELECT;
     }
 }

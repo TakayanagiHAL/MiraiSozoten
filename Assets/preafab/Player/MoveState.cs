@@ -326,8 +326,10 @@ public class MoveState : PlayerState
                         for (int i = 0; i < movePoints.Length - 1; i++)
                         {
                             hexagon = hexagonManger.GetHexagon(movePoints[i]);
+
                             hexagon.OnPassage(player);
                         }
+                        
 
                         SeaResource getResource;
 
@@ -374,7 +376,7 @@ public class MoveState : PlayerState
 
                         moveVol = -1;
 
-                        turnContllor.SetNextTurnPlayerRPC();
+                  
 
                         diceUI.SetMoveWAIT();
 

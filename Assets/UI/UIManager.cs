@@ -48,6 +48,7 @@ public class UIManager : MonoBehaviour
     void Start()
     {
         SetCanvas(CanvasName.DICE_UI, false);
+        SetCanvas(CanvasName.HAPPNING_UI, false);
     }
 
     // Update is called once per frame
