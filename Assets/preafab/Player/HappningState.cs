@@ -48,10 +48,8 @@ public class HappningState : PlayerState
                 switch(useHappning)
                 {
                     case 0:
-                        turnContllor.players[0/*Random.Range(0, 5)*/].CallRPCOwner(Player.RpcFunctionName.RANDAM_TELEPORT);
-                        player.SetWait();
+                        turnContllor.players[0/*Random.Range(0, 5)*/].CallRPCOwner(Player.RpcFunctionName.START_TORNADE);
                         uiManager.SetCanvas(CanvasName.HAPPNING_UI, false);
-                        turnContllor.SetNextTurnPlayerRPC();
                         happningUI.SetSelect();
                         break;
                      case 1:

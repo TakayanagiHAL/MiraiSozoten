@@ -162,7 +162,8 @@ public class Player : StrixBehaviour
         SET_WAIT,
         SET_MOVE_STATE,
         SET_COMAND_STATE,
-        RANDAM_TELEPORT
+        RANDAM_TELEPORT,
+        START_TORNADE
     }
 
     Dictionary<RpcFunctionName, string> rpcFunctions = new Dictionary<RpcFunctionName, string>()
@@ -172,7 +173,8 @@ public class Player : StrixBehaviour
         {RpcFunctionName.SET_WAIT, "SetWait"},
         {RpcFunctionName.SET_MOVE_STATE, "SetMoveState"},
         {RpcFunctionName.SET_COMAND_STATE , "SetComandState" },
-        {RpcFunctionName.RANDAM_TELEPORT,"RandomTeleport" }
+        {RpcFunctionName.RANDAM_TELEPORT,"RandomTeleport" },
+        {RpcFunctionName.START_TORNADE,"StartTornade" }
     };
     // Start is called before the first frame update
     void Start()
@@ -318,5 +320,22 @@ public class Player : StrixBehaviour
 
         seaResource = seaResource + add;
         seaResource.SetNoraml(resourceStack);
+    }
+
+    public void SetNextPlayer()
+    {
+        SetWait();
+        turnContllor.SetNextTurnPlayerRPC();
+    }
+
+    [StrixRpc]
+    public void StartTornade()
+    {
+        GetComponent<Animator>().SetBool("isTornade",true);
+    }
+
+    public void StopTornade()
+    {
+        GetComponent<Animator>().SetBool("isTornade", false);
     }
 }
