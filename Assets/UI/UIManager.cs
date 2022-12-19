@@ -12,7 +12,7 @@ public enum CanvasName
     COMMAND_UI,
     DICE_UI,
     R_EFFECT_UI,
-    HAPPNING_UI
+    HAPPNING_UI,
 }
 
 [Serializable]
