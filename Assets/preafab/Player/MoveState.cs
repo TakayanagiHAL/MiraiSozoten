@@ -18,7 +18,7 @@ public class MoveState : PlayerState
     ResourceUI resourceUI;
     ResourceEffectUI effectUI;
     DiceUI diceUI;
-
+    ScoreUI scoreUI;
     MapIndex useDice;
     int moveVol;
     MapIndex[] movePoints;
@@ -76,6 +76,7 @@ public class MoveState : PlayerState
         resourceUI = uiManager.GetCanvasObject(CanvasName.RESOURCE_UI).GetComponent<ResourceUI>();
         diceUI = uiManager.GetCanvasObject(CanvasName.DICE_UI).GetComponent<DiceUI>();
         effectUI = uiManager.GetCanvasObject(CanvasName.R_EFFECT_UI).GetComponent<ResourceEffectUI>();
+        scoreUI = uiManager.GetCanvasObject(CanvasName.SCORE_UI).GetComponent<ScoreUI>();
 
         useDice = dice[player.speed / 6];
         diceUI.SetMinMax(useDice.x, useDice.y);
@@ -371,6 +372,9 @@ public class MoveState : PlayerState
                         effectUI.SetAction(getResource);
 
                         resourceUI.SetResource(player.seaResource);
+
+                        scoreUI.SetMoney(player.money);
+                        scoreUI.SetOil(player.seaResource);
 
                         hexagonManger.GetHexagon(player.playerPos).OnReach(player);
 

@@ -572,6 +572,12 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 22
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!223 &600838288 stripped
+Canvas:
+  m_CorrespondingSourceObject: {fileID: 3078970313262422471, guid: 6fc97b5d1811e0a448e2682db43663b1,
+    type: 3}
+  m_PrefabInstance: {fileID: 1204648583}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &607936010
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1205,12 +1211,17 @@ PrefabInstance:
         type: 3}
       propertyPath: canvasDictionary.keyValuePairs.Array.data[4].canvas
       value: 
-      objectReference: {fileID: 1569021720}
+      objectReference: {fileID: 600838288}
     - target: {fileID: 8408353523822349668, guid: 6fc97b5d1811e0a448e2682db43663b1,
         type: 3}
       propertyPath: canvasDictionary.keyValuePairs.Array.data[5].canvas
       value: 
       objectReference: {fileID: 254164027}
+    - target: {fileID: 8408353523822349668, guid: 6fc97b5d1811e0a448e2682db43663b1,
+        type: 3}
+      propertyPath: canvasDictionary.keyValuePairs.Array.data[6].canvas
+      value: 
+      objectReference: {fileID: 1850354531}
     - target: {fileID: 8408353523822349668, guid: 6fc97b5d1811e0a448e2682db43663b1,
         type: 3}
       propertyPath: canvasDictionary.keyValuePairs.Array.data[3].canvasName
@@ -1225,6 +1236,11 @@ PrefabInstance:
         type: 3}
       propertyPath: canvasDictionary.keyValuePairs.Array.data[5].canvasName
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8408353523822349668, guid: 6fc97b5d1811e0a448e2682db43663b1,
+        type: 3}
+      propertyPath: canvasDictionary.keyValuePairs.Array.data[6].canvasName
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6fc97b5d1811e0a448e2682db43663b1, type: 3}
@@ -1618,12 +1634,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8817b2cc8bd205f4f9f493fa08726602, type: 3}
---- !u!223 &1569021720 stripped
-Canvas:
-  m_CorrespondingSourceObject: {fileID: 5258120988451325087, guid: 6fc97b5d1811e0a448e2682db43663b1,
-    type: 3}
-  m_PrefabInstance: {fileID: 1204648583}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1596188216
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1971,6 +1981,12 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 20
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!223 &1850354531 stripped
+Canvas:
+  m_CorrespondingSourceObject: {fileID: 5535205301991486003, guid: 6fc97b5d1811e0a448e2682db43663b1,
+    type: 3}
+  m_PrefabInstance: {fileID: 1204648583}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1901831119
 PrefabInstance:
   m_ObjectHideFlags: 0

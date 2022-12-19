@@ -185,7 +185,15 @@ public class Player : StrixBehaviour
         seaResource.steel = 15;
         seaResource.wood = 45;
 
-        FindObjectOfType<ResourceUI>().SetResource(seaResource);
+        ResourceUI resourceUI =  FindObjectOfType<ResourceUI>();
+
+        ScoreUI scoreUI = FindObjectOfType<ScoreUI>();
+
+        resourceUI.SetResource(seaResource);
+        resourceUI.SetStack(resourceStack);
+
+        scoreUI.SetMoney(money);
+        scoreUI.SetOil(seaResource);
     }
 
     // Update is called once per frame
