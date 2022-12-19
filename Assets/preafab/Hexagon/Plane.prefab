@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3075826280317681084}
   - component: {fileID: -4121022678008389530}
   m_Layer: 0
-  m_Name: Hexagon
+  m_Name: Plane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -25,14 +25,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 223918254713547279}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!212 &3075826280317681084
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -74,15 +74,15 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 9b2dc5dcf8069b94f8658a82f617a7c7, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 0.8828125}
+  m_Size: {x: 2.77, y: 2.4}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!114 &-4121022678008389530
@@ -104,4 +104,12 @@ MonoBehaviour:
   useSprites:
     keyValuePairs:
     - hexagonType: 0
-      sprite: {fileID: 0}
+      sprite: {fileID: 21300000, guid: 9b2dc5dcf8069b94f8658a82f617a7c7, type: 3}
+    - hexagonType: 1
+      sprite: {fileID: 21300000, guid: 0aae14b7f4d55824f9a697f7b30d7f89, type: 3}
+    - hexagonType: 2
+      sprite: {fileID: 21300000, guid: 3ab1d065a5600ec48a91eb573c2c908c, type: 3}
+    - hexagonType: 3
+      sprite: {fileID: 21300000, guid: 75842860adc1a3941a1129e3d6c931bf, type: 3}
+    - hexagonType: 4
+      sprite: {fileID: 21300000, guid: b472677b15796e24f855262f0c68b27d, type: 3}

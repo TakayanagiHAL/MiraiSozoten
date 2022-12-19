@@ -9,6 +9,87 @@ using SoftGear.Strix.Client.Core;
 [System.Serializable]
 public struct SeaResource
 {
+    public static SeaResource operator +(SeaResource a, SeaResource b)
+    {
+        b.plastic += a.plastic;
+        b.ePlastic += a.ePlastic;
+        b.wood += a.wood;
+        b.steel += a.steel;
+        b.seaFood += a.seaFood;
+
+        return b;
+    }
+
+    public static SeaResource operator -(SeaResource a, SeaResource b)
+    {
+        b.plastic -= a.plastic;
+        b.ePlastic -= a.ePlastic;
+        b.wood -= a.wood;
+        b.steel -= a.steel;
+        b.seaFood -= a.seaFood;
+
+        return b;
+    }
+
+    public void SetNoraml(int size)
+    {
+        if (plastic < 0) plastic = 0;
+        if (ePlastic < 0) ePlastic = 0;
+        if (wood < 0) wood = 0;
+        if (steel < 0) steel = 0;
+        if (seaFood < 0) seaFood = 0;
+
+        int allSize = plastic + ePlastic + wood + steel + seaFood;
+
+        if (size < allSize)
+        {
+            if (plastic > allSize - size)
+            {
+                plastic -= allSize - size;
+            }
+            else
+            {
+                allSize -= seaFood;
+                plastic = 0;
+
+                if(ePlastic > allSize - size)
+                {
+                    ePlastic -= allSize - size;
+                }
+                else
+                {
+                    allSize -= seaFood;
+                    ePlastic = 0;
+
+                    if (wood > allSize - size)
+                    {
+                        wood -= allSize - size;
+                    }
+                    else
+                    {
+                        allSize -= seaFood;
+                        wood = 0;
+
+                        if (seaFood > allSize - size)
+                        {
+                            seaFood -= allSize - size;
+                        }
+                        else
+                        {
+                            allSize -= seaFood;
+                            seaFood = 0;
+
+                            steel -= allSize - size;  
+                            
+                        }
+                    }
+                }
+            }
+           
+        }
+    }
+
+
     public int plastic;
     public int ePlastic;
     public int wood;
@@ -30,30 +111,23 @@ public class Player : StrixBehaviour
     public int speed = 1;
 
     public int resourceStack = 1200;
-    int getPower = 100;
+    public int getPower = 100;
 
-    int getDepth;
-    int searchPower;
+    public int getDepth = 1;
+    public int searchPower = 1;
 
     //クラフト対象
-    int dieselEngine;
-    int shipBody;
-    int whaleMouse;
-    int crane;
-    int sonar;
+    int dieselEngine = 1;
+    int shipBody = 1;
+    int whaleMouse = 1;
+    int crane = 1;
+    int sonar = 1;
 
     //資源
     [StrixSyncField]
     public SeaResource seaResource;
 
     //内部パラメータ
-    [SerializeField] Text scoreUI;
-    public Text diceUI;
-
-    [StrixSyncField]
-    public int moveVol;
-
-    public Canvas comandCanvas;
 
     [StrixSyncField]
     public TurnState nowState;
@@ -63,15 +137,15 @@ public class Player : StrixBehaviour
 
     HexagonManger hexagonManger;
 
-    TurnContllor turnContllor;
+    public TurnContllor turnContllor;
+
+    UIManager uiManager;
 
     [StrixSyncField]
     public int turnNum;
 
     [StrixSyncField]
     public bool isTurn;
-
-    public MapIndex[] movePoints;
 
     PlayerState playerState;
 
@@ -87,16 +161,20 @@ public class Player : StrixBehaviour
         SET_TURN,
         SET_WAIT,
         SET_MOVE_STATE,
-        SET_COMAND_STATE
+        SET_COMAND_STATE,
+        RANDAM_TELEPORT,
+        START_TORNADE
     }
 
     Dictionary<RpcFunctionName, string> rpcFunctions = new Dictionary<RpcFunctionName, string>()
     {
         {RpcFunctionName.INIT_PLAYER , "Init"},
         {RpcFunctionName.SET_TURN, "SetTurn"},
-        { RpcFunctionName.SET_WAIT, "SetWait"},
+        {RpcFunctionName.SET_WAIT, "SetWait"},
         {RpcFunctionName.SET_MOVE_STATE, "SetMoveState"},
-        {RpcFunctionName.SET_COMAND_STATE , "SetComandState" }
+        {RpcFunctionName.SET_COMAND_STATE , "SetComandState" },
+        {RpcFunctionName.RANDAM_TELEPORT,"RandomTeleport" },
+        {RpcFunctionName.START_TORNADE,"StartTornade" }
     };
     // Start is called before the first frame update
     void Start()
@@ -106,6 +184,8 @@ public class Player : StrixBehaviour
         seaResource.seaFood = 0;
         seaResource.steel = 15;
         seaResource.wood = 45;
+
+        FindObjectOfType<ResourceUI>().SetResource(seaResource);
     }
 
     // Update is called once per frame
@@ -119,11 +199,15 @@ public class Player : StrixBehaviour
             {
                 case TurnState.PLAYER_MOVE:
                     playerState = new MoveState();
-                    playerState.TurnInit(this,hexagonManger,turnContllor);
+                    playerState.TurnInit(this,hexagonManger,turnContllor,uiManager);
                     break;
                 case TurnState.SELECT_COMAND:
                     playerState = new CommandState();
-                    playerState.TurnInit(this, hexagonManger, turnContllor);
+                    playerState.TurnInit(this, hexagonManger, turnContllor,uiManager);
+                    break;
+                case TurnState.HAPPNING_EVENT:
+                    playerState = new HappningState();
+                    playerState.TurnInit(this, hexagonManger, turnContllor, uiManager);
                     break;
             }
             nowState = nextState;
@@ -140,6 +224,8 @@ public class Player : StrixBehaviour
 
         turnContllor = FindObjectOfType<TurnContllor>();
 
+        uiManager = FindObjectOfType<UIManager>();
+
         nowState = TurnState.TURN_WAIT;
         nextState = TurnState.TURN_WAIT;
 
@@ -147,7 +233,8 @@ public class Player : StrixBehaviour
 
         playerPos.x = 0;
         playerPos.y = 0;
-        moveVol = -1;
+
+        transform.position = hexagonManger.GetMapPos(playerPos);
     }
 
     public void CallRPCOwner(RpcFunctionName fName,params object[] param)
@@ -206,8 +293,49 @@ public class Player : StrixBehaviour
         Debug.Log("SetComandState");
     }
 
+    [StrixRpc]
+    public void RandomTeleport()
+    {
+        MapIndex mapIndex;
+        mapIndex.x = Random.Range(0, hexagonManger.GetMapScale().x);
+        mapIndex.y = Random.Range(0, hexagonManger.GetMapScale().y);
+
+        playerPos = mapIndex;
+        transform.position = hexagonManger.GetMapPos(mapIndex);
+    }
+
     public TurnState GetNextState()
     {
         return nextState;
+    }
+
+    public void AddSeaResouce(int step)
+    {
+        SeaResource add;
+        add.plastic     = (int)(0.45 * getPower * step);
+        add.ePlastic    = (int)(0.25 * getPower * step);
+        add.wood        = (int)(0.15 * getPower * step);
+        add.steel       = (int)(0.5 * getPower * step);
+        add.seaFood     = (int)(0.10 * getPower * step);
+
+        seaResource = seaResource + add;
+        seaResource.SetNoraml(resourceStack);
+    }
+
+    public void SetNextPlayer()
+    {
+        SetWait();
+        turnContllor.SetNextTurnPlayerRPC();
+    }
+
+    [StrixRpc]
+    public void StartTornade()
+    {
+        GetComponent<Animator>().SetBool("isTornade",true);
+    }
+
+    public void StopTornade()
+    {
+        GetComponent<Animator>().SetBool("isTornade", false);
     }
 }

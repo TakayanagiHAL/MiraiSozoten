@@ -16,19 +16,15 @@ public class EditorHexagonMark : EditorWindow
         if (GUILayout.Button("SpriteSet"))
         {
             // ヒエラルキーの全てのGameObjectを取得する
-            Object[] allObject = Resources.FindObjectsOfTypeAll(typeof(GameObject));
+            Hexagon[] allObject = Resources.FindObjectsOfTypeAll<Hexagon>();
 
 
             // 取得したオブジェクトの中から並び替えるオブジェクトと同じ物を全て削除する
-            foreach (GameObject obj in allObject)
+            foreach (Hexagon obj in allObject)
             {
-                // 同じ物かどうかを判定
-                if (obj.name.Contains("Hexagon"))
-                {
-                    //Debug.Log(obj.name);
-                    Hexagon hex = obj.GetComponent<Hexagon>();
-                    hex.SetSprite();
-                }
+                Debug.Log(obj.name);
+                obj.SetSprite();
+                
             }
         }
     }

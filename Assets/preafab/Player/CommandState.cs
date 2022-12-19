@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class CommandState : PlayerState
 {
-    public override void TurnInit(Player player, HexagonManger hexagon, TurnContllor turn)
+    public override void TurnInit(Player player, HexagonManger hexagon, TurnContllor turn, UIManager ui)
     {
-        base.TurnInit(player, hexagon, turn);
+        base.TurnInit(player, hexagon, turn,ui);
         player.nowState = TurnState.SELECT_COMAND;
-        player.comandCanvas.gameObject.SetActive(true);
+        uiManager.SetCanvas(CanvasName.COMMAND_UI, true);
     }
     override public void TurnUpdate (Player player){
 
