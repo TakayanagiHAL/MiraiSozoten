@@ -17,7 +17,11 @@ public class VFXCloud : MonoBehaviour
     {
         if (!_Renderer.isVisible)//ƒJƒƒ‰ŠO‚És‚Á‚½‚Æ‚«
         {
-            //Destroy(this.gameObject);
+           // Destroy(this.gameObject);
         }
+    }
+    private void OnBecameInvisible()
+    {
+        Destroy(this.gameObject);
     }
 }
