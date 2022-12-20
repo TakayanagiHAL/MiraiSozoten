@@ -19,6 +19,7 @@ public class CraftUI_MenuTabController : MonoBehaviour
 
     [SerializeField] GameObject CraftPanel;
     [SerializeField] GameObject ItemPanel;
+    [SerializeField] GameObject CraftSubjectPanel;
 
 
     MenuTab NowTab;
@@ -44,10 +45,10 @@ public class CraftUI_MenuTabController : MonoBehaviour
             TabTransform.anchoredPosition = new Vector3(110.0f, 0.0f, 0.0f);
 
             // タブを切り替える
-            //CraftPanel.Rotate(0.0f, 90.0f, 0.0f);
-            //ItemPanel.Rotate(0.0f, -90.0f, 0.0f);
             CraftPanel.SetActive(false);
             ItemPanel.SetActive(true);
+
+            CraftSubjectPanel.SetActive(false);
 
             NowTab = MenuTab.ITEM_TAB;
         }
@@ -56,10 +57,10 @@ public class CraftUI_MenuTabController : MonoBehaviour
             TabTransform.anchoredPosition = new Vector3(-110.0f, 0.0f, 0.0f);
 
             // タブを切り替える
-            //CraftPanel.Rotate(0.0f, -90.0f, 0.0f);
-            //ItemPanel.Rotate(0.0f, 90.0f, 0.0f);
             CraftPanel.SetActive(true);
             ItemPanel.SetActive(false);
+
+            CraftSubjectPanel.SetActive(true);
 
             NowTab = MenuTab.CRAFT_TAB;
         }
