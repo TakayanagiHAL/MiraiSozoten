@@ -32,7 +32,7 @@ public class HappningUI : MonoBehaviour
         {
             case HappenState.EVENT_SELECT:
                 selectUI.active = true;
-                allowPos.localPosition = new Vector3(allowPos.localPosition.x, -35 * Random.Range(0, 7), allowPos.localPosition.z);
+                allowPos.localPosition = new Vector3(allowPos.localPosition.x, 300+(-90 * Random.Range(0, 7)), allowPos.localPosition.z);
                 useHappen = -1;
                 break;
             case HappenState.WAIT:
