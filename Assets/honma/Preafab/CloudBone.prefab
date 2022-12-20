@@ -91,9 +91,9 @@ MonoBehaviour:
     type: 3}
   _cloudArray: []
   _cloudAmount: 100
-  MinPosition_X: -1000
-  MaxPosition_X: 0
-  MinPosition_W: -600
-  MaxPosition_W: 600
-  MinPosition_Y: 300
+  MinPosition_X: -950
+  MaxPosition_X: -700
+  MinPosition_W: -1500
+  MaxPosition_W: 1500
+  MinPosition_Y: 200
   MaxPosition_Y: 350
