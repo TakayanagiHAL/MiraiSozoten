@@ -28,7 +28,8 @@ public enum HexagonType
     COAST,
     OFFING,
     REEF,
-    PORT
+    PORT,
+    HAPPNING
 }
 
 class HexagonMethod
@@ -87,6 +88,9 @@ public class Hexagon : MonoBehaviour
                 break;
             case HexagonType.PORT:
                 hexagonMethod = new PortHexagon();
+                break;
+            case HexagonType.HAPPNING:
+                hexagonMethod = new HappningHexagon();
                 break;
         }
 
