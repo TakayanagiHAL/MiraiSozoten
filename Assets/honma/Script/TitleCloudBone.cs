@@ -10,7 +10,7 @@ public class TitleCloudBone : MonoBehaviour
     [Header("ƒJƒƒ‰‚ÌTransform‚ğ“ü‚ê‚é")]
     private Transform _cameraTransform;
 
-    [SerializeField] [Header("preafab‚Ì‰_‚ÌGameObject‚ğ“ü‚ê‚é")]
+    [SerializeField] [Header("prefab‚Ì‰_‚ÌGameObject‚ğ“ü‚ê‚é")]
     private GameObject _cloudObject;
 
     [SerializeField] [Header("‰½‚à“ü‚ê‚È‚¢")]
