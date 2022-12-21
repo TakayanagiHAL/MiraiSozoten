@@ -832,7 +832,7 @@ PrefabInstance:
     - target: {fileID: 6222887166591534016, guid: ff889b20e5a52ac40bc7c7facaa92394,
         type: 3}
       propertyPath: MaxPosition_Y
-      value: 350
+      value: 300
       objectReference: {fileID: 0}
     - target: {fileID: 6222887166591534016, guid: ff889b20e5a52ac40bc7c7facaa92394,
         type: 3}
@@ -847,8 +847,13 @@ PrefabInstance:
     - target: {fileID: 6222887166591534016, guid: ff889b20e5a52ac40bc7c7facaa92394,
         type: 3}
       propertyPath: MinPosition_Y
-      value: 200
+      value: 150
       objectReference: {fileID: 0}
+    - target: {fileID: 6222887166591534016, guid: ff889b20e5a52ac40bc7c7facaa92394,
+        type: 3}
+      propertyPath: _cameraTransform
+      value: 
+      objectReference: {fileID: 255257183}
     - target: {fileID: 6222887166591534017, guid: ff889b20e5a52ac40bc7c7facaa92394,
         type: 3}
       propertyPath: m_RootOrder
@@ -923,6 +928,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: CloudBone
+      objectReference: {fileID: 0}
+    - target: {fileID: 6222887166591534019, guid: ff889b20e5a52ac40bc7c7facaa92394,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ff889b20e5a52ac40bc7c7facaa92394, type: 3}

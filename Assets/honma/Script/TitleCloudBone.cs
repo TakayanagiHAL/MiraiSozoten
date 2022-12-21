@@ -2,9 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System;
 
 public class TitleCloudBone : MonoBehaviour
 {
+    [SerializeField]
+    [Header("ƒJƒƒ‰‚ÌTransform‚ğ“ü‚ê‚é")]
+    private Transform _cameraTransform;
+
     [SerializeField] [Header("preafab‚Ì‰_‚ÌGameObject‚ğ“ü‚ê‚é")]
     private GameObject _cloudObject;
 
@@ -16,17 +21,17 @@ public class TitleCloudBone : MonoBehaviour
 
     [Header("----------------------")]
     [SerializeField]
-    [Range(-1200.0f, -600.0f)] private float MinPosition_X;
+    [Range(-1200.0f, -600.0f)] private float MinPosition_X = -850.0f;
     [SerializeField]
-    [Range(-1100.0f, -500.0f)] private float MaxPosition_X;
-    
-    [SerializeField]
-    [Range(-1500.0f, 0.0f)] private float MinPosition_W;
-    [SerializeField]
-    [Range(0.0f, 1500.0f)] private float MaxPosition_W;
+    [Range(-1100.0f, -500.0f)] private float MaxPosition_X = -750.0f;
 
-    [SerializeField]     private float MinPosition_Y;
-    [SerializeField]     private float MaxPosition_Y;
+    [SerializeField]
+    [Range(-1500.0f, 0.0f)] private float MinPosition_W = -1500.0f;
+    [SerializeField]
+    [Range(0.0f, 1500.0f)] private float MaxPosition_W = 1500.0f;
+
+    [SerializeField]     private float MinPosition_Y = 150.0f;
+    [SerializeField]     private float MaxPosition_Y = 300.0f;
 
     //ki-
     Keyboard keyboard;
@@ -54,15 +59,7 @@ public class TitleCloudBone : MonoBehaviour
     {
         for (int i = 0; i < _cloudAmount; i++)
         {
-
-            float x = Random.Range(MinPosition_X, MaxPosition_X);
-            float w = Random.Range(MinPosition_W, MaxPosition_W);
-
-            float y = Random.Range(MinPosition_Y, MaxPosition_Y);
-
-            Vector3 position = new Vector3(x, y, w);
-
-            _cloudArray[i] = Instantiate(_cloudObject, position, Quaternion.identity, this.gameObject.transform);
+            _cloudArray[i] = Instantiate(_cloudObject, RandomVector3(), Quaternion.identity, this.gameObject.transform);
         }
 
     }
@@ -70,62 +67,60 @@ public class TitleCloudBone : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // 1ƒL[‚Ì“ü—Íó‘Ôæ“¾
-        var Key_a = keyboard.aKey;
+        //// 1ƒL[‚Ì“ü—Íó‘Ôæ“¾
+        //var Key_a = keyboard.aKey;
         
-        if (Key_a.wasPressedThisFrame)
+        //if (Key_a.wasPressedThisFrame)
+        //{
+        //    _cloudArray[putA].SetActive(false);
+        //    putA += 1;
+
+        //    if (putA >= _cloudAmount)
+        //        putA = 0;
+            
+        //}
+
+       
+    }
+
+    private void FixedUpdate()
+    {
+        int index = CloudArraySerch();
+
+        if (index >= 0)//_cloudArray‚ÉNull‚ªo—ˆ‚½
         {
-            Destroy(_cloudArray[putA]);
-            putA += 1;
-            if(putA>=2)
-            {
-                float x = Random.Range(MinPosition_X, MaxPosition_X);
-                float w = Random.Range(MinPosition_W, MaxPosition_W);
-
-                float y = Random.Range(MinPosition_Y, MaxPosition_Y);
-
-                Vector3 position = new Vector3(x, y, w);
-                _cloudArray[putA-2] = Instantiate(_cloudObject, position, Quaternion.identity, this.gameObject.transform);
-            }
-           
+            Destroy(_cloudArray[index]);
+            _cloudArray[index] = Instantiate(_cloudObject, RandomVector3(), Quaternion.identity, this.gameObject.transform);
         }
     }
 
-    //private void FixedUpdate()
-    //{
-    //    // 1ƒL[‚Ì“ü—Íó‘Ôæ“¾
-    //    var Key_b = keyboard.bKey;
-    //    Debug.Log("‰_‚Ì‘—Ê‚ªAmountˆÈ‰º‚Ì‚Æ‚«"+_cloudArray.Length);
 
-    //    if(CloudArraySerch()>0)//‰_‚Ì”‚ª‘—Ê‚ğ‰º‰ñ‚Á‚½
-    //    {
-    //        //int a = CloudArraySerch();
-            
-    //        float x = Random.Range(MinPosition_X, MaxPosition_X);
-    //        float w = Random.Range(MinPosition_W, MaxPosition_W);
-    //        float y = Random.Range(MinPosition_Y, MaxPosition_Y);
+    //SetActive(False)‚Ì—v‘f‚ğ’T‚µAinstantiate‚·‚éˆ×‚Ì—v‘f‚Ì”Ô†‚ğ•Ô‚·
+    private int CloudArraySerch()
+    {
+        int[] copyArray = new int[_cloudAmount];
 
-    //        Vector3 position = new Vector3(x, y, w);
-    //        //Debug.Log("‰_‚Ìi:"+ CloudArraySerch());
-    //        _cloudArray[CloudArraySerch()] = Instantiate(_cloudObject, position, Quaternion.identity, this.gameObject.transform);
-    //    }
-    //}
+        for (int i = 0; i < _cloudAmount; i++)
+        {
+            copyArray[i] = Convert.ToInt32(_cloudArray[i].activeSelf);
+        }
+
+        int gameint = Array.IndexOf(copyArray, 0);
+       
+        return gameint;
+    }
 
 
-    ////‹ó‚Ì—v‘f‚ğ’T‚µAinstantiate‚·‚éˆ×‚Ì‹ó‚Ì—v‘f‚Ì”Ô†‚ğ•Ô‚·
-    //private int CloudArraySerch()
-    //{
-    //    GameObject[] gameArray = _cloudArray;
-    //    int index = _cloudAmount + 1;
+    private Vector3 RandomVector3()
+    {
 
+        float x = UnityEngine.Random.Range(MinPosition_X, MaxPosition_X);
+        float w = UnityEngine.Random.Range(MinPosition_W, MaxPosition_W);
+        float y = UnityEngine.Random.Range(MinPosition_Y, MaxPosition_Y);
 
-    //    for (int i = 0; i <= _cloudAmount; i++)
-    //    {
-    //        if (gameArray[i] == null)
-    //            return i;
-    //    }
+        Vector3 position = new Vector3(x, y, w);
 
-
-    //    return index;
-    //}
+        position = position + _cameraTransform.position;
+        return position;
+    }
 }

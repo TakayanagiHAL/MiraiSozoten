@@ -6,11 +6,12 @@ using UnityEngine.VFX;
 public class VFXCloud : MonoBehaviour
 {
     [SerializeField]
-    private float CloudVelocityX;
+    private float CloudVelocityX = 0.1f;
     [SerializeField]
-    private float CloudVelocityY;
-    [SerializeField][Header("â_ÇÃçÇÇ≥êßå¿")]
-    private float CloudLimitPositionY;
+    private float CloudVelocityY = 0.03f;
+    [SerializeField]
+    [Header("â_ÇÃçÇÇ≥êßå¿")]
+    private float CloudLimitPositionY = 350.0f;
 
     private Renderer _Renderer;
     private VisualEffect _VFXCloud;
@@ -25,11 +26,7 @@ public class VFXCloud : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (!_Renderer.isVisible)//ÉJÉÅÉâäOÇ…çsÇ¡ÇΩÇ∆Ç´
-        {
-           // Destroy(this.gameObject);
-        }
-
+        
         Transform myTransform = this.transform;
         Vector3 myVector3 = myTransform.position;
 
@@ -44,7 +41,7 @@ public class VFXCloud : MonoBehaviour
     }
     private void OnBecameInvisible()
     {
-        Destroy(this.gameObject);
-        
+        this.gameObject.SetActive(false);   //DestroyÇµÇ»Ç¢Ç≈åüçıÇ≈Ç´ÇÈÇÊÇ§Ç…Ç∑ÇÈ
     }
+   
 }
