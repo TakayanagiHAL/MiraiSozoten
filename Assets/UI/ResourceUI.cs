@@ -12,6 +12,7 @@ public class ResourceUI : MonoBehaviour
     [SerializeField] Text woodScore;
     [SerializeField] Text steelScore;
     [SerializeField] Text seaFoodScore;
+    [SerializeField] Text stackScore;
 
     // Start is called before the first frame update
     void Start()
@@ -31,5 +32,10 @@ public class ResourceUI : MonoBehaviour
         woodScore.text      = resource.wood.ToString();
         steelScore.text     = resource.steel.ToString();
         seaFoodScore.text   = resource.seaFood.ToString();
+    }
+
+    public void SetStack(int stack)
+    {
+        stackScore.text = stack.ToString();
     }
 }

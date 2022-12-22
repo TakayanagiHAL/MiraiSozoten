@@ -18,7 +18,7 @@ public class MoveState : PlayerState
     ResourceUI resourceUI;
     ResourceEffectUI effectUI;
     DiceUI diceUI;
-
+    ScoreUI scoreUI;
     MapIndex useDice;
     int moveVol;
     MapIndex[] movePoints;
@@ -66,6 +66,41 @@ public class MoveState : PlayerState
         return allow;
     }
 
+    int GetKeyAllow()
+    {
+        int allow = 5;
+
+        if (Input.GetKeyUp(KeyCode.Return))
+        {
+            if (Input.GetKey(KeyCode.W))
+            {
+                allow = 8;
+                if (Input.GetKey(KeyCode.A))
+                {
+                    allow = 7;
+                }
+                else if (Input.GetKey(KeyCode.D))
+                {
+                    allow = 9;
+                }
+            }
+            else if (Input.GetKey(KeyCode.S))
+            {
+                allow = 2;
+                if (Input.GetKey(KeyCode.A))
+                {
+                    allow = 1;
+                }
+                else if (Input.GetKey(KeyCode.D))
+                {
+                    allow = 3;
+                }
+            }
+        }
+
+        return allow;
+    }
+
     public override void TurnInit(Player player, HexagonManger hexagon, TurnContllor turn, UIManager ui)
     {
         base.TurnInit(player, hexagon, turn,ui);
@@ -76,6 +111,7 @@ public class MoveState : PlayerState
         resourceUI = uiManager.GetCanvasObject(CanvasName.RESOURCE_UI).GetComponent<ResourceUI>();
         diceUI = uiManager.GetCanvasObject(CanvasName.DICE_UI).GetComponent<DiceUI>();
         effectUI = uiManager.GetCanvasObject(CanvasName.R_EFFECT_UI).GetComponent<ResourceEffectUI>();
+        scoreUI = uiManager.GetCanvasObject(CanvasName.SCORE_UI).GetComponent<ScoreUI>();
 
         useDice = dice[player.speed / 6];
         diceUI.SetMinMax(useDice.x, useDice.y);
@@ -105,53 +141,8 @@ public class MoveState : PlayerState
 
                 int newPos;
 
-                if (Input.GetKeyDown(KeyCode.W))
-                {
-                    newPos = player.playerPos.y - 1;
-                    if (newPos >= 0)
-                    {
-                        player.playerPos.y = newPos;
-                        moveVol--;
-                        movePoints[moveVol] = player.playerPos;
-                        state = MState.MOVING;
-                    }
-                }
-                if (Input.GetKeyDown(KeyCode.A))
-                {
-                    newPos = player.playerPos.x - 1;
-                    if (newPos >= 0)
-                    {
-                        player.playerPos.x = newPos;
-                        moveVol--;
-                        movePoints[moveVol] = player.playerPos;
-                        state = MState.MOVING;
-                    }
-                }
-                if (Input.GetKeyDown(KeyCode.S))
-                {
-                    newPos = player.playerPos.y + 1;
-                    if (newPos < mapScale.y)
-                    {
-                        player.playerPos.y = newPos;
-                        moveVol--;
-                        movePoints[moveVol] = player.playerPos;
-                        state = MState.MOVING;
-                    }
-                }
-                if (Input.GetKeyDown(KeyCode.D))
-                {
-                    newPos = player.playerPos.x + 1;
-                    if (newPos < mapScale.x)
-                    {
-                        player.playerPos.x = newPos;
-                        moveVol--;
-                        movePoints[moveVol] = player.playerPos;
-                        state = MState.MOVING;
-                    }
-                }
+               
                 int allow = GetLStickAllow();
-
-                Debug.Log("Allow:" + allow);
 
                 switch (allow)
                 {
@@ -283,6 +274,143 @@ public class MoveState : PlayerState
                         break;
                 }
 
+                if (allow != 5 && allow != 0) state = MState.MOVING;
+
+                Debug.Log("Allow:" + allow);
+
+                allow = GetKeyAllow();
+
+                switch (allow)
+                {
+                    case 1:
+                        if ((player.playerPos.x % 2) == 0)
+                        {
+                            newPos = player.playerPos.x - 1;
+                            if (newPos >= 0)
+                            {
+                                player.playerPos.x = newPos;
+                                moveVol--;
+                                movePoints[moveVol] = player.playerPos;
+                            }
+                        }
+                        else
+                        {
+                            newPos = player.playerPos.y + 1;
+                            if (newPos < mapScale.y)
+                            {
+                                newPos = player.playerPos.x - 1;
+                                if (newPos >= 0)
+                                {
+                                    player.playerPos.x = newPos;
+                                    player.playerPos.y += 1;
+                                    moveVol--;
+                                    movePoints[moveVol] = player.playerPos;
+                                }
+                            }
+                        }
+                        break;
+                    case 2:
+                        newPos = player.playerPos.y + 1;
+                        if (newPos < mapScale.y)
+                        {
+                            player.playerPos.y = newPos;
+                            moveVol--;
+                            movePoints[moveVol] = player.playerPos;
+                        }
+                        break;
+                    case 3:
+                        if ((player.playerPos.x % 2) == 0)
+                        {
+                            newPos = player.playerPos.x + 1;
+                            if (newPos < mapScale.x)
+                            {
+                                player.playerPos.x = newPos;
+                                moveVol--;
+                                movePoints[moveVol] = player.playerPos;
+                            }
+                        }
+                        else
+                        {
+                            newPos = player.playerPos.y + 1;
+                            if (newPos < mapScale.y)
+                            {
+                                newPos = player.playerPos.x + 1;
+                                if (newPos < mapScale.x)
+                                {
+                                    player.playerPos.x = newPos;
+                                    player.playerPos.y += 1;
+                                    moveVol--;
+                                    movePoints[moveVol] = player.playerPos;
+                                }
+                            }
+                        }
+                        break;
+                    case 7:
+                        if ((player.playerPos.x % 2) == 0)
+                        {
+                            newPos = player.playerPos.y - 1;
+                            if (newPos >= 0)
+                            {
+                                newPos = player.playerPos.x - 1;
+                                if (newPos >= 0)
+                                {
+                                    player.playerPos.x = newPos;
+                                    player.playerPos.y -= 1;
+                                    moveVol--;
+                                    movePoints[moveVol] = player.playerPos;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            newPos = player.playerPos.x - 1;
+                            if (newPos >= 0)
+                            {
+                                player.playerPos.x = newPos;
+                                moveVol--;
+                                movePoints[moveVol] = player.playerPos;
+                            }
+                        }
+                        break;
+                    case 8:
+                        newPos = player.playerPos.y - 1;
+                        if (newPos >= 0)
+                        {
+                            player.playerPos.y = newPos;
+                            moveVol--;
+                            movePoints[moveVol] = player.playerPos;
+                        }
+                        break;
+                    case 9:
+                        if ((player.playerPos.x % 2) == 0)
+                        {
+                            newPos = player.playerPos.y - 1;
+                            if (newPos >= 0)
+                            {
+                                newPos = player.playerPos.x + 1;
+                                if (newPos < mapScale.x)
+                                {
+                                    player.playerPos.x = newPos;
+                                    player.playerPos.y -= 1;
+                                    moveVol--;
+                                    movePoints[moveVol] = player.playerPos;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            newPos = player.playerPos.x + 1;
+                            if (newPos < mapScale.x)
+                            {
+                                player.playerPos.x = newPos;
+                                moveVol--;
+                                movePoints[moveVol] = player.playerPos;
+                            }
+                        }
+                        break;
+                }
+                if (allow != 5 && allow != 0) state = MState.MOVING;
+
                 player.transform.LookAt(hexagonManger.GetMapPos(player.playerPos));
 
                 //player.transform.position = hexagonManger.GetMapPos(player.playerPos);
@@ -371,6 +499,9 @@ public class MoveState : PlayerState
                         effectUI.SetAction(getResource);
 
                         resourceUI.SetResource(player.seaResource);
+
+                        scoreUI.SetMoney(player.money);
+                        scoreUI.SetOil(player.seaResource);
 
                         hexagonManger.GetHexagon(player.playerPos).OnReach(player);
 

@@ -108,20 +108,32 @@ public class Player : StrixBehaviour
 
     public List<Item> items;
     public MapIndex playerPos;
+
+    //船体パラメータ
+    //速力
     public int speed = 1;
-
+    //積載量
     public int resourceStack = 1200;
+    //回収量
     public int getPower = 100;
-
+    //回収深度
     public int getDepth = 1;
+    //探知力
     public int searchPower = 1;
+    //装甲厚
+    public int shipArmer = 1;
 
     //クラフト対象
-    int dieselEngine = 1;
-    int shipBody = 1;
-    int whaleMouse = 1;
-    int crane = 1;
-    int sonar = 1;
+    //ディーゼルエンジン
+    public int dieselEngine = 1;
+    //船体
+    public int shipBody = 1;
+    //SSWマウス
+    public int whaleMouse = 1;
+    //クレーン
+    public int crane = 1;
+    //レーダー
+    public int sonar = 1;
 
     //資源
     [StrixSyncField]
@@ -185,7 +197,15 @@ public class Player : StrixBehaviour
         seaResource.steel = 15;
         seaResource.wood = 45;
 
-        FindObjectOfType<ResourceUI>().SetResource(seaResource);
+        ResourceUI resourceUI =  FindObjectOfType<ResourceUI>();
+
+        ScoreUI scoreUI = FindObjectOfType<ScoreUI>();
+
+        resourceUI.SetResource(seaResource);
+        resourceUI.SetStack(resourceStack);
+
+        scoreUI.SetMoney(money);
+        scoreUI.SetOil(seaResource);
     }
 
     // Update is called once per frame
