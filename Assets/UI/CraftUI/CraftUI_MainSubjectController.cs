@@ -8,6 +8,7 @@ public class CraftUI_MainSubjectController : MonoBehaviour
     GameObject IconFragment;
     RectTransform CursolTransform;
     int SubjectNum;
+    [SerializeField] CraftUI craftUI;
 
     // Start is called before the first frame update
     void Start()
@@ -23,7 +24,14 @@ public class CraftUI_MainSubjectController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // カーソル移動処理
+        // 入力処理移動処理
+        CurcolMove();
+    }
+
+    // カーソル移動処理
+    void CurcolMove()
+    {
+        // 上下入力で項目を選ぶ
         if (Input.GetKeyDown(KeyCode.DownArrow))
         {
             SubjectNum++;
@@ -61,6 +69,32 @@ public class CraftUI_MainSubjectController : MonoBehaviour
             }
 
             CursolPositionCalculation();
+        }
+
+        // Enterキー入力で強化
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            if (SubjectNum == 0)
+            {
+                craftUI.DieselEngineUpgrade();
+                //Debug.Log("Upgrade");
+            }
+            else if (SubjectNum == 1)
+            {
+                craftUI.ShipBodyUpgrade();
+            }
+            else if (SubjectNum == 2)
+            {
+                craftUI.WhaleMouseUpgrade();
+            }
+            else if (SubjectNum == 3)
+            {
+                craftUI.CraneUpgrade();
+            }
+            else if (SubjectNum == 4)
+            {
+                craftUI.SonarUpgrade();
+            }
         }
     }
 
