@@ -551,7 +551,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   strixBehaviours:
   - {fileID: 595389768}
-  objectType: 262146
+  objectType: 786434
   sendRate: 5
   syncDestroy: 1
   networkInstanceId: -1
@@ -1364,7 +1364,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   strixBehaviours:
   - {fileID: 1408910506}
-  objectType: 262147
+  objectType: 786435
   sendRate: 5
   syncDestroy: 1
   networkInstanceId: -1
@@ -1847,7 +1847,7 @@ PrefabInstance:
     - target: {fileID: 9215123041160438143, guid: 4edd9e463c4039c4ea3bd23c956e81da,
         type: 3}
       propertyPath: objectType
-      value: 262145
+      value: 786433
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4edd9e463c4039c4ea3bd23c956e81da, type: 3}
