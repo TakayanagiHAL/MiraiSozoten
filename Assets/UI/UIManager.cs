@@ -9,7 +9,10 @@ public enum CanvasName
 {
     SCORE_UI,
     RESOURCE_UI,
-    COMMAND_UI
+    COMMAND_UI,
+    DICE_UI,
+    R_EFFECT_UI,
+    HAPPNING_UI,
 }
 
 [Serializable]
@@ -44,7 +47,8 @@ public class UIManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        SetCanvas(CanvasName.DICE_UI, false);
+        SetCanvas(CanvasName.HAPPNING_UI, false);
     }
 
     // Update is called once per frame
@@ -62,5 +66,10 @@ public class UIManager : MonoBehaviour
     public Canvas GetCanvas(CanvasName name)
     {
         return canvasDictionary.GetCanvas(name);
+    }
+
+    public GameObject GetCanvasObject(CanvasName name)
+    {
+        return canvasDictionary.GetCanvas(name).gameObject;
     }
 }

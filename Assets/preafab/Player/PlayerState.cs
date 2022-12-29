@@ -8,9 +8,12 @@ public class PlayerState
 
     protected TurnContllor turnContllor;
 
-    public virtual void TurnInit(Player player, HexagonManger hexagon, TurnContllor turn) {
+    protected UIManager uiManager;
+
+    public virtual void TurnInit(Player player, HexagonManger hexagon, TurnContllor turn, UIManager ui) {
         hexagonManger = hexagon;
         turnContllor = turn;
+        uiManager = ui;
     }
 
     public virtual void TurnUpdate(Player player) { }
