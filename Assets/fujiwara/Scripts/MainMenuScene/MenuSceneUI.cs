@@ -58,7 +58,7 @@ public class MenuSceneUI : MonoBehaviour
         transform.Find("PlayModeGroup").gameObject.SetActive(true);
     }
 
-    //「参加」押下
+    //部屋番号入力後、「参加」押下
     public void Press_AccessRoom()
     {
         //接続開始（参加）

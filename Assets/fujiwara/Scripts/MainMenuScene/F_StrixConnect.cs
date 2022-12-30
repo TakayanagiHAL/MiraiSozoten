@@ -13,7 +13,6 @@ using SoftGear.Strix.Net.Logging;
 using SoftGear.Strix.Unity.Runtime.Event;
 
 
-
 public class F_StrixConnect : MonoBehaviour
 {
     public string host = "127.0.0.1";

@@ -13,9 +13,8 @@ public class AllMemberSceneChecker : MonoBehaviour
     {
         isCheck = false;
 
-
         //現在のシーン番号をStrixNetwork.instanceの追加プロパティ「nowScene」に保存（前提として、ルーム作成時に追加プロパティを設定している）
-        //この処理は、シーン移動直後であれば、他のスクリプトからでも処理可能
+        //この処理は、シーン移動直後かつ、部屋に接続されている状況であれば、他のスクリプトからでも処理可能
         StrixNetwork.instance.SetRoomMember(
           StrixNetwork.instance.selfRoomMember.GetPrimaryKey(),
           new Dictionary<string, object>(){
@@ -25,33 +24,43 @@ public class AllMemberSceneChecker : MonoBehaviour
               },
           args =>
           {
-              Debug.Log("準備状態を変更しました");
+              Debug.Log("メンバープロパティ：シーン番号を変更しました。");
           },
           args =>
           {
-              Debug.Log("準備状態の変更に失敗しました。error = " + args.cause);
+              Debug.Log("メンバープロパティ：シーン番号の変更に失敗しました。error = " + args.cause);
           }
           );
-
     }
 
     // Update is called once per frame
     void Update()
-    {
-        if (CheckAllMemberinGameScene(SceneNum) && !isCheck)
+    {        
+        //全員がシーンジャンプできたかチェック
+
+        //※デバッグする際、ゲームシーンに飛んでから、全クライアントのウィンドウを一瞬でもアクティブにしてないとそのクライアントのStart()が呼ばれないので注意
+        if (!isCheck)
         {
-            Debug.Log("全プレイヤーがゲームシーンに移動しました。");
-            isCheck = true;
+            if (CheckAllMemberinGameScene(SceneNum))
+            {
+                Debug.Log("全プレイヤーがゲームシーンに移動しました。");
+                isCheck = true;
+            }
         }
+
+        //ホストだけで（または、ルーム内で1回だけ）関数を呼びたい時は、以下のif文を使って
+        //if(StrixNetwork.instance.isRoomOwner)
+        //{
+
+        //}
     }
 
     private bool CheckAllMemberinGameScene(int num)
     {
         //現在の全ルームメンバーを参照
-
         var A = StrixNetwork.instance.roomMembers;
 
-        int membercount = 1;
+        int membercount = 0;
 
         foreach (var roomMember in A)
         {
@@ -64,15 +73,11 @@ public class AllMemberSceneChecker : MonoBehaviour
 
             }
 
-            //そのプロパティが期待値じゃなかったら失敗
             if ((int)value != num)
             {
-                Debug.Log("値が" + (int)value);
+                Debug.Log(membercount+"番プレイヤーの値が" + (int)value);
                 return false;
             }
-
-
-
         }
 
         return true;
