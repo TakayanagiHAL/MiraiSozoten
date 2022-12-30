@@ -2078,6 +2078,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Plane15
       objectReference: {fileID: 0}
+    - target: {fileID: 223918254713547279, guid: 8817b2cc8bd205f4f9f493fa08726602,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3280524330781936982, guid: 8817b2cc8bd205f4f9f493fa08726602,
         type: 3}
       propertyPath: m_RootOrder

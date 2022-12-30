@@ -25,18 +25,23 @@ public struct MapIndex
 
 public enum HexagonType
 {
+    NONE,
     COAST,
     OFFING,
     REEF,
     PORT,
-    HAPPNING
+    HAPPNING,
+    SEA_BASE
 }
 
 class HexagonMethod
 {
+    Hexagon hexagon;
     public virtual void OnPassage(Player player) { }
 
     public virtual void OnReach(Player player) { }
+
+    public void SetHexagon(Hexagon hex) { hexagon = hex; }
 }
 
 [Serializable]
@@ -75,24 +80,41 @@ public class Hexagon : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+    }
+
+    public void Init()
+    {
         switch (hexagonType)
         {
+            case HexagonType.NONE:
+                Destroy(this.gameObject);
+                break;
             case HexagonType.COAST:
                 hexagonMethod = new CoastHexagon();
+                hexagonMethod.SetHexagon(this);
                 break;
             case HexagonType.OFFING:
                 hexagonMethod = new OffingHexagon();
+                hexagonMethod.SetHexagon(this);
                 break;
             case HexagonType.REEF:
                 hexagonMethod = new ReefHexagon();
+                hexagonMethod.SetHexagon(this);
                 break;
             case HexagonType.PORT:
                 hexagonMethod = new PortHexagon();
+                hexagonMethod.SetHexagon(this);
                 break;
             case HexagonType.HAPPNING:
                 hexagonMethod = new HappningHexagon();
+                hexagonMethod.SetHexagon(this);
+                break;
+            case HexagonType.SEA_BASE:
+                hexagonMethod = new SeabaseHexagon();
+                hexagonMethod.SetHexagon(this);
                 break;
         }
+
 
     }
 
@@ -110,6 +132,7 @@ public class Hexagon : MonoBehaviour
 
     public void SetSprite()
     {
+       
         GetComponent<SpriteRenderer>().sprite = useSprites.GetSprite(hexagonType);
     }
 

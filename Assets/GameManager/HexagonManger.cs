@@ -20,6 +20,7 @@ public class HexagonManger : StrixBehaviour
         {
             MapIndex index = hexagons[i].GetMapIndex();
             map[index.y,index.x] = hexagons[i];
+
         }
     }
 
@@ -30,7 +31,9 @@ public class HexagonManger : StrixBehaviour
     }
 
     public Vector3 GetMapPos(MapIndex index) {
-        Vector3 pos = map[index.y, index.x].transform.position;
+
+        Vector3 pos = new Vector3();
+        pos = map[index.y, index.x].transform.position;
         return pos;
 
     }
