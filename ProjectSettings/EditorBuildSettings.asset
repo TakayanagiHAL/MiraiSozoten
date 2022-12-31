@@ -6,10 +6,10 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/MainMenuScene.unity
+    path: Assets/fujiwara/Scenes/MainMenuScene.unity
     guid: 72b2d2dd5b4f67b4b97ae74f97097a40
   - enabled: 1
-    path: Assets/Scenes/OnlineLobbyScene.unity
+    path: Assets/fujiwara/Scenes/OnlineLobbyScene.unity
     guid: 1e4f27ab5ec58b34cb83dd1adabf2129
   - enabled: 1
     path: Assets/Scenes/SampleScene.unity

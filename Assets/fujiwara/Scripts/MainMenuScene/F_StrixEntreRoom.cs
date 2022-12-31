@@ -71,6 +71,7 @@ public class F_StrixEntreRoom : MonoBehaviour
     }
 
 
+    //参加後、プロパティの初期設定
     public void RoomStatusInit()
     {
         //部屋IDを持つ
@@ -96,7 +97,7 @@ public class F_StrixEntreRoom : MonoBehaviour
           StrixNetwork.instance.selfRoomMember.GetPrimaryKey(),
           new Dictionary<string, object>(){
                 {"properties",new Dictionary<string,object>(){
-                    {"nowScene",1 },
+                    {"nowScene",0 },
                     {"state",0 }
                 } }
               },
