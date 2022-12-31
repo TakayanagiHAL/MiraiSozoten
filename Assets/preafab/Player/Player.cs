@@ -139,6 +139,8 @@ public class Player : StrixBehaviour
     [StrixSyncField]
     public SeaResource seaResource;
 
+    public int medal = 0;
+
     //“à•”ƒpƒ‰ƒ[ƒ^
 
     [StrixSyncField]
@@ -147,11 +149,11 @@ public class Player : StrixBehaviour
     [StrixSyncField]
     public TurnState nextState;
 
-    HexagonManger hexagonManger;
+    public HexagonManger hexagonManger;
 
     public TurnContllor turnContllor;
 
-    UIManager uiManager;
+    public UIManager uiManager;
 
     [StrixSyncField]
     public int turnNum;

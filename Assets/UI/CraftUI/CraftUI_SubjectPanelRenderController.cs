@@ -73,7 +73,7 @@ public class CraftUI_SubjectPanelRenderController : MonoBehaviour
         // 経過時間を計測
         ChangeTime += Time.deltaTime;
 
-        // パネルを移動(と回転)
+        // パネルを移動
         if(state == UpdateSubjectState.MAIN_SUBJECT) // メイン➡特化
         {            
             // パネルを移動
