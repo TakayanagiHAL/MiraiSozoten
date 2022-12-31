@@ -13,6 +13,7 @@ public enum CanvasName
     DICE_UI,
     R_EFFECT_UI,
     HAPPNING_UI,
+    YES_OR_NO_UI
 }
 
 [Serializable]
@@ -49,6 +50,7 @@ public class UIManager : MonoBehaviour
     {
         SetCanvas(CanvasName.DICE_UI, false);
         SetCanvas(CanvasName.HAPPNING_UI, false);
+        SetCanvas(CanvasName.YES_OR_NO_UI, false);
     }
 
     // Update is called once per frame
