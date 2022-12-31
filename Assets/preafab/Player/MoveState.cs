@@ -159,7 +159,7 @@ public class MoveState : PlayerState
                             newPos.x = player.playerPos.x - 1;
                             if (newPos.x >= 0)
                             {
-                                if (hexagonManger.GetHexagon(newPos) == null) break;
+                                if (hexagonManger.GetHexagon(newPos).GetHexagonType() == HexagonType.NONE) break;
 
                                 player.playerPos = newPos;
                                 moveVol--;
@@ -175,7 +175,7 @@ public class MoveState : PlayerState
                                 newPos.x = player.playerPos.x - 1;
                                 if (newPos.x >= 0)
                                 {
-                                    if (hexagonManger.GetHexagon(newPos) == null) break;
+                                    if (hexagonManger.GetHexagon(newPos).GetHexagonType() == HexagonType.NONE) break;
 
                                     player.playerPos = newPos;
                                     moveVol--;
@@ -189,7 +189,7 @@ public class MoveState : PlayerState
                         newPos.y = player.playerPos.y + 1;
                         if (newPos.y < mapScale.y)
                         {
-                            if (hexagonManger.GetHexagon(newPos) == null) break;
+                            if (hexagonManger.GetHexagon(newPos).GetHexagonType() == HexagonType.NONE) break;
 
                             player.playerPos = newPos;
                             moveVol--;
@@ -203,7 +203,7 @@ public class MoveState : PlayerState
                             newPos.x = player.playerPos.x + 1;
                             if (newPos.x < mapScale.x)
                             {
-                                if (hexagonManger.GetHexagon(newPos) == null) break;
+                                if (hexagonManger.GetHexagon(newPos).GetHexagonType() == HexagonType.NONE) break;
 
                                 player.playerPos = newPos;
                                 moveVol--;
@@ -219,7 +219,7 @@ public class MoveState : PlayerState
                                 newPos.x = player.playerPos.x + 1;
                                 if (newPos.x < mapScale.x)
                                 {
-                                    if (hexagonManger.GetHexagon(newPos) == null) break;
+                                    if (hexagonManger.GetHexagon(newPos).GetHexagonType() == HexagonType.NONE) break;
 
                                     player.playerPos = newPos;
                                     moveVol--;
@@ -238,7 +238,7 @@ public class MoveState : PlayerState
                                 newPos.x = player.playerPos.x - 1;
                                 if (newPos.x >= 0)
                                 {
-                                    if (hexagonManger.GetHexagon(newPos) == null) break;
+                                    if (hexagonManger.GetHexagon(newPos).GetHexagonType() == HexagonType.NONE) break;
 
                                     player.playerPos = newPos;
                                     moveVol--;
@@ -252,7 +252,7 @@ public class MoveState : PlayerState
                             newPos.x = player.playerPos.x - 1;
                             if (newPos.x >= 0)
                             {
-                                if (hexagonManger.GetHexagon(newPos) == null) break;
+                                if (hexagonManger.GetHexagon(newPos).GetHexagonType() == HexagonType.NONE) break;
 
                                 player.playerPos = newPos;
                                 moveVol--;
@@ -265,7 +265,7 @@ public class MoveState : PlayerState
                         newPos.y = player.playerPos.y - 1;
                         if (newPos.y >= 0)
                         {
-                            if (hexagonManger.GetHexagon(newPos) == null) break;
+                            if (hexagonManger.GetHexagon(newPos).GetHexagonType() == HexagonType.NONE) break;
 
                             player.playerPos = newPos;
                             moveVol--;
@@ -282,7 +282,7 @@ public class MoveState : PlayerState
                                 newPos.x = player.playerPos.x + 1;
                                 if (newPos.x < mapScale.x)
                                 {
-                                    if (hexagonManger.GetHexagon(newPos) == null) break;
+                                    if (hexagonManger.GetHexagon(newPos).GetHexagonType() == HexagonType.NONE) break;
 
                                     player.playerPos = newPos;
                                     moveVol--;
@@ -296,7 +296,7 @@ public class MoveState : PlayerState
                             newPos.x = player.playerPos.x + 1;
                             if (newPos.x < mapScale.x)
                             {
-                                if (hexagonManger.GetHexagon(newPos) == null) break;
+                                if (hexagonManger.GetHexagon(newPos).GetHexagonType() == HexagonType.NONE) break;
 
                                 player.playerPos = newPos;
                                 moveVol--;
