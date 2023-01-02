@@ -6,7 +6,7 @@ using UnityEngine.Events;
 
 class SeabaseHexagon : HexagonMethod
 {
-    bool isStar = false;
+    bool isMedal = false;
 
     int cost = 100;
 
@@ -39,7 +39,7 @@ class SeabaseHexagon : HexagonMethod
 
     public override void OnReach(Player player)
     {
-        if (isStar)
+        if (isMedal)
         {
             yorNUI = player.uiManager.GetCanvas(CanvasName.YES_OR_NO_UI).GetComponent<YorNUI>();
             player.uiManager.SetCanvas(CanvasName.YES_OR_NO_UI,true);
@@ -55,9 +55,9 @@ class SeabaseHexagon : HexagonMethod
         //player.turnContllor.SetNextTurnPlayerRPC();
     }
 
-    void SetStar()
+    public void SetMedal()
     {
-        isStar = true;
+        isMedal = true;
     }
 
     void YesEvent()
@@ -65,6 +65,8 @@ class SeabaseHexagon : HexagonMethod
         usePlayer.medal++;
 
         usePlayer.money -= cost;
+
+        isMedal = false;
 
         usePlayer.turnContllor.SetNextTurnPlayerRPC();
 

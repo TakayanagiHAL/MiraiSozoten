@@ -34,7 +34,7 @@ public enum HexagonType
     SEA_BASE
 }
 
-class HexagonMethod
+public class HexagonMethod
 {
     Hexagon hexagon;
     public virtual void OnPassage(Player player) { }
@@ -48,7 +48,7 @@ class HexagonMethod
 public struct HexagonSpritePair
 {
     public HexagonType hexagonType;
-    public Sprite sprite;
+    public GameObject sprite;
 }
 
 [Serializable]
@@ -56,7 +56,7 @@ public class HexagonSpriteDictionary
 {
     public List<HexagonSpritePair> keyValuePairs;
 
-    public Sprite GetSprite(HexagonType type)
+    public GameObject GetSprite(HexagonType type)
     {
         for(int i = 0; i < keyValuePairs.Count; i++)
         {
@@ -76,6 +76,7 @@ public class Hexagon : MonoBehaviour
     [SerializeField] MapIndex index;
     [SerializeField] HexagonType hexagonType;
     [SerializeField] HexagonSpriteDictionary useSprites;
+    [SerializeField] GameObject hexagonObject;
     HexagonMethod hexagonMethod;
     // Start is called before the first frame update
     void Start()
@@ -87,7 +88,6 @@ public class Hexagon : MonoBehaviour
         switch (hexagonType)
         {
             case HexagonType.NONE:
-                Destroy(this.gameObject);
                 break;
             case HexagonType.COAST:
                 hexagonMethod = new CoastHexagon();
@@ -133,10 +133,12 @@ public class Hexagon : MonoBehaviour
     public void SetSprite()
     {
        
-        GetComponent<SpriteRenderer>().sprite = useSprites.GetSprite(hexagonType);
+        hexagonObject = useSprites.GetSprite(hexagonType);
     }
 
     public void SetMapindex(int X, int Y) { index.x = X; index.y = Y; }
 
+    public HexagonType GetHexagonType() { return hexagonType; }
 
+    public HexagonMethod GetHexagonMethod() { return hexagonMethod; }
 }
