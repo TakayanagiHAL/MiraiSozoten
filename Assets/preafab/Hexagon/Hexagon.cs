@@ -31,7 +31,8 @@ public enum HexagonType
     REEF,
     PORT,
     HAPPNING,
-    SEA_BASE
+    SEA_BASE,
+    SEA_BASE_OFF,
 }
 
 public class HexagonMethod
@@ -48,7 +49,7 @@ public class HexagonMethod
 public struct HexagonSpritePair
 {
     public HexagonType hexagonType;
-    public GameObject sprite;
+    public Material sprite;
 }
 
 [Serializable]
@@ -56,7 +57,7 @@ public class HexagonSpriteDictionary
 {
     public List<HexagonSpritePair> keyValuePairs;
 
-    public GameObject GetSprite(HexagonType type)
+    public Material GetSprite(HexagonType type)
     {
         for(int i = 0; i < keyValuePairs.Count; i++)
         {
@@ -132,13 +133,15 @@ public class Hexagon : MonoBehaviour
 
     public void SetSprite()
     {
-       
-        hexagonObject = useSprites.GetSprite(hexagonType);
+        hexagonObject.GetComponent<MeshRenderer>().material = useSprites.GetSprite(hexagonType);
     }
 
     public void SetMapindex(int X, int Y) { index.x = X; index.y = Y; }
 
     public HexagonType GetHexagonType() { return hexagonType; }
 
-    public HexagonMethod GetHexagonMethod() { return hexagonMethod; }
+    public void SetHexagonType(HexagonType type) { hexagonType = type; }
+
+    public Type GetHexagonMethod<Type>() where Type : HexagonMethod { return hexagonMethod as Type; }
 }
+ 
