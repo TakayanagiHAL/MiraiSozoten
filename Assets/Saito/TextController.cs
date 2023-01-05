@@ -40,6 +40,8 @@ public class TextController : MonoBehaviour
     float BeforeTextPosY2;
     float BeforeTextPosY3;
     float BeforeTextPosY4;
+
+    bool TextEnd;
     
     // Start is called before the first frame update
     void Start()
@@ -79,7 +81,7 @@ public class TextController : MonoBehaviour
         BeforeTextPosY3 = 0.0f;
         BeforeTextPosY4 = 0.0f;
 
-        Debug.Log("DisplayText.Length:" + DisplayText.Length);
+        TextEnd = false;
     }
 
     // Update is called once per frame
@@ -92,13 +94,19 @@ public class TextController : MonoBehaviour
             TextClear();
 
             // 次のDisplayTextを作成
-            if (EventCarryOut < DisplayText.Length)
+            if (EventCarryOut < DisplayText.Length - 1)
             {
                 EventCarryOut++;
                 CreateDisplayText();
                 DispTime = NextDispTime + 0.1f;
 
-                Debug.Log("EventCarryOut:" + EventCarryOut);
+                //Debug.Log("DisplayText.Length:" + DisplayText.Length);
+                //Debug.Log("EventCarryOut:" + EventCarryOut);
+            }
+            else
+            {
+                TextEnd = true;
+                Debug.Log("textEnd:" + TextEnd);
             }
         }
 
@@ -131,6 +139,8 @@ public class TextController : MonoBehaviour
             {
                 // 配列の長さを取得
                 StringNum = DisplayText[EventCarryOut].Length;
+
+                //Debug.Log("StringNum:" + StringNum);
 
                 // 文章の長さが0だった場合ループを抜ける
                 if (StringNum == 0)
@@ -222,8 +232,6 @@ public class TextController : MonoBehaviour
         // 移動し終わったらテキストを表示する
         if (TextDispFrag == true)
         {
-            Debug.Log("TextSet");
-
             TextSet();
             NowProcessedNum++;
             DispTime = 0.0f;
@@ -340,14 +348,43 @@ public class TextController : MonoBehaviour
         textline3.text = "";
         textline4.text = "";
 
-        // 各種フラグと時間計測用の変数を初期化
-        NowProcessedNum = 0; // 現在の表示テキスト数
-        TextDispFrag = false;
-        DispTime = 0.0f;
+        // ProcessedDispTextの中身を全てクリア
+        ProcessedDispText.Clear();
 
-        MoveTextFlag = false;
-        TextMoveTime = 0.0f;
+
+        // 各種フラグと時間計測用の変数を初期化
+        NowProcessedNum = 0;   // 現在の表示テキスト数
+        TextDispFrag = false;  // テキスト表示フラグ
+        DispTime = 0.0f;       // 次の行を表示する経過時間
+
+        MoveTextFlag = false;  // テキスト移動のフラグ
+        TextMoveTime = 0.0f;   // テキスト移動の経過時間
     }
+
+    /* ==========テキストの読み上げ終了判定を取得する========== */
+    public bool GetTextEnd()
+    {
+        return TextEnd;
+    }
+
+    /* ==========テキストを追加で入力する========== */
+    // ※内容を上書きするので、上書きしても問題無い時か全部表示しきってから追加で入れること
+    public void SetText(string text)
+    {
+        TextClear();                     // テキストを全て初期化
+
+        DisplayText = text.Split("。");  // 表示テキスト内容を上書き
+
+        EventCarryOut = 0;               // テキストの進み具合を初期化
+
+        TextEnd = false;                 // テキスト終了フラグをfalseにする
+
+        CreateDisplayText();             // テキストを加工
+
+        //Debug.Log("DisplayText.Length:" + DisplayText.Length);
+    }
+
+
 
     /* ==========string型テキストから特定の文字を探して数を調べる ========== */
     int SpecificCharNumSearch(string Text, string search)
@@ -374,4 +411,5 @@ public class TextController : MonoBehaviour
 
         return PartNum;
     }
+
 }

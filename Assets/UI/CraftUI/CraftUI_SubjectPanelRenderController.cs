@@ -21,7 +21,7 @@ public class CraftUI_SubjectPanelRenderController : MonoBehaviour
     float ChangeTime;
     float StartTime;
 
-    [SerializeField] float PanelChangeTimeMax;
+    float PanelChangeTimeMax;
 
     // Start is called before the first frame update
     void Start()
@@ -36,6 +36,8 @@ public class CraftUI_SubjectPanelRenderController : MonoBehaviour
 
         MainSubject.SetActive(true);
         SpecializePanel.SetActive(false);
+
+        PanelChangeTimeMax = 0.1f;
 
         state = UpdateSubjectState.MAIN_SUBJECT;
     }
