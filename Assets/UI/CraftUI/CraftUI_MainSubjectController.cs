@@ -10,16 +10,9 @@ public class CraftUI_MainSubjectController : MonoBehaviour
 
     RectTransform CursolTransform;
     int SubjectNum;
-    [SerializeField] CraftUI craftUI;
-    [SerializeField] Player player;
 
-    // ステータステキスト表示オブジェクト
-    [SerializeField] GameObject SpeedTextUnit;
-    [SerializeField] GameObject LasingTextUnit;
-    [SerializeField] GameObject ArmerTextUnit;
-    [SerializeField] GameObject SalvageTextUnit;
-    [SerializeField] GameObject RateTextUnit;
-    [SerializeField] GameObject RaderTextUnit;
+    CraftUI craftUI;
+    Player player;
 
     // 現在のステータス表示テキスト
     Text NowSpeedText;
@@ -37,13 +30,6 @@ public class CraftUI_MainSubjectController : MonoBehaviour
     Text AfterRateText;
     Text AfterRaderText;
 
-    // 素材テキスト表示オブジェクト
-    [SerializeField] GameObject PlasticTextUnit;
-    [SerializeField] GameObject EnplaTextUnit;
-    [SerializeField] GameObject WoodTextUnit;
-    [SerializeField] GameObject SteelTextUnit;
-    [SerializeField] GameObject SeaFoodTextUnit;
-
     // 必要素材テキスト
     Text UsePlasticText;
     Text UseEnplaText;
@@ -58,11 +44,13 @@ public class CraftUI_MainSubjectController : MonoBehaviour
     Text HaveSteelText;
     Text HaveSeafoodText;
 
-    CraftUI_SubjectIconController NowSubject;
+    Paramater NextUpParamater;      // 強化後のパラメータを一時的に保持する変数
+    SeaResource UpgradeUseResource; // 強化に必要な素材数を一時的に保持する変数
 
     // 回収量の計算のために必要
     float craneGetPower;
     float mouseGetPower;
+
     float returnabilityRate;
 
     // Start is called before the first frame update
@@ -75,41 +63,66 @@ public class CraftUI_MainSubjectController : MonoBehaviour
         CursolTransform = SubjectCursol.GetComponent<RectTransform>();
         SubjectNum = 0;
 
+        /* ==========Textを親オブジェクトから取得==========*/
+        GameObject CraftUIPanel= this.gameObject.transform.parent.transform.parent.transform.parent.gameObject;
+        GameObject StatusBackground = CraftUIPanel.transform.Find("StatusBackground").gameObject;
+        GameObject UpdateView = StatusBackground.transform.Find("UpdateView").gameObject;
+
         // ステータス表示オブジェクトから各種Textを取得
-        NowSpeedText = SpeedTextUnit.transform.Find("Speed_NowStatus").gameObject.GetComponent<Text>();
-        AfterSpeedText = SpeedTextUnit.transform.Find("Speed_NextStatus").gameObject.GetComponent<Text>();
+        GameObject UnderLine_Speed = UpdateView.transform.Find("UnderLine_Speed").gameObject;
+        NowSpeedText = UnderLine_Speed.transform.Find("Speed_NowStatus").gameObject.GetComponent<Text>();
+        AfterSpeedText = UnderLine_Speed.transform.Find("Speed_NextStatus").gameObject.GetComponent<Text>();
 
-        NowLadingText = LasingTextUnit.transform.Find("Lading_NowStatus").gameObject.GetComponent<Text>();
-        AfterLadingText = LasingTextUnit.transform.Find("Lading_NextStatus").gameObject.GetComponent<Text>();
+        GameObject UnderLine_Lading = UpdateView.transform.Find("UnderLine_Lading").gameObject;
+        NowLadingText = UnderLine_Lading.transform.Find("Lading_NowStatus").gameObject.GetComponent<Text>();
+        AfterLadingText = UnderLine_Lading.transform.Find("Lading_NextStatus").gameObject.GetComponent<Text>();
 
-        NowArmerText = ArmerTextUnit.transform.Find("Armer_NowStatus").gameObject.GetComponent<Text>();
-        AfterArmerText = ArmerTextUnit.transform.Find("Armer_NextStatus").gameObject.GetComponent<Text>();
+        GameObject UnderLine_Armer = UpdateView.transform.Find("UnderLine_Armer").gameObject;
+        NowArmerText = UnderLine_Armer.transform.Find("Armer_NowStatus").gameObject.GetComponent<Text>();
+        AfterArmerText = UnderLine_Armer.transform.Find("Armer_NextStatus").gameObject.GetComponent<Text>();
 
-        NowSalvageText = SalvageTextUnit.transform.Find("Salvage_NowStatus").gameObject.GetComponent<Text>();
-        AfterSalvageText = SalvageTextUnit.transform.Find("Salvage_NextStatus").gameObject.GetComponent<Text>();
+        GameObject UnderLine_Salvage = UpdateView.transform.Find("UnderLine_Salvage").gameObject;
+        NowSalvageText = UnderLine_Salvage.transform.Find("Salvage_NowStatus").gameObject.GetComponent<Text>();
+        AfterSalvageText = UnderLine_Salvage.transform.Find("Salvage_NextStatus").gameObject.GetComponent<Text>();
 
         // 還元率テキスト
-        NowRateText = RateTextUnit.transform.Find("Rate_NowStatus").gameObject.GetComponent<Text>();
-        AfterRateText = RateTextUnit.transform.Find("Rate_NextStatus").gameObject.GetComponent<Text>();
+        GameObject UnderLine_Rate = UpdateView.transform.Find("UnderLine_Rate").gameObject;
+        NowRateText = UnderLine_Rate.transform.Find("Rate_NowStatus").gameObject.GetComponent<Text>();
+        AfterRateText = UnderLine_Rate.transform.Find("Rate_NextStatus").gameObject.GetComponent<Text>();
 
-        NowRaderText = RaderTextUnit.transform.Find("Rader_NowStatus").gameObject.GetComponent<Text>();
-        AfterRaderText = RaderTextUnit.transform.Find("Rader_NextStatus").gameObject.GetComponent<Text>();
+        GameObject UnderLine_Rader = UpdateView.transform.Find("UnderLine_Rader").gameObject;
+        NowRaderText = UnderLine_Rader.transform.Find("Rader_NowStatus").gameObject.GetComponent<Text>();
+        AfterRaderText = UnderLine_Rader.transform.Find("Rader_NextStatus").gameObject.GetComponent<Text>();
 
         // 素材テキスト表示オブジェクトから各種Textを取得
-        UsePlasticText = PlasticTextUnit.transform.Find("Plastic_NeedNum").gameObject.GetComponent<Text>();
-        HavePlasticText = PlasticTextUnit.transform.Find("Plastic_HaveNum").gameObject.GetComponent<Text>();
+        GameObject ItemBackground = StatusBackground.transform.Find("ItemBackground").gameObject;
 
-        UseEnplaText = EnplaTextUnit.transform.Find("EnPla_NeedNum").gameObject.GetComponent<Text>();
-        HaveEnplaText = EnplaTextUnit.transform.Find("EnPla_HaveNum").gameObject.GetComponent<Text>();
+        GameObject UnderLine_Plastic= ItemBackground.transform.Find("UnderLine_Plastic").gameObject;
+        UsePlasticText = UnderLine_Plastic.transform.Find("Plastic_NeedNum").gameObject.GetComponent<Text>();
+        HavePlasticText = UnderLine_Plastic.transform.Find("Plastic_HaveNum").gameObject.GetComponent<Text>();
 
-        UseWoodText = WoodTextUnit.transform.Find("Wood_NeedNum").gameObject.GetComponent<Text>();
-        HaveWoodText = WoodTextUnit.transform.Find("Wood_HaveNum").gameObject.GetComponent<Text>();
+        GameObject UnderLine_EnPla = ItemBackground.transform.Find("UnderLine_EnPla").gameObject;
+        UseEnplaText = UnderLine_EnPla.transform.Find("EnPla_NeedNum").gameObject.GetComponent<Text>();
+        HaveEnplaText = UnderLine_EnPla.transform.Find("EnPla_HaveNum").gameObject.GetComponent<Text>();
 
-        UseSteelText = SteelTextUnit.transform.Find("Steel_NeedNum").gameObject.GetComponent<Text>();
-        HaveSteelText = SteelTextUnit.transform.Find("Steel_HaveNum").gameObject.GetComponent<Text>();
+        GameObject UnderLine_Wood = ItemBackground.transform.Find("UnderLine_Wood").gameObject;
+        UseWoodText = UnderLine_Wood.transform.Find("Wood_NeedNum").gameObject.GetComponent<Text>();
+        HaveWoodText = UnderLine_Wood.transform.Find("Wood_HaveNum").gameObject.GetComponent<Text>();
 
-        UseSeafoodText = SeaFoodTextUnit.transform.Find("Seafood_NeedNum").gameObject.GetComponent<Text>();
-        HaveSeafoodText = SeaFoodTextUnit.transform.Find("Seafood_HaveNum").gameObject.GetComponent<Text>();
+        GameObject UnderLine_Steel = ItemBackground.transform.Find("UnderLine_Steel").gameObject;
+        UseSteelText = UnderLine_Steel.transform.Find("Steel_NeedNum").gameObject.GetComponent<Text>();
+        HaveSteelText = UnderLine_Steel.transform.Find("Steel_HaveNum").gameObject.GetComponent<Text>();
+
+        GameObject UnderLine_Seefood = ItemBackground.transform.Find("UnderLine_Seefood").gameObject;
+        UseSeafoodText = UnderLine_Seefood.transform.Find("Seafood_NeedNum").gameObject.GetComponent<Text>();
+        HaveSeafoodText = UnderLine_Seefood.transform.Find("Seafood_HaveNum").gameObject.GetComponent<Text>();
+
+
+        // craftUIとplayerを取得
+        craftUI = CraftUIPanel.transform.parent.transform.parent.gameObject.GetComponent<CraftUI>();
+
+        player = craftUI.GetPlayer();
+
 
         // 所持素材表示テキストにテキストを入力
         HavePlasticText.text = player.seaResource.plastic.ToString();
@@ -119,6 +132,12 @@ public class CraftUI_MainSubjectController : MonoBehaviour
         HaveSeafoodText.text = player.seaResource.seaFood.ToString();
 
         returnabilityRate = 1.0f;
+
+        craneGetPower = craftUI.GetCraneGetPower();
+        mouseGetPower = craftUI.GetMouseGetPower();
+        
+        NextUpParamater = new Paramater();
+        UpgradeUseResource = new SeaResource();
     }
 
     // Update is called once per frame
@@ -141,8 +160,8 @@ public class CraftUI_MainSubjectController : MonoBehaviour
             {
                 IconFragment.SetActive(false);
             }
-
-            CursolPositionCalculation();
+            
+            CursolPositionCalculation();            
         }
         else if (Input.GetKeyDown(KeyCode.UpArrow))
         {
@@ -160,8 +179,38 @@ public class CraftUI_MainSubjectController : MonoBehaviour
             {
                 IconFragment.SetActive(false);
             }
-
+            
             CursolPositionCalculation();
+        }
+
+        // Enterキーで強化
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            // 素材足りてるか判定
+            if (SubjectNum == 0)
+            {
+                craftUI.DieselEngineUpgrade();
+            }
+            else if (SubjectNum == 1)
+            {
+                craftUI.ShipBodyUpgrade();
+            }
+            else if (SubjectNum == 2)
+            {
+                //AddRate(UpgradePalamater[ContenaNum].Rate);
+
+                craftUI.WhaleMouseUpgrade();
+            }
+            else if (SubjectNum == 3)
+            {
+                craftUI.CraneUpgrade();
+            }
+            else if (SubjectNum == 4)
+            {
+                craftUI.SonarUpgrade();
+            }
+
+            TextUpdate();
         }
     }
     
@@ -177,30 +226,36 @@ public class CraftUI_MainSubjectController : MonoBehaviour
         return SubjectNum;
     }
 
-    public Player GetPlayer()
+    // テキスト内容を更新する
+    public void TextUpdate()
     {
-        return player;
+        NextUpParamater = craftUI.GetNextParamater(SubjectNum);
+        UpgradeUseResource = craftUI.GetNextUseResource(SubjectNum);
+
+        craneGetPower = craftUI.GetCraneGetPower();
+        mouseGetPower = craftUI.GetMouseGetPower();
+
+        SetPlayerText(NextUpParamater);
     }
 
     /* ===========CraftUI_SubjectIconControllerからパラメータと素材数を取得=========== */
-    public void SetPlayerText(SeaResource resource, Paramater upParamater, UpgradeSubject subject)
+    public void SetPlayerText(Paramater upParamater)
     {
         // ステータス表示テキストを更新
         NowSpeedText.text = player.speed.ToString();
-        int speed = upParamater.Speed + player.speed;
+        int speed = NextUpParamater.Speed + player.speed;
         AfterSpeedText.text = speed.ToString();
 
         NowLadingText.text = player.resourceStack.ToString();
-        int lading = upParamater.Lading + player.resourceStack;
+        int lading = NextUpParamater.Lading + player.resourceStack;
         AfterLadingText.text = lading.ToString();
 
         NowArmerText.text = player.shipArmer.ToString();
-        //int lading = upParamater.Lading + player.resourceStack;
-        AfterArmerText.text = (player.shipArmer + upParamater.Armer).ToString(); //lading.ToString();
+        AfterArmerText.text = (player.shipArmer + upParamater.Armer).ToString();
 
         // 回収量テキスト(クレーン&マウスかそれ以外かで処理を分ける)
         NowSalvageText.text = player.getPower.ToString();
-        if (subject== UpgradeSubject.SUBJECT_WHALEMOUSE)
+        if (SubjectNum== 2)
         {
             if (upParamater.GetPower > 0.0f)
             {
@@ -211,7 +266,7 @@ public class CraftUI_MainSubjectController : MonoBehaviour
                 AfterSalvageText.text = player.getPower.ToString();
             }
         }
-        else if(subject == UpgradeSubject.SUBJECT_CRANE)
+        else if(SubjectNum == 3)
         {
             if (upParamater.GetPower > 0.0f)
             {
@@ -245,47 +300,16 @@ public class CraftUI_MainSubjectController : MonoBehaviour
         HaveSeafoodText.text = player.seaResource.seaFood.ToString();
 
         // 必要素材テキストに数値を入力
-        UsePlasticText.text = resource.plastic.ToString();
-        UseEnplaText.text = resource.ePlastic.ToString();
-        UseWoodText.text = resource.wood.ToString();
-        UseSteelText.text = resource.steel.ToString();
-        UseSeafoodText.text = resource.seaFood.ToString();
+        UsePlasticText.text = UpgradeUseResource.plastic.ToString();
+        UseEnplaText.text = UpgradeUseResource.ePlastic.ToString();
+        UseWoodText.text = UpgradeUseResource.wood.ToString();
+        UseSteelText.text = UpgradeUseResource.steel.ToString();
+        UseSeafoodText.text = UpgradeUseResource.seaFood.ToString();
     }
-
-    // マウスかクレーンの強化の時だけ追加で呼ぶ
-    public void SetGetPowerText(float state, UpgradeSubject subject)
-    {
-        if (subject == UpgradeSubject.SUBJECT_WHALEMOUSE)
-        {
-            mouseGetPower = state;
-        }
-        else if(subject == UpgradeSubject.SUBJECT_CRANE)
-        {            
-            craneGetPower = state;
-        }
-    }
-
+    
     // マウス強化時に呼ぶ
     public void AddRate(float rate)
     {
         returnabilityRate += rate;
-    }
-
-    public void SetCraneGetPower(float power)
-    {
-        if (power > 0.0f)
-        {
-            craneGetPower = power;
-            craftUI.SetCraneGetower(power);
-        }
-    }
-
-    public void SetMouseGetPower(float power)
-    {
-        if (power > 0.0f)
-        {
-            mouseGetPower = power;
-            craftUI.SetMouseGetower(power);
-        }
     }
 }

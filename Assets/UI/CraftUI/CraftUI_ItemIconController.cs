@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class CraftUI_ItemIconController : MonoBehaviour
 {
     GameObject Detail;
-    Color DetailColor;
+    Image DetailColor;
     float alpha;
     float aimAlpha;
     float ChangeTime;
@@ -17,7 +17,7 @@ public class CraftUI_ItemIconController : MonoBehaviour
     {
         Detail = this.gameObject.transform.Find("ItemDetail").gameObject;
         Detail.SetActive(false);
-        DetailColor = Detail.GetComponent<Image>().GetComponent<Color>();
+        DetailColor = Detail.GetComponent<Image>();
         alpha = 0.0f;
         fade = true;
     }
