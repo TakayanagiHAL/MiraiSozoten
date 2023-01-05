@@ -40,6 +40,8 @@ public class TextController : MonoBehaviour
     float BeforeTextPosY2;
     float BeforeTextPosY3;
     float BeforeTextPosY4;
+
+    bool TextEnd;
     
     // Start is called before the first frame update
     void Start()
@@ -80,6 +82,8 @@ public class TextController : MonoBehaviour
         BeforeTextPosY4 = 0.0f;
 
         Debug.Log("DisplayText.Length:" + DisplayText.Length);
+
+        TextEnd = false;
     }
 
     // Update is called once per frame
@@ -92,13 +96,19 @@ public class TextController : MonoBehaviour
             TextClear();
 
             // 次のDisplayTextを作成
-            if (EventCarryOut < DisplayText.Length)
+            if (EventCarryOut < DisplayText.Length - 1)
             {
                 EventCarryOut++;
                 CreateDisplayText();
                 DispTime = NextDispTime + 0.1f;
 
+                Debug.Log("DisplayText.Length:" + DisplayText.Length);
                 Debug.Log("EventCarryOut:" + EventCarryOut);
+            }
+            else
+            {
+                TextEnd = true;
+                Debug.Log("textEnd:" + TextEnd);
             }
         }
 
@@ -120,6 +130,7 @@ public class TextController : MonoBehaviour
             if (HeadBreakSymbol == 0)
             {
                 DisplayText[EventCarryOut] = DisplayText[EventCarryOut].Remove(0, 1);
+                Debug.Log("DisplayText[EventCarryOut]:" + DisplayText[EventCarryOut]);
             }
 
             // リストの中身を全て削除
@@ -222,8 +233,6 @@ public class TextController : MonoBehaviour
         // 移動し終わったらテキストを表示する
         if (TextDispFrag == true)
         {
-            Debug.Log("TextSet");
-
             TextSet();
             NowProcessedNum++;
             DispTime = 0.0f;
@@ -340,6 +349,10 @@ public class TextController : MonoBehaviour
         textline3.text = "";
         textline4.text = "";
 
+        // ProcessedDispTextの中身を全てクリア
+        ProcessedDispText.Clear();
+
+
         // 各種フラグと時間計測用の変数を初期化
         NowProcessedNum = 0; // 現在の表示テキスト数
         TextDispFrag = false;
@@ -373,5 +386,20 @@ public class TextController : MonoBehaviour
         }
 
         return PartNum;
+    }
+
+    /* ==========テキストの読み上げ終了判定を取得する========== */
+    public bool GetTextEnd()
+    {
+        return TextEnd;
+    }
+
+    /* ==========テキストを追加で入力する========== */
+    // ※内容を上書きするので、上書きしても問題無い時か全部表示しきってから追加で入れること
+    public void SetText(string text)
+    {
+        TextClear();
+
+        DisplayText = text.Split("。");
     }
 }

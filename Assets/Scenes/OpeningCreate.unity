@@ -2243,6 +2243,51 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1594782323}
   m_CullTransparentMesh: 1
+--- !u!1 &1595338657
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1595338659}
+  - component: {fileID: 1595338658}
+  m_Layer: 0
+  m_Name: OpeningManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1595338658
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1595338657}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98ec94278862fea498d0a5ea430f2b49, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  text: {fileID: 0}
+--- !u!4 &1595338659
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1595338657}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 960, y: 505.62787, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 10
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1646427723
 GameObject:
   m_ObjectHideFlags: 0
@@ -2834,6 +2879,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e13fa362fb251e04ebf955a76337144a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  EventText: "\uFF11\uFF11\uFF11\uFF11\uFF11\uFF11\uFF11\uFF11\uFF11\uFF11\uFF11\uFF11\uFF11\uFF11\uFF11\uFF11\uFF11\uFF11\uFF11\uFF11\uFF11\uFF11\uFF11\uFF11\uFF11\uFF11\uFF11\uFF11\uFF11\uFF11\uFF11\uFF11\uFF11\uFF11\uFF11\uFF11\uFF11\uFF11\n\uFF12\uFF12\uFF12\uFF12\uFF12\uFF12\uFF12\uFF12\uFF12\uFF12\uFF12\uFF12\uFF12\uFF12\uFF12\uFF12\n\uFF13\uFF13\uFF13\uFF13\uFF13\uFF13\uFF13\uFF13\uFF13\uFF13\uFF13\uFF13\uFF13\uFF13\uFF13\uFF13\uFF13\n\uFF14\uFF14\uFF14\uFF14\uFF14\uFF14\uFF14\uFF14\uFF14\uFF14\uFF14\uFF14\uFF14\uFF14\uFF14\uFF14\uFF14\u3002\n\uFF15\uFF15\uFF15\uFF15\uFF15\uFF15\uFF15\uFF15\uFF15\uFF15\uFF15\uFF15\uFF15\uFF15\uFF15\uFF15\n\uFF16\uFF16\uFF16\uFF16\uFF16\uFF16\uFF16\uFF16\uFF16\uFF16\uFF16\uFF16\uFF16\uFF16\uFF16\uFF16\uFF16\n\uFF17\uFF17\uFF17\uFF17\uFF17\n\uFF18\uFF18\uFF18\uFF18\uFF18\uFF18\uFF18\uFF18\uFF18\uFF18\uFF18\uFF18\uFF18"
+  EventText: "\uFF11\uFF11\uFF11\uFF11\uFF11\uFF11\uFF11\uFF11\uFF11\uFF11\uFF11\uFF11\uFF11\uFF11\uFF11\uFF11\uFF11\uFF11\uFF11\uFF11\uFF11\uFF11\uFF11\uFF11\uFF11\uFF11\uFF11\uFF11\uFF11\uFF11\uFF11\uFF11\uFF11\uFF11\uFF11\uFF11\uFF11\uFF11\n\uFF12\uFF12\uFF12\uFF12\uFF12\uFF12\uFF12\uFF12\uFF12\uFF12\uFF12\uFF12\uFF12\uFF12\uFF12\uFF12\n\uFF13\uFF13\uFF13\uFF13\uFF13\uFF13\uFF13\uFF13\uFF13\uFF13\uFF13\uFF13\uFF13\uFF13\uFF13\uFF13\uFF13\n\uFF14\uFF14\uFF14\uFF14\uFF14\uFF14\uFF14\uFF14\uFF14\uFF14\uFF14\uFF14\uFF14\uFF14\uFF14\uFF14\uFF14\n\uFF15\uFF15\uFF15\uFF15\uFF15\uFF15\uFF15\uFF15\uFF15\uFF15\uFF15\uFF15\uFF15\uFF15\uFF15\uFF15\n\uFF16\uFF16\uFF16\uFF16\uFF16\uFF16\uFF16\uFF16\uFF16\uFF16\uFF16\uFF16\uFF16\uFF16\uFF16\uFF16\uFF16\n\uFF17\uFF17\uFF17\uFF17\uFF17\n\uFF18\uFF18\uFF18\uFF18\uFF18\uFF18\uFF18\uFF18\uFF18\uFF18\uFF18\uFF18\uFF18"
   NextDispTime: 1
   TextMoveTimeMax: 0.3

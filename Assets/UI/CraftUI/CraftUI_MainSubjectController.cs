@@ -15,6 +15,8 @@ public class CraftUI_MainSubjectController : MonoBehaviour
     Player player;
 
     // 現在のステータス表示テキスト
+    Text NowShipLevelText;
+
     Text NowSpeedText;
     Text NowLadingText;
     Text NowArmerText;
@@ -23,6 +25,8 @@ public class CraftUI_MainSubjectController : MonoBehaviour
     Text NowRaderText;
 
     // 強化後のステータス表示テキスト
+    Text AfterShipLevelText;
+
     Text AfterSpeedText;
     Text AfterLadingText;
     Text AfterArmerText;
@@ -69,6 +73,10 @@ public class CraftUI_MainSubjectController : MonoBehaviour
         GameObject UpdateView = StatusBackground.transform.Find("UpdateView").gameObject;
 
         // ステータス表示オブジェクトから各種Textを取得
+        GameObject UnderLine_ShipLevel = UpdateView.transform.Find("UnderLine_ShipLV").gameObject;
+        NowShipLevelText = UnderLine_ShipLevel.transform.Find("Ship_NowLevel").gameObject.GetComponent<Text>();
+        AfterShipLevelText = UnderLine_ShipLevel.transform.Find("Ship_NextLevel").gameObject.GetComponent<Text>();
+
         GameObject UnderLine_Speed = UpdateView.transform.Find("UnderLine_Speed").gameObject;
         NowSpeedText = UnderLine_Speed.transform.Find("Speed_NowStatus").gameObject.GetComponent<Text>();
         AfterSpeedText = UnderLine_Speed.transform.Find("Speed_NextStatus").gameObject.GetComponent<Text>();
@@ -242,6 +250,9 @@ public class CraftUI_MainSubjectController : MonoBehaviour
     public void SetPlayerText(Paramater upParamater)
     {
         // ステータス表示テキストを更新
+        NowShipLevelText.text = player.shipLevel.ToString();
+        AfterShipLevelText.text = (player.shipLevel + 1).ToString();
+
         NowSpeedText.text = player.speed.ToString();
         int speed = NextUpParamater.Speed + player.speed;
         AfterSpeedText.text = speed.ToString();

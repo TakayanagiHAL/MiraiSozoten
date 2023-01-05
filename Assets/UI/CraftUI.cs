@@ -58,9 +58,16 @@ public class CraftUI : MonoBehaviour
     [SerializeField] List<SeaResource> CraneUseResource;
     [SerializeField] List<SeaResource> RaderUseResource;
 
+    Text TimerText;
+
     // 回収量の計算のために必要
     float craneGetPower;
     float mouseGetPower;
+
+    // 制限時間の処理に使用する変数
+    float TimeLimit;    // 制限時間
+    bool craftEnd;      // クラフトが終了するフラグ
+
 
     // Start is called before the first frame update
     void Start()
@@ -70,17 +77,45 @@ public class CraftUI : MonoBehaviour
             Debug.Log("MainPlayer NULL");
         }
 
+        // タイマー用のテキストを取得
+        TimerText = this.gameObject.transform.Find("MainPlayerUIPanel").gameObject.transform.Find("TimeImage").transform.Find("TimeText").GetComponent<Text>();
 
         craneGetPower = CraneUpParamater[1].GetPower;
         mouseGetPower = MouseUpParamater[1].GetPower;
 
-        Init();
+        TimeLimit = 60.0f;
+
+        craftEnd = false;
     }
 
     // Update is called once per frame
     void Update()
     {
+        // 時間計測
+        TimeCount();
+    }
 
+    /* ==========制限時間を減らす==========*/
+    void TimeCount()
+    {
+        if (craftEnd == false)
+        {
+            // 時間計測をする
+            TimeLimit -= Time.deltaTime;
+            if (TimeLimit < 0.0f)
+            {
+                TimeLimit = 0.0f;
+                craftEnd = true;
+            }
+
+            TimerText.text = ((int)TimeLimit).ToString();
+        }        
+    }
+
+    /* ==========クラフト終了フラグを取得==========*/
+    public bool GetCraftEnd()
+    {
+        return craftEnd;
     }
 
     /* ==========ディーゼルエンジンの強化========== */
@@ -104,6 +139,8 @@ public class CraftUI : MonoBehaviour
 
                 // 強化レベルアップ
                 player.dieselEngine++;
+
+                player.shipLevel++;
 
                 Debug.Log("エンジン強化");
             }            
@@ -134,6 +171,7 @@ public class CraftUI : MonoBehaviour
                 // 強化レベルアップ
                 player.shipBody++;
 
+                player.shipLevel++;
 
                 Debug.Log("船体強化");
             }           
@@ -166,6 +204,8 @@ public class CraftUI : MonoBehaviour
                 // 強化レベルアップ
                 player.whaleMouse++;
 
+                player.shipLevel++;
+
                 Debug.Log("引き揚げ量強化");
             }            
         }
@@ -194,6 +234,8 @@ public class CraftUI : MonoBehaviour
                 // 強化レベルアップ
                 player.crane++;
 
+                player.shipLevel++;
+
                 Debug.Log("クレーン強化");
             }
         }
@@ -216,6 +258,8 @@ public class CraftUI : MonoBehaviour
 
                 // 強化レベルアップ
                 player.sonar++;
+
+                player.shipLevel++;
 
                 Debug.Log("ソナー強化");
             }
@@ -326,6 +370,7 @@ public class CraftUI : MonoBehaviour
         return param;
     }
 
+    // 強化に使うリソース量を取得
     public SeaResource GetNextUseResource(int cursolNum)
     {        
         // カーソルがどこにあるかを判定する
@@ -390,34 +435,7 @@ public class CraftUI : MonoBehaviour
         return resource;
     }
 
-    // クラフトが始まる時に呼ぶ初期化処理
-    void Init()
-    {
-        // スピードのステータス表示
-        //NowSpeedText.text = player.speed.ToString();
-
-        //float afterSpeedStatus = player.speed + DieselPalamUpList[player.dieselEngine];
-        //AfterSpeedText.text = afterSpeedStatus.ToString();
-
-        // 積載量のステータス表示
-        //NowLadingText.text = player.resourceStack.ToString();
-
-        //float afterStackText = player.resourceStack + BodyPalamUpList[player.shipBody].y;
-        //AfterLadingText.text = afterStackText.ToString();
-
-        // 回収量のステータス表示
-        //NowSalvageText.text = player.getPower.ToString();
-
-        //float afterSalvageText = player.getPower + CranePalamUpList[player.crane];
-        //AfterSalvageText.text = afterSalvageText.ToString();
-
-        // 探知力のステータス表示
-        //NowRaderText.text = player.searchPower.ToString();
-
-        //float AfterText = player.searchPower + SonarPalamUpList[player.sonar];
-        //AfterRaderText.text = AfterText.ToString();
-    }
-
+    
     // クレーンのの回収力を取得する
     public float GetCraneGetPower()
     {
@@ -430,6 +448,8 @@ public class CraftUI : MonoBehaviour
         return mouseGetPower;
     }
 
+
+    // プレイヤー取得
     public Player GetPlayer()
     {
         if (player != null)
