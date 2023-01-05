@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using TMPro;
 
 public class MainMenuManager : MonoBehaviour
 {
@@ -11,7 +10,7 @@ public class MainMenuManager : MonoBehaviour
     private bool RoomMode;
 
     //ルームIDインプットフィールド
-    public TMP_InputField RoomIDInputField;
+    public InputField RoomIDInputField;
 
     //ルームID保存変数
     public double RoomID;
@@ -20,7 +19,7 @@ public class MainMenuManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        RoomID = 0;
     }
 
     // Update is called once per frame
@@ -50,6 +49,10 @@ public class MainMenuManager : MonoBehaviour
     {
         SceneManager.LoadScene("OnlineLobbyScene");
     }
+
+    
+
+    
 
 
     //ルームIDを取得（ゲッタ）
