@@ -118,7 +118,7 @@ public class ResultData : StrixBehaviour
 
     Keyboard _keyboard;
 
-    // Start is called before the first frame update
+     //Start is called before the first frame update
     void Start()
     {
         // 現在のキーボード情報
@@ -279,9 +279,17 @@ public class ResultData : StrixBehaviour
         }
     }
 
+    //Playerの階層をGameSceneから外す
+    private void PlayerParentDetachChildren()
+    {
+        Transform _playerParent = _playerObject.transform.parent;//playerの一つ上のオブジェクトを取得
+        _playerParent.DetachChildren();
+    }
+
     //最初の位置決め   一度だけ呼び出す
     private void StartStep()
     {
+        PlayerParentDetachChildren();
         UiCanvas.SetActive(true);
         PlayerGameObjectInitialization();
         RankImageChange();
@@ -294,8 +302,6 @@ public class ResultData : StrixBehaviour
     {
         _phaseUiList[0].SetActive(true);
         
-        //_phase01OrderCountTextLists[strixMyEntryNumber()].text = $"{/*勲章の数*/}";
-
         //船の入場座標取得
         Transform myTransform = _playersPosition.transform;
         Vector3 StartPosition = myTransform.position;
