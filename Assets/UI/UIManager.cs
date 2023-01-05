@@ -15,7 +15,8 @@ public enum CanvasName
     HAPPNING_UI,
     YES_OR_NO_UI,
     CRAFT_UI,
-    BACK_UI
+    BACK_UI,
+    TURN_START_UI
 }
 
 [Serializable]
@@ -54,6 +55,9 @@ public class UIManager : MonoBehaviour
         SetCanvas(CanvasName.HAPPNING_UI, false);
         SetCanvas(CanvasName.YES_OR_NO_UI, false);
         SetCanvas(CanvasName.BACK_UI, false);
+        SetCanvas(CanvasName.CRAFT_UI, false);
+        SetCanvas(CanvasName.TURN_START_UI, false);
+        SetCanvas(CanvasName.COMMAND_UI, false);
     }
 
     // Update is called once per frame

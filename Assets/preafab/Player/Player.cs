@@ -104,7 +104,7 @@ public class Player : StrixBehaviour
     [StrixSyncField]
     public int money = 1000;
     [StrixSyncField]
-    int shipLevel;
+    public int shipLevel;
 
     public List<Item> items;
     public MapIndex playerPos;
@@ -270,7 +270,7 @@ public class Player : StrixBehaviour
 
         transform.position = hexagonManger.GetMapPos(playerPos);
 
-        playerCamera.SetMapCamera(false);
+        playerCamera.SetMapCamera(true);
     }
 
     public void CallRPCOwner(RpcFunctionName fName,params object[] param)

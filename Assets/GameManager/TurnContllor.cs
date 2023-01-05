@@ -20,25 +20,26 @@ public class TurnContllor : StrixBehaviour
 
     UIManager uiManager;
 
-    public Player[] players;
+    [StrixSyncField] public Player[] players;
 
-    [SerializeField] int playerVol;
+    [StrixSyncField] int playerVol;
 
     [SerializeField] int maxTurn;
 
-    int nowTurn;
+    [StrixSyncField] int nowTurn =1;
 
-    int turnPlayer;
+    [StrixSyncField] int turnPlayer;
 
     // Start is called before the first frame update
     void Start()
     {
         hexagonManger = FindObjectOfType<HexagonManger>();
         turnPlayer = 0;
+        uiManager = FindObjectOfType<UIManager>();
 
         players = FindObjectsOfType<Player>();
 
-        for(int i = 0; i < players.Length; i++)
+        for (int i = 0; i < players.Length; i++)
         {
             players[i].turnNum = i;
 
@@ -47,8 +48,9 @@ public class TurnContllor : StrixBehaviour
             players[i].CallRPCOwner(Player.RpcFunctionName.INIT_PLAYER);
         }
 
-        players[0].CallRPCOwner(Player.RpcFunctionName.SET_TURN);
-        players[0].CallRPCOwner(Player.RpcFunctionName.SET_COMAND_STATE);
+        uiManager.GetCanvas(CanvasName.TURN_START_UI).GetComponent<TurnStartUI>().SetTurn(nowTurn);
+        uiManager.SetCanvas(CanvasName.TURN_START_UI, true);
+        uiManager.GetCanvas(CanvasName.TURN_START_UI).GetComponent<TurnStartUI>().AnimStart();
     }
 
     // Update is called once per frame
@@ -65,7 +67,7 @@ public class TurnContllor : StrixBehaviour
         {
             turnPlayer = 0;
             nowTurn++;
-            StartCraftFase();
+            Invoke("StartCraftFase", 3);
         }
         else
         {
@@ -90,12 +92,22 @@ public class TurnContllor : StrixBehaviour
     void StartCraftFase()
     {
         uiManager.SetCanvas(CanvasName.CRAFT_UI, true);
+        Invoke("FinishCraftFase", 60);
     }
 
     public void FinishCraftFase()
     {
+        players[0].playerCamera.SetMapCamera(true);
         uiManager.SetCanvas(CanvasName.CRAFT_UI, false);
-        players[turnPlayer].CallRPCOwner(Player.RpcFunctionName.SET_TURN);
-        players[turnPlayer].CallRPCOwner(Player.RpcFunctionName.SET_COMAND_STATE);
+        uiManager.SetCanvas(CanvasName.TURN_START_UI, true);
+        uiManager.GetCanvas(CanvasName.TURN_START_UI).GetComponent<TurnStartUI>().SetTurn(nowTurn);
+        uiManager.GetCanvas(CanvasName.TURN_START_UI).GetComponent<TurnStartUI>().AnimStart();
+    }
+
+    public void StartFirstPlayer()
+    {
+        players[0].CallRPCOwner(Player.RpcFunctionName.SET_TURN);
+        players[0].CallRPCOwner(Player.RpcFunctionName.SET_COMAND_STATE);
+        players[0].playerCamera.SetMapCamera(false);
     }
 }
