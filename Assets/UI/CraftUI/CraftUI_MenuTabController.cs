@@ -14,12 +14,10 @@ public class CraftUI_MenuTabController : MonoBehaviour
 {
     GameObject TabCursol;
     RectTransform TabTransform;
-    //[SerializeField] RectTransform CraftPanel;
-    //[SerializeField] RectTransform ItemPanel;
-
-    [SerializeField] GameObject CraftPanel;
-    [SerializeField] GameObject ItemPanel;
-    [SerializeField] GameObject CraftSubjectPanel;
+    
+    GameObject CraftPanel;
+    GameObject ItemPanel;
+    GameObject CraftSubjectPanel;
 
 
     MenuTab NowTab;
@@ -27,6 +25,12 @@ public class CraftUI_MenuTabController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        GameObject CenterUIPanel = this.gameObject.transform.parent.gameObject;
+
+        CraftPanel = CenterUIPanel.transform.Find("CraftUIPanel").gameObject;
+        CraftSubjectPanel = CraftPanel.transform.Find("SubjectPanel").gameObject;
+        ItemPanel = CenterUIPanel.transform.Find("ItemMenuPanel").gameObject;
+
         TabCursol = this.gameObject.transform.Find("MenuTabCursol").gameObject;
         TabTransform = TabCursol.GetComponent<RectTransform>();
 
