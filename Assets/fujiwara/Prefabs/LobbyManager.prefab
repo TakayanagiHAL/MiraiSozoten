@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4313005872985875366}
   - component: {fileID: -2989341548750488984}
   - component: {fileID: 1909519349816712079}
+  - component: {fileID: 9121536936946680842}
   m_Layer: 0
   m_Name: LobbyManager
   m_TagString: Untagged
@@ -65,3 +66,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5108b34bd637354ead4a04bcc7458c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UI_RuleSettingCanvas: {fileID: 4998936588512225776, guid: 8e88b5d3a262b0946bd67e988dbf9c71,
+    type: 3}
+  UI_RoomExitBoard: {fileID: 0}
+--- !u!114 &9121536936946680842
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4154089363009489724}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 236c9cba733792240b2ff703d8d3bfa6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isExitWindow: 0
