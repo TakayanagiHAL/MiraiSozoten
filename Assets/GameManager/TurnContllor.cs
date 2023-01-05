@@ -67,7 +67,15 @@ public class TurnContllor : StrixBehaviour
         {
             turnPlayer = 0;
             nowTurn++;
-            Invoke("StartCraftFase", 3);
+            if (nowTurn > maxTurn)
+            {
+                FindObjectOfType<ResultData>().ResultStart = true;
+            }
+            else
+            {
+                Invoke("StartCraftFase", 3);
+            }
+
         }
         else
         {

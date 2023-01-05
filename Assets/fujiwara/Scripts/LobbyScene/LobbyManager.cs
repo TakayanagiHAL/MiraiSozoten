@@ -37,6 +37,6 @@ public class LobbyManager : StrixBehaviour
     [StrixRpc]
     public void SceneChangetoGame()
     {
-        SceneManager.LoadScene("GameScene");
+        SceneManager.LoadScene(2);
     }
 }

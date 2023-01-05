@@ -22,6 +22,8 @@ public class ResultData : StrixBehaviour
 
     [Header("=====GameScene‚©‚ç“ü‚ê‚é=====")]
     [SerializeField]
+    GameObject gameScene;
+    [SerializeField]
     [Header("Player‚Ìscript")]
     private Player _playerScript;
 
@@ -283,6 +285,7 @@ public class ResultData : StrixBehaviour
     private void StartStep()
     {
         UiCanvas.SetActive(true);
+        gameScene.SetActive(false);
         PlayerGameObjectInitialization();
         RankImageChange();
         MyPlayerNameChange();

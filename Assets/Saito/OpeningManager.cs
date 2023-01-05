@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class OpeningManager : MonoBehaviour
 {
@@ -95,6 +96,6 @@ public class OpeningManager : MonoBehaviour
     // シーン変更用の関数
     void OpeningEnd()
     {
-
+        SceneManager.LoadScene(3);
     }
 }
