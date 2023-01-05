@@ -29,27 +29,27 @@ public class ResultData : StrixBehaviour
     [Header("GameSceneのPlayer")]
     private GameObject _playerObject;
 
-    [SerializeField][Header("***リザルト状態になるまでfalse***\n")]
+    [SerializeField] [Header("***リザルト状態になるまでfalse***\n")]
     private GameObject ResultSceneGameOblect;
     [SerializeField]
     private GameObject UiCanvas;
 
-    [SerializeField][Header("01～04までのフェーズを入れる")]
+    [SerializeField] [Header("01～04までのフェーズを入れる")]
     private List<GameObject> _phaseUiList;
 
-    [SerializeField][Header("ボタンが押されると表示")]
+    [SerializeField] [Header("ボタンが押されると表示")]
     private GameObject _phase04InformationUi;
 
     //座標合わせ用
-    [SerializeField][Header("ResultPlayer01のGameObject")]
+    [SerializeField] [Header("ResultPlayer01のGameObject")]
     private GameObject _resultPlayer01;
 
     //リザルト時の入場用座標
-    [SerializeField][Header("PlayersPositionのGameObject")]
+    [SerializeField] [Header("PlayersPositionのGameObject")]
     private GameObject _playersPosition;
 
     //Phase02以降に使う
-    [SerializeField][Header("shipsPosition2のGameObject")]
+    [SerializeField] [Header("shipsPosition2のGameObject")]
     private GameObject _shipsPosition2;
 
     [Header("***************************\n")]
@@ -60,23 +60,52 @@ public class ResultData : StrixBehaviour
     private GameObject _phase01ClosingEventCanvas;//TextWindow
     [SerializeField]
     private GameObject _phase01PlayersEndPosition;
-    [SerializeField][Header("Phase01の船の速度")]
+    [SerializeField] [Header("Phase01の船の速度")]
     private float ShipsMovingSpeed;
+    [SerializeField]
+    private List<Text> _phase01OrderCountTextLists;
+    [SerializeField]
+    private List<Text> _phase01PlayerNameTextLists;
+
 
     [Header("Phase02")]
     [SerializeField]
-    private GameObject _phase02FullSizePanel;
+    private Image _phase02RankCrownImage;
     [SerializeField]
-    private Image _rankCrownImage;
-    [SerializeField]
-    private Image _rankNumberImage;
+    private Image _phase02RankNumberImage;
     [SerializeField]
     private Text _phase02PlayerName;
     [SerializeField]
     private Text _phase02OrderCount;
     [SerializeField]
     private List<Text> _phase02OrderTextLists;
-   
+    [SerializeField]
+    private GameObject _phase02PlayerPosition;
+
+    [Header("Phase03")]
+    [SerializeField]
+    private Image _phase03CrownImage;
+    [SerializeField]
+    private Image _phase03NumberImage;
+    [SerializeField]
+    private Text _phase03PlayerName;
+    [SerializeField]
+    private Text _phase03OrderCount;
+
+    [Header("Phase04")]
+    [SerializeField]
+    private List<Text> _phase04PlayerNameList;
+    [SerializeField]
+    private List<Text> _phase04OrderCountList;
+    [SerializeField]
+    private List<Text> _phase04MoneyCountList;
+
+
+    [Header("\n順位の画像(Assetから選択)")]
+    [SerializeField]
+    private List<Sprite> RankCrownImageLists;
+    [SerializeField]
+    private List<Sprite> RankNumberImageLists;
 
     Keyboard _keyboard;
 
@@ -114,8 +143,10 @@ public class ResultData : StrixBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!isLocal) return;
+
         //if (ResultStart == false)
-            //return;
+        //return;
         switch (_nowPhase)
         {
             case NowPhase.Start:
@@ -158,6 +189,21 @@ public class ResultData : StrixBehaviour
         }
         return -1;
     }
+    //自分の順位取得
+    private int MyPlayerRank()//***************************************************************************************************     GameSceneから
+    {
+        int rank = 1;
+
+        return rank;
+    }
+
+    private void RankImageChange()
+    {
+        _phase02RankCrownImage.sprite = RankCrownImageLists[MyPlayerRank() - 1];
+        _phase02RankNumberImage.sprite = RankNumberImageLists[MyPlayerRank() - 1];
+        _phase03CrownImage.sprite = RankCrownImageLists[MyPlayerRank() - 1];
+        _phase03NumberImage.sprite = RankNumberImageLists[MyPlayerRank() - 1];
+    }
 
     //自分の名前を取得する
     private string strixMyPlayerName()
@@ -165,6 +211,40 @@ public class ResultData : StrixBehaviour
         string _myPlayerName = StrixNetwork.instance.selfRoomMember.GetName();
 
         return _myPlayerName;
+    }
+
+    //ResultシーンのPlayerNameを一括変更
+    private void MyPlayerNameChange()
+    {
+        _phase01PlayerNameTextLists[strixMyEntryNumber() - 1].text = strixMyPlayerName();
+        _phase02PlayerName.text = strixMyPlayerName();
+        _phase03PlayerName.text = strixMyPlayerName();
+        _phase04PlayerNameList[MyPlayerRank()-1].text = strixMyPlayerName();
+    }
+
+    private int MyPlayerOrderCount()//***************************************************************************************************     GameSceneから
+    {
+        int myOrder = 10;
+        return myOrder;
+    }
+
+    private void OrderCountChange()
+    {
+        _phase01OrderCountTextLists[strixMyEntryNumber() - 1].text = $"{MyPlayerOrderCount()}";
+        _phase02OrderCount.text = $"{MyPlayerOrderCount()}";
+        _phase03OrderCount.text = $"{MyPlayerOrderCount()}";
+        _phase04OrderCountList[MyPlayerRank() - 1].text = $"{MyPlayerOrderCount()}";
+    }
+
+    private int MyPlayerMoneyCount()//***************************************************************************************************     GameSceneから
+    {
+        int myMoney = 100;
+        return myMoney;
+    }
+
+    private void MoneyCountChange()
+    {
+        _phase04MoneyCountList[MyPlayerRank() - 1].text = $"{MyPlayerMoneyCount()}";
     }
 
     //所定の位置に置くためにサイズなどの初期化を行う
@@ -187,23 +267,29 @@ public class ResultData : StrixBehaviour
     //最初の位置決め   一度だけ呼び出す
     private void StartStep()
     {
-        if (!isLocal) return;
-
         UiCanvas.SetActive(true);
         PlayerGameObjectInitialization();
+        RankImageChange();
+        MyPlayerNameChange();
+        OrderCountChange();
+        MoneyCountChange();
     }
 
     private void stepPhase01()
     {
         _phaseUiList[0].SetActive(true);
+        
+        //_phase01OrderCountTextLists[strixMyEntryNumber()].text = $"{/*勲章の数*/}";
 
+        //船の入場座標取得
         Transform myTransform = _playersPosition.transform;
         Vector3 StartPosition = myTransform.position;
         Vector3 EndPosition = _phase01PlayersEndPosition.transform.position;
 
         float _distance = StartPosition.z - EndPosition.z;
-        float speed = Time.deltaTime * ShipsMovingSpeed / Mathf.Abs(_distance);//  40.0fはz座標の相対距離
+        float speed = Time.deltaTime * ShipsMovingSpeed / Mathf.Abs(_distance);
 
+        //船の入場座標更新
         myTransform.position = Vector3.Lerp(StartPosition, EndPosition, speed);
 
         if(speed>0.99f)//このspeedは割合    ここは割と適当な条件
@@ -221,14 +307,37 @@ public class ResultData : StrixBehaviour
     {
         _phaseUiList[0].SetActive(false);
         _phaseUiList[1].SetActive(true);
+        _shipsPosition2.SetActive(true);
+
+        //船の座標取得
+        Transform myTransform = _playersPosition.transform;
+        Vector3 myVector3 = _phase02PlayerPosition.transform.position;
+        //座標更新
+        myTransform.position = myVector3;
+        
+        //プレイヤー情報
+        
+
+        var key_B = _keyboard.bKey;
+
+        if (key_B.wasPressedThisFrame)
+        {
+            _nowPhase = NowPhase.Phase03;
+        }
     }
     private void stepPhase03()
     {
+        _phaseUiList[1].SetActive(false);
+        _phaseUiList[2].SetActive(true);
 
+        //ボタン入力処理
     }
     private void stepPhase04()
     {
+        _phaseUiList[2].SetActive(false);
+        _phaseUiList[3].SetActive(true);
 
+        //ボタン入力処理
     }
 
 }
