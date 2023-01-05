@@ -33,7 +33,7 @@ public class PressButton : MonoBehaviour
 
         if (Key_putB.wasPressedThisFrame)
         {
-            _nextSceneLoadScript.LoadSceneStart();
+            _nextSceneLoadScript.LoadSceneStart("メインメニューScene");//シーン名入力
         }
     }
 }

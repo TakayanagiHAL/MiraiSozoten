@@ -12,9 +12,6 @@ public class NextSceneLoad : MonoBehaviour
     [SerializeField][Header("ロード画面中に表示するSlider")]
     private Slider _nowLodingSlider;
 
-    [SerializeField][Header("次のシーン名を入力")]
-    private string _nexySceneName;
-
     [SerializeField][Header("テキスト演出")]
     private Text _loadingText;
 
@@ -31,14 +28,17 @@ public class NextSceneLoad : MonoBehaviour
 
     private int _cnt = 0;
 
+    private string _nextSceneName;
     private string _period2 = "";
     private string _period3 = "";
 
     private Vector3 _startPos;
     private Vector3 _endPos;
 
-    public void LoadSceneStart()
+    public void LoadSceneStart(string SceneName)
     {
+        _nextSceneName = SceneName;
+
         //ロード用のUI表示
         _nowLoadingUi.SetActive(true);
 
@@ -49,7 +49,7 @@ public class NextSceneLoad : MonoBehaviour
     IEnumerator NowLoadScene()
     {
         // シーンの読み込みをする  LoadSceneAsyncで現状の動作を問題なく行う（ここではロードしながらスライダーを動かしている）
-        _asyncOperation = SceneManager.LoadSceneAsync(_nexySceneName);
+        _asyncOperation = SceneManager.LoadSceneAsync(_nextSceneName);
 
         //　読み込みが終わるまで進捗状況をスライダーの値に反映させる
         while (!_asyncOperation.isDone)
@@ -84,6 +84,8 @@ public class NextSceneLoad : MonoBehaviour
         _startPos = _imageTexture.transform.position;
         _endPos = _imageTexture.transform.position;
         _endPos.y = _endPos.y + _imagePopHeight;
+
+        _nowLoadingUi.SetActive(false);
     }
 
     //  確認用
