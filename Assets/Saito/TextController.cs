@@ -81,8 +81,6 @@ public class TextController : MonoBehaviour
         BeforeTextPosY3 = 0.0f;
         BeforeTextPosY4 = 0.0f;
 
-        Debug.Log("DisplayText.Length:" + DisplayText.Length);
-
         TextEnd = false;
     }
 
@@ -102,8 +100,8 @@ public class TextController : MonoBehaviour
                 CreateDisplayText();
                 DispTime = NextDispTime + 0.1f;
 
-                Debug.Log("DisplayText.Length:" + DisplayText.Length);
-                Debug.Log("EventCarryOut:" + EventCarryOut);
+                //Debug.Log("DisplayText.Length:" + DisplayText.Length);
+                //Debug.Log("EventCarryOut:" + EventCarryOut);
             }
             else
             {
@@ -130,7 +128,6 @@ public class TextController : MonoBehaviour
             if (HeadBreakSymbol == 0)
             {
                 DisplayText[EventCarryOut] = DisplayText[EventCarryOut].Remove(0, 1);
-                Debug.Log("DisplayText[EventCarryOut]:" + DisplayText[EventCarryOut]);
             }
 
             // リストの中身を全て削除
@@ -142,6 +139,8 @@ public class TextController : MonoBehaviour
             {
                 // 配列の長さを取得
                 StringNum = DisplayText[EventCarryOut].Length;
+
+                //Debug.Log("StringNum:" + StringNum);
 
                 // 文章の長さが0だった場合ループを抜ける
                 if (StringNum == 0)
@@ -354,13 +353,38 @@ public class TextController : MonoBehaviour
 
 
         // 各種フラグと時間計測用の変数を初期化
-        NowProcessedNum = 0; // 現在の表示テキスト数
-        TextDispFrag = false;
-        DispTime = 0.0f;
+        NowProcessedNum = 0;   // 現在の表示テキスト数
+        TextDispFrag = false;  // テキスト表示フラグ
+        DispTime = 0.0f;       // 次の行を表示する経過時間
 
-        MoveTextFlag = false;
-        TextMoveTime = 0.0f;
+        MoveTextFlag = false;  // テキスト移動のフラグ
+        TextMoveTime = 0.0f;   // テキスト移動の経過時間
     }
+
+    /* ==========テキストの読み上げ終了判定を取得する========== */
+    public bool GetTextEnd()
+    {
+        return TextEnd;
+    }
+
+    /* ==========テキストを追加で入力する========== */
+    // ※内容を上書きするので、上書きしても問題無い時か全部表示しきってから追加で入れること
+    public void SetText(string text)
+    {
+        TextClear();                     // テキストを全て初期化
+
+        DisplayText = text.Split("。");  // 表示テキスト内容を上書き
+
+        EventCarryOut = 0;               // テキストの進み具合を初期化
+
+        TextEnd = false;                 // テキスト終了フラグをfalseにする
+
+        CreateDisplayText();             // テキストを加工
+
+        //Debug.Log("DisplayText.Length:" + DisplayText.Length);
+    }
+
+
 
     /* ==========string型テキストから特定の文字を探して数を調べる ========== */
     int SpecificCharNumSearch(string Text, string search)
@@ -388,18 +412,4 @@ public class TextController : MonoBehaviour
         return PartNum;
     }
 
-    /* ==========テキストの読み上げ終了判定を取得する========== */
-    public bool GetTextEnd()
-    {
-        return TextEnd;
-    }
-
-    /* ==========テキストを追加で入力する========== */
-    // ※内容を上書きするので、上書きしても問題無い時か全部表示しきってから追加で入れること
-    public void SetText(string text)
-    {
-        TextClear();
-
-        DisplayText = text.Split("。");
-    }
 }
