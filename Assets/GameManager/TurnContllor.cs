@@ -9,8 +9,8 @@ public enum TurnState
     TURN_WAIT,
     SELECT_COMAND,
     PLAYER_MOVE,
-    HAPPNING_EVENT
-
+    HAPPNING_EVENT,
+    MAP_VIEW
 }
 
 public class TurnContllor : StrixBehaviour
