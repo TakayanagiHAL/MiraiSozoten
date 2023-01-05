@@ -18,19 +18,22 @@ public class ResultData : StrixBehaviour
     }
     private NowPhase _nowPhase;
 
-    public bool ResultStart = false;
+    public bool ResultStart;
 
-
+    [Header("=====GameScene‚©‚ç“ü‚ê‚é=====")]
     [SerializeField]
     [Header("Player‚Ìscript")]
     private Player _playerScript;
-    [SerializeField]
-    [Header("ClickLoadScene‚Ìscript")]
-    private NextSceneLoad _nextSceneLoadScript;
 
     [SerializeField]
     [Header("GameScene‚ÌPlayer")]
     private GameObject _playerObject;
+
+    [Header("==============================\n")]
+
+    [SerializeField]
+    [Header("ClickLoadScene‚Ìscript")]
+    private NextSceneLoad _nextSceneLoadScript;
 
     [SerializeField] [Header("***ƒŠƒUƒ‹ƒgó‘Ô‚É‚È‚é‚Ü‚Åfalse***\n")]
     private GameObject ResultSceneGameOblect;
@@ -151,8 +154,8 @@ public class ResultData : StrixBehaviour
     {
         if (!isLocal) return;
 
-        //if (ResultStart == false)
-        //return;
+        if (ResultStart == false) return;
+
         switch (_nowPhase)
         {
             case NowPhase.Start:
