@@ -18,9 +18,9 @@ public class ResultData : StrixBehaviour
     }
     private NowPhase _nowPhase;
 
-    public bool ResultStart = false;
+    public bool ResultStart;
 
-
+    [Header("=====GameSceneから入れる=====")]
     [SerializeField]
     [Header("Playerのscript")]
     private Player _playerScript;
@@ -29,6 +29,12 @@ public class ResultData : StrixBehaviour
     [Header("GameSceneのPlayer")]
     private GameObject _playerObject;
 
+    [Header("==============================\n")]
+
+    [SerializeField]
+    [Header("ClickLoadSceneのscript")]
+    private NextSceneLoad _nextSceneLoadScript;
+
     [SerializeField] [Header("***リザルト状態になるまでfalse***\n")]
     private GameObject ResultSceneGameOblect;
     [SerializeField]
@@ -36,9 +42,6 @@ public class ResultData : StrixBehaviour
 
     [SerializeField] [Header("01～04までのフェーズを入れる")]
     private List<GameObject> _phaseUiList;
-
-    [SerializeField] [Header("ボタンが押されると表示")]
-    private GameObject _phase04InformationUi;
 
     //座標合わせ用
     [SerializeField] [Header("ResultPlayer01のGameObject")]
@@ -99,7 +102,13 @@ public class ResultData : StrixBehaviour
     private List<Text> _phase04OrderCountList;
     [SerializeField]
     private List<Text> _phase04MoneyCountList;
-
+    [SerializeField]
+    [Header("ボタンが押されると表示")]
+    private GameObject _phase04InformationUi;
+    [SerializeField]
+    private Button _stayButton;
+    [SerializeField]
+    private Button _exitButton;
 
     [Header("\n順位の画像(Assetから選択)")]
     [SerializeField]
@@ -145,8 +154,8 @@ public class ResultData : StrixBehaviour
     {
         if (!isLocal) return;
 
-        //if (ResultStart == false)
-        //return;
+        if (ResultStart == false) return;
+
         switch (_nowPhase)
         {
             case NowPhase.Start:
@@ -224,7 +233,7 @@ public class ResultData : StrixBehaviour
 
     private int MyPlayerOrderCount()//***************************************************************************************************     GameSceneから
     {
-        int myOrder = 10;
+        int myOrder = _playerScript.medal;//要確認
         return myOrder;
     }
 
@@ -238,13 +247,19 @@ public class ResultData : StrixBehaviour
 
     private int MyPlayerMoneyCount()//***************************************************************************************************     GameSceneから
     {
-        int myMoney = 100;
+        int myMoney = _playerScript.money;
         return myMoney;
     }
 
     private void MoneyCountChange()
     {
         _phase04MoneyCountList[MyPlayerRank() - 1].text = $"{MyPlayerMoneyCount()}";
+    }
+
+    //他のプレイヤーの名前、勲章の数、コインの数を取得していく
+    private void OtherPlayers()
+    {
+
     }
 
     //所定の位置に置くためにサイズなどの初期化を行う
@@ -340,4 +355,37 @@ public class ResultData : StrixBehaviour
         //ボタン入力処理
     }
 
+    public void phase03_ResultDetailsButton()
+    {
+        _nowPhase = NowPhase.Phase04;
+    }
+
+    public void phase04_RoomExitButton()
+    {
+        _phase04InformationUi.SetActive(true);
+        //Information時に入力されないようにボタン無効化
+        _exitButton.interactable = false;
+        _stayButton.interactable = false;
+    }
+
+    public void phase04_RoomStayButton()
+    {
+        //ルームマッチングシーンに遷移
+        //ルームマッチングシーンにレプリカのついたオブジェクトを持ち込まないように破棄する or 自分の情報だけを持ち込むようにする
+        _nextSceneLoadScript.LoadSceneStart("ルームマッチング？Scene");//シーン名入力
+    }
+
+    public void phase04_Information_YES_Button()
+    {
+        //ルームから抜けて、メインメニューシーンに遷移
+        _nextSceneLoadScript.LoadSceneStart("メインメニューScene");//シーン名入力
+    }
+
+    public void phase04_Information_NO_Button()
+    {
+        _phase04InformationUi.SetActive(false);
+        //Information解除でphase04のボタン有効化
+        _exitButton.interactable = true;
+        _stayButton.interactable = true;
+    }
 }
