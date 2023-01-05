@@ -9,6 +9,10 @@ public class HexagonManger : StrixBehaviour
     [SerializeField] int mapWidth;
     [SerializeField] int mapHeight;
     Hexagon[,] map;
+
+    int nowMedal = -1;
+
+    List<SeabaseHexagon> seabase;
     // Start is called before the first frame update
     void Start()
     {
@@ -20,6 +24,10 @@ public class HexagonManger : StrixBehaviour
         {
             MapIndex index = hexagons[i].GetMapIndex();
             map[index.y,index.x] = hexagons[i];
+            if(hexagons[i].GetHexagonType() == HexagonType.SEA_BASE)
+            {
+                seabase.Add((SeabaseHexagon)hexagons[i].GetHexagonMethod());
+            }
         }
     }
 
@@ -30,11 +38,25 @@ public class HexagonManger : StrixBehaviour
     }
 
     public Vector3 GetMapPos(MapIndex index) {
-        Vector3 pos = map[index.y, index.x].transform.position;
+
+        Vector3 pos = new Vector3();
+        pos = map[index.y, index.x].transform.position;
         return pos;
 
     }
 
     public MapIndex GetMapScale() { return new MapIndex(mapWidth, mapHeight); }
-    public Hexagon GetHexagon(MapIndex index) { return map[index.y, index.x]; }
+    public Hexagon GetHexagon(MapIndex index) { return map[index.y, index.x];}
+
+    public void SetNextMedal()
+    {
+        int m = Random.Range(0, seabase.Capacity);
+        while(nowMedal == m)
+        {
+            m = Random.Range(0, seabase.Capacity);
+        }
+
+        seabase[m].SetMedal();
+        nowMedal = m;
+    }
 }
