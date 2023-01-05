@@ -38,4 +38,9 @@ public class ScoreUI : MonoBehaviour
 
         oilText.text = oil.ToString();
     }
+
+    public void SetMedal(int medal)
+    {
+        medalText.text = medal.ToString();
+    }
 }

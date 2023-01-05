@@ -139,6 +139,8 @@ public class Player : StrixBehaviour
     [StrixSyncField]
     public SeaResource seaResource;
 
+    public int medal = 0;
+
     //ì‡ïîÉpÉâÉÅÅ[É^
 
     [StrixSyncField]
@@ -147,11 +149,13 @@ public class Player : StrixBehaviour
     [StrixSyncField]
     public TurnState nextState;
 
-    HexagonManger hexagonManger;
+    public HexagonManger hexagonManger;
 
     public TurnContllor turnContllor;
 
-    UIManager uiManager;
+    public UIManager uiManager;
+
+    ScoreUI scoreUI;
 
     [StrixSyncField]
     public int turnNum;
@@ -199,13 +203,14 @@ public class Player : StrixBehaviour
 
         ResourceUI resourceUI =  FindObjectOfType<ResourceUI>();
 
-        ScoreUI scoreUI = FindObjectOfType<ScoreUI>();
+        scoreUI = FindObjectOfType<ScoreUI>();
 
         resourceUI.SetResource(seaResource);
         resourceUI.SetStack(resourceStack);
 
         scoreUI.SetMoney(money);
         scoreUI.SetOil(seaResource);
+        scoreUI.SetMedal(medal);
     }
 
     // Update is called once per frame
@@ -234,7 +239,10 @@ public class Player : StrixBehaviour
         }
 
         if (isTurn) playerState.TurnUpdate(this);
-       
+
+        scoreUI.SetMoney(money);
+        scoreUI.SetOil(seaResource);
+        scoreUI.SetMedal(medal);
     }
 
     [StrixRpc]
