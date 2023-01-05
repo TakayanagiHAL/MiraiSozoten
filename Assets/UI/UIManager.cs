@@ -13,7 +13,8 @@ public enum CanvasName
     DICE_UI,
     R_EFFECT_UI,
     HAPPNING_UI,
-    YES_OR_NO_UI
+    YES_OR_NO_UI,
+    CRAFT_UI
 }
 
 [Serializable]

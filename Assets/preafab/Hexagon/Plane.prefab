@@ -55,22 +55,26 @@ MonoBehaviour:
       sprite: {fileID: 3552028377891350464, guid: 70e4127db14159c49ad592a9555fcce1,
         type: 3}
     - hexagonType: 1
-      sprite: {fileID: 4653046345675533320, guid: 8aad1134512df7143826d54aac1021d2,
+      sprite: {fileID: 4874126678125670354, guid: bd0cd0cbbbc05d04d9452a21b3d10be0,
         type: 3}
     - hexagonType: 2
-      sprite: {fileID: 4928815285206285198, guid: fb551e8b6e8011341a3ed49ced375a69,
+      sprite: {fileID: 4874126678125670354, guid: 157e0a0d2019e4547ae87b3f22c9d58b,
         type: 3}
     - hexagonType: 3
-      sprite: {fileID: 6680084986022567620, guid: c2ef86715cd2f2344891f3617da490f4,
+      sprite: {fileID: -6922793697723135513, guid: d158d156cbf8d004ebaaac73aafd7675,
         type: 3}
     - hexagonType: 4
-      sprite: {fileID: 4626099056906723704, guid: aceb501c7eb7fa94f813dd497d5a7d1d,
+      sprite: {fileID: -6629797300637803691, guid: da341769d4b376745bcac49432329a48,
         type: 3}
     - hexagonType: 5
-      sprite: {fileID: 7497362361831091847, guid: 34b07ad30b3602444902bee9c5bb578a,
+      sprite: {fileID: -6629797300637803691, guid: 9950212874a7d734b9945d99cb7c665b,
         type: 3}
     - hexagonType: 6
-      sprite: {fileID: 21300000, guid: b472677b15796e24f855262f0c68b27d, type: 3}
+      sprite: {fileID: -6478536213147159724, guid: c0fb41d5284281b4e85743f552d51410,
+        type: 3}
+    - hexagonType: 7
+      sprite: {fileID: -6478536213147159724, guid: 30858e5c9aaed324380854089629c7e3,
+        type: 3}
   hexagonObject: {fileID: 2839737294075970666}
 --- !u!1001 &7492361379093456994
 PrefabInstance:

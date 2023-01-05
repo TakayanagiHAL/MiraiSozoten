@@ -15,7 +15,9 @@ public class YorNUI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        yesEvent = buttonYes.gameObject.AddComponent<EventTrigger>();
+
+        noEvent = buttonNo.gameObject.AddComponent<EventTrigger>();
     }
 
     // Update is called once per frame
@@ -24,10 +26,13 @@ public class YorNUI : MonoBehaviour
         
     }
 
-    public void SetEvent(EventTrigger yes,EventTrigger no)
+    public void SetEvent(EventTrigger.Entry yes, EventTrigger.Entry no)
     {
-        yesEvent = yes;
-        noEvent = no;
+        yesEvent.triggers.Clear();
+        noEvent.triggers.Clear();
+
+        yesEvent.triggers.Add(yes);
+        noEvent.triggers.Add(no);
     }
 
     public void SetText(string set)

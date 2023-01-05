@@ -10,26 +10,24 @@ class SeabaseHexagon : HexagonMethod
 
     int cost = 100;
 
-    EventTrigger yesTrigger;
-    EventTrigger noTrigger;
-
     EventTrigger.Entry yesEvent;
     EventTrigger.Entry noEvent;
 
     YorNUI yorNUI;
     Player usePlayer;
-    string message;
+    string message = "勲章を獲得しますか?";
+
 
     public SeabaseHexagon()
     {
+        yesEvent = new EventTrigger.Entry();
+        noEvent = new EventTrigger.Entry();
+
         yesEvent.callback.AddListener(data => YesEvent());
         noEvent.callback.AddListener(data => NoEvent());
 
-        yesEvent.eventID = EventTriggerType.PointerEnter;
-        noEvent.eventID = EventTriggerType.PointerEnter;
-
-        yesTrigger.triggers.Add(yesEvent);
-        noTrigger.triggers.Add(noEvent);
+        yesEvent.eventID = EventTriggerType.PointerDown;
+        noEvent.eventID = EventTriggerType.PointerDown;
     }
 
     public override void OnPassage(Player player)
@@ -44,15 +42,24 @@ class SeabaseHexagon : HexagonMethod
             yorNUI = player.uiManager.GetCanvas(CanvasName.YES_OR_NO_UI).GetComponent<YorNUI>();
             player.uiManager.SetCanvas(CanvasName.YES_OR_NO_UI,true);
 
-            yorNUI.SetEvent(yesTrigger, noTrigger);
+            yorNUI.SetEvent(yesEvent, noEvent);
             yorNUI.SetText(message);
 
             usePlayer = player;
+
+            player.SetWait();
+
+            Debug.Log("OnMedal");
+        }
+        else
+        {
+            player.SetWait();
+
+            player.turnContllor.SetNextTurnPlayerRPC();
+
         }
 
-        player.SetWait();
 
-        //player.turnContllor.SetNextTurnPlayerRPC();
     }
 
     public void SetMedal()
@@ -72,6 +79,8 @@ class SeabaseHexagon : HexagonMethod
 
         usePlayer.uiManager.SetCanvas(CanvasName.YES_OR_NO_UI, false);
 
+        Debug.Log("OnMedal_NO");
+
     }
 
     void NoEvent()
@@ -79,6 +88,8 @@ class SeabaseHexagon : HexagonMethod
         usePlayer.turnContllor.SetNextTurnPlayerRPC();
 
         usePlayer.uiManager.SetCanvas(CanvasName.YES_OR_NO_UI, false);
+
+        Debug.Log("OnMedal_NO");
     }
 }
 
