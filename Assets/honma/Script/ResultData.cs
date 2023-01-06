@@ -141,7 +141,7 @@ public class ResultData : StrixBehaviour
         _nowPhase = NowPhase.Start;
 
         //Gameシーン時に使わないオブジェクトをfalseにする
-        AnimationObject.SetActive(false);
+        //AnimationObject.SetActive(false);
         ResultSceneGameOblect.SetActive(false);
         UiCanvas.SetActive(false);
         _phase04InformationUi.SetActive(false);
@@ -321,7 +321,7 @@ public class ResultData : StrixBehaviour
         {
             PlayerParentDetachChildren();// 恐らくGameSceneObjectとResultSceneObjectの間にPlayerが出現する
         }
-        AnimationObject.SetActive(true);
+        //AnimationObject.SetActive(true);
         UiCanvas.SetActive(true);
         //ここでGameシーンをオフにする  **********************************************************************************************:
         ResultSceneGameOblect.SetActive(true);
