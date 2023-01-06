@@ -18,9 +18,14 @@ public class ResultData : StrixBehaviour
     }
     private NowPhase _nowPhase;
 
+    [Header("リザルト開始時にGameSceneの方でTrueにする")]
     public bool ResultStart;
 
+    [Header("ストリクスOFF ＆ デバッグ時にチェックを入れる")]
     public bool LocalTestDebug;
+
+    [Header("Gameシーン未接続状態のときにチェックを入れる")]
+    public bool OnlyResultPlay;
 
     [Header("=====GameSceneから入れる=====")]
     [SerializeField]
@@ -31,14 +36,22 @@ public class ResultData : StrixBehaviour
     [Header("GameSceneのPlayer")]
     private GameObject _playerObject;
 
+    [SerializeField]
+    [Header("GameSceneのGameSceneオブジェクト")]
+    private GameObject _gameSceneObject;
+
     [Header("==============================\n")]
+
+    [SerializeField]
+    [Header("Phase01ClosingEventCanvasのscript")]
+    private TextController _textControllerScript;
 
     [SerializeField]
     [Header("ClickLoadSceneのscript")]
     private NextSceneLoad _nextSceneLoadScript;
 
-    //[SerializeField][Header("***リザルト状態になるまでfalse***\n")]
-    //private GameObject AnimationObject;
+    [SerializeField][Header("***リザルト状態になるまでfalse***\n")]
+    private GameObject AnimationObject;
 
     [SerializeField]
     private GameObject ResultSceneGameOblect;
@@ -74,6 +87,8 @@ public class ResultData : StrixBehaviour
     private List<Text> _phase01OrderCountTextLists;
     [SerializeField]
     private List<Text> _phase01PlayerNameTextLists;
+    [SerializeField]
+    private List<GameObject> _debugShipList;
 
 
     [Header("Phase02")]
@@ -141,7 +156,7 @@ public class ResultData : StrixBehaviour
         _nowPhase = NowPhase.Start;
 
         //Gameシーン時に使わないオブジェクトをfalseにする
-        //AnimationObject.SetActive(false);
+        AnimationObject.SetActive(false);
         ResultSceneGameOblect.SetActive(false);
         UiCanvas.SetActive(false);
         _phase04InformationUi.SetActive(false);
@@ -153,6 +168,13 @@ public class ResultData : StrixBehaviour
 
         //各フェーズのアクティブ初期化
         _phase01ClosingEventCanvas.SetActive(false);
+
+        //デバッグ用の船のオブジェクト
+        foreach(var debugShip in _debugShipList)
+        {
+            debugShip.SetActive(false);
+        }
+        _resultPlayer01.transform.GetChild(0).gameObject.SetActive(false);
     }
 
     // Update is called once per frame
@@ -169,7 +191,6 @@ public class ResultData : StrixBehaviour
         {
             case NowPhase.Start:
                 StartStep();
-                _nowPhase = NowPhase.Phase01;
                 break;
             case NowPhase.Phase01:
                 stepPhase01();
@@ -249,7 +270,7 @@ public class ResultData : StrixBehaviour
     {
         int myOrder = 123;
 
-        if (!LocalTestDebug)
+        if (!OnlyResultPlay)
         {
             myOrder = _playerScript.medal;//要確認
         }
@@ -268,7 +289,7 @@ public class ResultData : StrixBehaviour
     {
         int myMoney = 1234;
         
-        if (!LocalTestDebug)
+        if (!OnlyResultPlay)
         {
             myMoney = _playerScript.money;
         }
@@ -319,11 +340,26 @@ public class ResultData : StrixBehaviour
     {
         if (!LocalTestDebug)
         {
-            PlayerParentDetachChildren();// 恐らくGameSceneObjectとResultSceneObjectの間にPlayerが出現する
+            
         }
-        //AnimationObject.SetActive(true);
+
+        if (!OnlyResultPlay)
+        {
+            PlayerParentDetachChildren();// 恐らくGameSceneObjectとResultSceneObjectの間にPlayerが出現する
+            
+        }
+        else
+        {
+            foreach (var debugShip in _debugShipList)
+            {
+                debugShip.SetActive(true);
+            }
+            _resultPlayer01.transform.GetChild(0).gameObject.SetActive(true);
+        }
+
+        AnimationObject.SetActive(true);
         UiCanvas.SetActive(true);
-        //ここでGameシーンをオフにする  **********************************************************************************************:
+        gameSceneFalse();//この関数でGameシーンをオフにする  **********************************************************************************************:
         ResultSceneGameOblect.SetActive(true);
         PlayerGameObjectInitialization();
         RankImageChange();
@@ -350,9 +386,8 @@ public class ResultData : StrixBehaviour
         if(speed>0.99f)//このspeedは割合    ここは割と適当な条件
         {
             _phase01ClosingEventCanvas.SetActive(true);
-            var key_B = _keyboard.bKey;
-
-            if (key_B.wasPressedThisFrame)
+           
+            if (_textControllerScript.GetTextEnd())//text読み上げ終了時
             {
                 _nowPhase = NowPhase.Phase02;
             }
@@ -365,7 +400,13 @@ public class ResultData : StrixBehaviour
         _shipsPosition2.SetActive(true);
 
         //船の座標取得
-        Transform myTransform = _playerObject.transform;//tigau
+        Transform myTransform = _playerObject.transform;
+
+        if (OnlyResultPlay)
+        {
+            myTransform = _resultPlayer01.transform;
+        }
+
         Vector3 myVector3 = _phase02PlayerPosition.transform.position;
         //座標更新
         myTransform.position = myVector3;
@@ -427,5 +468,20 @@ public class ResultData : StrixBehaviour
         //Information解除でphase04のボタン有効化
         _exitButton.interactable = true;
         _stayButton.interactable = true;
+    }
+
+    public void phase01Start()
+    {
+        _nowPhase = NowPhase.Phase01;
+    }
+
+    //アニメーションのイベントで丁度良いタイミングでGameシーンをオフにする
+    public void gameSceneFalse()
+    {
+        if (!OnlyResultPlay)
+        {
+            _gameSceneObject.SetActive(false);
+        }
+        
     }
 }
