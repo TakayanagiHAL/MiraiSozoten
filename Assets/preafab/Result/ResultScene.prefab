@@ -6985,8 +6985,16 @@ MonoBehaviour:
   MainMenuScene: 
   LobbyMatchingScene: 
   gameScene: {fileID: 0}
-  _playerScript: {fileID: 0}
-  _playerObject: {fileID: 1770069098285082587}
+  _playerScript:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  _playerObject:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   _gameSceneObject: {fileID: 0}
   _textControllerScript: {fileID: 1035049979382023399}
   _nextSceneLoadScript: {fileID: 6505505027359830860}
@@ -6998,7 +7006,11 @@ MonoBehaviour:
   - {fileID: 1035049979581577454}
   - {fileID: 1035049978596123465}
   - {fileID: 1035049978731594574}
-  _resultPlayer01: {fileID: 1770069098285082587}
+  _resultPlayer01:
+  - {fileID: 1770069098285082587}
+  - {fileID: 1035049978353897437}
+  - {fileID: 1035049978428326734}
+  - {fileID: 1035049979173984618}
   _playersPosition: {fileID: 1035049979070941430}
   _phase01ClosingEventCanvas: {fileID: 1035049979382023393}
   _phase01PlayersEndPosition: {fileID: 1035049977740631479}

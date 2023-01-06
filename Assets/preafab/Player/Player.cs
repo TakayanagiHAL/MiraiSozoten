@@ -100,7 +100,7 @@ public struct SeaResource
 public class Player : StrixBehaviour
 {
     //表示パラメータ
-    string playerName;
+    public string playerName;
     [StrixSyncField]
     public int money = 1000;
     [StrixSyncField]
