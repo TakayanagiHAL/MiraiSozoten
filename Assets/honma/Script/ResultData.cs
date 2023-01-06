@@ -21,11 +21,19 @@ public class ResultData : StrixBehaviour
     [Header("リザルト開始時にGameSceneの方でTrueにする")]
     public bool ResultStart;
 
+    [Header("【デバッグチェック】")]
     [Header("ストリクスOFF ＆ デバッグ時にチェックを入れる")]
     public bool LocalTestDebug;
-
-    [Header("Gameシーン未接続状態のときにチェックを入れる")]
+    [Header("Gameシーン未接続状態のときにチェックを入れる(シーン遷移もなし)")]
     public bool OnlyResultPlay;
+
+    [Header("【シーン名の入力】")]
+    [Header("メインメニューシーン名を入力")]
+    [SerializeField]
+    private string MainMenuScene;
+    [Header("ロビーマッチングシーン名を入力")]
+    [SerializeField]
+    private string LobbyMatchingScene;
 
     [Header("=====GameSceneから入れる=====")]
     [SerializeField]
@@ -447,29 +455,41 @@ public class ResultData : StrixBehaviour
     {
         _phase04InformationUi.SetActive(true);
         //Information時に入力されないようにボタン無効化
-        _exitButton.interactable = false;
-        _stayButton.interactable = false;
+        _exitButton.enabled = false;
+        _stayButton.enabled = false;
     }
 
     public void phase04_RoomStayButton()
     {
-        //ルームマッチングシーンに遷移
-        //ルームマッチングシーンにレプリカのついたオブジェクトを持ち込まないように破棄する or 自分の情報だけを持ち込むようにする
-        _nextSceneLoadScript.LoadSceneStart("ルームマッチング？Scene");//シーン名入力
+        if (!OnlyResultPlay)
+        {
+            //ルームマッチングシーンに遷移
+            //ルームマッチングシーンにレプリカのついたオブジェクトを持ち込まないように破棄する or 自分の情報だけを持ち込むようにする
+            _nextSceneLoadScript.LoadSceneStart(LobbyMatchingScene);//シーン名入力
+        }
     }
 
     public void phase04_Information_YES_Button()
     {
-        //ルームから抜けて、メインメニューシーンに遷移
-        _nextSceneLoadScript.LoadSceneStart("メインメニューScene");//シーン名入力
+        if (!LocalTestDebug)
+        {
+            //ルームから抜けて、メインメニューシーンに遷移
+            StrixNetwork.instance.LeaveRoom(handler: deleteRoomResult => Debug.Log("退室しました。：" + (StrixNetwork.instance.room == null)),
+                            failureHandler: deleteRoomError => Debug.LogError("Could not delete room.Reason: " + deleteRoomError.cause));
+        }
+        if(!OnlyResultPlay)
+        {
+            _nextSceneLoadScript.LoadSceneStart(MainMenuScene);
+        }
+        
     }
 
     public void phase04_Information_NO_Button()
     {
         _phase04InformationUi.SetActive(false);
         //Information解除でphase04のボタン有効化
-        _exitButton.interactable = true;
-        _stayButton.interactable = true;
+        _exitButton.enabled = true;
+        _stayButton.enabled = true;
     }
 
     public void phase01Start()
@@ -483,7 +503,6 @@ public class ResultData : StrixBehaviour
         if (!OnlyResultPlay)
         {
             _gameSceneObject.SetActive(false);
-        }
-        
+        }   
     }
 }
