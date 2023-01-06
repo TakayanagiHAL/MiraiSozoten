@@ -42,7 +42,6 @@ public class TurnContllor : StrixBehaviour
     {
         hexagonManger = FindObjectOfType<HexagonManger>();
         turnPlayer = 0;
-        uiManager = FindObjectOfType<UIManager>();
 
         onotherUI = FindObjectOfType<OnotherUI>();
 
@@ -64,16 +63,17 @@ public class TurnContllor : StrixBehaviour
             players[i].playerCamera.SetRenderTexture(renderTextures[i]);
 
             players[i].uiManager.SetCamera(players[i].playerCamera.GetCamera());
+
+            players[i].playerCamera.SetMapCamera(true);
+            players[i].uiManager.SetCanvas(CanvasName.TURN_START_UI, true);
+            players[i].uiManager.GetCanvas(CanvasName.TURN_START_UI).GetComponent<TurnStartUI>().SetTurn(nowTurn);
+            players[i].uiManager.GetCanvas(CanvasName.TURN_START_UI).GetComponent<TurnStartUI>().AnimStart();
         }
 
 
         onotherUI.SetTurnTexture(renderTextures[0]);
 
-        
-
-        players[0].uiManager.GetCanvas(CanvasName.TURN_START_UI).GetComponent<TurnStartUI>().SetTurn(nowTurn);
-        players[0].uiManager.SetCanvas(CanvasName.TURN_START_UI, true);
-        players[0].uiManager.GetCanvas(CanvasName.TURN_START_UI).GetComponent<TurnStartUI>().AnimStart();
+       
     }
 
     // Update is called once per frame
@@ -124,6 +124,12 @@ public class TurnContllor : StrixBehaviour
 
 
     public void StartCraftFase()
+    {
+        Invoke("CallCraft", 2.0f);
+       
+    }
+
+    void CallCraft()
     {
         players[turnPlayer].uiManager.SetCanvas(CanvasName.CRAFT_UI, true);
         players[turnPlayer].uiManager.GetCanvas(CanvasName.CRAFT_UI).GetComponent<CraftUI>().StartCraft();

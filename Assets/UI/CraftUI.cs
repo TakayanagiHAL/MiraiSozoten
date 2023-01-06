@@ -58,6 +58,8 @@ public class CraftUI : MonoBehaviour
     [SerializeField] List<SeaResource> CraneUseResource;
     [SerializeField] List<SeaResource> RaderUseResource;
 
+    [SerializeField] CraftUI_MenuTabController tabController;
+
     Text TimerText;
 
     // 回収量の計算のために必要
@@ -116,6 +118,8 @@ public class CraftUI : MonoBehaviour
     {
         craftEnd = false;
         TimeLimit = 15.0f;
+
+        tabController.Init();
     }
 
     /* ==========クラフト終了フラグを取得==========*/

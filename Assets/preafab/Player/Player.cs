@@ -265,9 +265,6 @@ public class Player : StrixBehaviour
 
         SetWait();
 
-        playerPos.x = 0;
-        playerPos.y = 0;
-
         transform.position = hexagonManger.GetMapPos(playerPos);
 
         playerCamera.SetMapCamera(true);
