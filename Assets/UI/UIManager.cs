@@ -70,6 +70,27 @@ public class UIManager : MonoBehaviour
     {
         Canvas canvas = canvasDictionary.GetCanvas(name);
         canvas.enabled = flag;
+        if (flag)
+        {
+            switch (name)
+            {
+                case CanvasName.BACK_UI:
+                    canvas.GetComponent<BackUI>().SetFirstButton();
+                    break;
+                case CanvasName.COMMAND_UI:
+                    canvas.GetComponent<CommandUI>().SetFirstButton();
+                    break;
+                case CanvasName.DICE_UI:
+                    canvas.GetComponent<DiceUI>().SetFirstButton();
+                    break;
+                case CanvasName.HAPPNING_UI:
+                    canvas.GetComponent<happningUI>().SetFirstButton();
+                    break;
+                case CanvasName.YES_OR_NO_UI:
+                    canvas.GetComponent<YorNUI>().SetFirstButton();
+                    break;
+            }
+        }
     }
 
     public Canvas GetCanvas(CanvasName name)
@@ -80,5 +101,14 @@ public class UIManager : MonoBehaviour
     public GameObject GetCanvasObject(CanvasName name)
     {
         return canvasDictionary.GetCanvas(name).gameObject;
+    }
+
+    public void SetCamera(Camera camera)
+    {
+        foreach(CanvasPair pair in canvasDictionary.keyValuePairs)
+        {
+            pair.canvas.worldCamera = camera;
+            pair.canvas.planeDistance = 1.0f;
+        }
     }
 }

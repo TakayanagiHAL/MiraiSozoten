@@ -136,7 +136,6 @@ public class Player : StrixBehaviour
     public int sonar = 1;
 
     //Ž‘Œ¹
-    [StrixSyncField]
     public SeaResource seaResource;
 
     public int medal = 0;
@@ -160,7 +159,7 @@ public class Player : StrixBehaviour
     ScoreUI scoreUI;
 
     [StrixSyncField]
-    public int turnNum;
+    public int turnNum = 0;
 
     [StrixSyncField]
     public bool isTurn;
@@ -213,6 +212,18 @@ public class Player : StrixBehaviour
         scoreUI.SetMoney(money);
         scoreUI.SetOil(seaResource);
         scoreUI.SetMedal(medal);
+
+        foreach (var RoomMember in StrixNetwork.instance.sortedRoomMembers)
+        {
+            if (StrixNetwork.instance.selfRoomMember.GetUid() != RoomMember.GetUid())
+            {
+                turnNum++;
+            }
+            else
+            {
+                break;
+            }
+        }
     }
 
     // Update is called once per frame

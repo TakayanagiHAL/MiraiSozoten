@@ -8,6 +8,8 @@ public class ScoreUI : MonoBehaviour
     [SerializeField] Text medalText;
     [SerializeField] Text moneyText;
     [SerializeField] Text oilText;
+    [SerializeField] Text turnText;
+    [SerializeField] Text playerText;
 
     // Start is called before the first frame update
     void Start()

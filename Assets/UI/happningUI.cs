@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class happningUI : MonoBehaviour
 {
@@ -18,6 +19,13 @@ public class happningUI : MonoBehaviour
     HappenState state = HappenState.EVENT_SELECT;
 
     int useHappen = -1;
+
+    [SerializeField] GameObject firstButton;
+
+    public void SetFirstButton()
+    {
+        EventSystem.current.SetSelectedGameObject(firstButton);
+    }
 
     // Start is called before the first frame update
     void Start()
