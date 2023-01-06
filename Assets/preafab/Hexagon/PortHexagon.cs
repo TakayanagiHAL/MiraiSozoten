@@ -11,7 +11,7 @@ class PortHexagon : HexagonMethod
 
     YorNUI yorNUI;
     Player usePlayer;
-    string message = "勲章を獲得しますか?";
+    string message = "資源を換金しますか?";
 
     public PortHexagon()
     {
@@ -33,8 +33,11 @@ class PortHexagon : HexagonMethod
     {
         usePlayer = player;
 
-        player.SetWait();
-        player.turnContllor.StartCraftFase();
+        yorNUI = player.uiManager.GetCanvas(CanvasName.YES_OR_NO_UI).GetComponent<YorNUI>();
+        player.uiManager.SetCanvas(CanvasName.YES_OR_NO_UI, true);
+
+        yorNUI.SetEvent(yesEvent, noEvent);
+        yorNUI.SetText(message);
     }
 
     void YesEvent()
@@ -54,7 +57,8 @@ class PortHexagon : HexagonMethod
         usePlayer.money += usePlayer.seaResource.seaFood * 12;
         usePlayer.seaResource.seaFood = 0;
 
-        usePlayer.turnContllor.SetNextTurnPlayerRPC();
+        usePlayer.SetWait();
+        usePlayer.turnContllor.StartCraftFase();
 
         usePlayer.uiManager.SetCanvas(CanvasName.YES_OR_NO_UI, false);
 
@@ -62,7 +66,8 @@ class PortHexagon : HexagonMethod
 
     void NoEvent()
     {
-        usePlayer.turnContllor.SetNextTurnPlayerRPC();
+        usePlayer.SetWait();
+        usePlayer.turnContllor.StartCraftFase();
 
         usePlayer.uiManager.SetCanvas(CanvasName.YES_OR_NO_UI, false);
 

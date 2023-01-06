@@ -3702,6 +3702,11 @@ PrefabInstance:
       propertyPath: objectType
       value: 786433
       objectReference: {fileID: 0}
+    - target: {fileID: 6013894807187041161, guid: 6e16f7cc8640f834f9b5657a65f00ff6,
+        type: 3}
+      propertyPath: maxTurn
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6013894807187041162, guid: 6e16f7cc8640f834f9b5657a65f00ff6,
         type: 3}
       propertyPath: m_Name
