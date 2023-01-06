@@ -50,7 +50,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   strixBehaviours:
   - {fileID: 8410475785638066886}
-  objectType: 4
+  objectType: 6
   sendRate: 5
   syncDestroy: 1
   networkInstanceId: -1
@@ -69,6 +69,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   money: 1000
+  shipLevel: 0
   playerPos:
     x: 0
     y: 0
@@ -95,6 +96,7 @@ MonoBehaviour:
   hexagonManger: {fileID: 0}
   turnContllor: {fileID: 0}
   uiManager: {fileID: 0}
+  playerCamera: {fileID: 0}
   turnNum: 0
   isTurn: 0
   getRVol: 0

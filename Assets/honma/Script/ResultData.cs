@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
+using UnityEngine.Events;
 using SoftGear.Strix.Unity.Runtime;
 using SoftGear.Strix.Client.Core;
 
@@ -79,10 +80,6 @@ public class ResultData : StrixBehaviour
     [SerializeField] [Header("PlayersPositionのGameObject")]
     private GameObject _playersPosition;
 
-    //Phase02以降に使う
-    [SerializeField] [Header("shipsPosition2のGameObject")]
-    private GameObject _shipsPosition2;
-
     [Header("***************************\n")]
 
     //各フェーズで徐々にアクティブを解除していく
@@ -111,9 +108,9 @@ public class ResultData : StrixBehaviour
     [SerializeField]
     private Text _phase02OrderCount;
     [SerializeField]
-    private List<Text> _phase02OrderTextLists;
+    private List<Text> _phase02OrderTextList;
     [SerializeField]
-    private GameObject _phase02PlayerPosition;
+    private List<GameObject> _phase02CameraList;
 
     [Header("Phase03")]
     [SerializeField]
@@ -174,15 +171,21 @@ public class ResultData : StrixBehaviour
         {
             ListObject.SetActive(false);
         }
-        _shipsPosition2.SetActive(false);
 
         //各フェーズのアクティブ初期化
         _phase01ClosingEventCanvas.SetActive(false);
 
+        //Phase02カメラの初期化
+        foreach(var camera in _phase02CameraList)
+        {
+            camera.SetActive(false);
+        }
+
         //デバッグ用の船のオブジェクト
-        foreach(var debugShip in _debugShipList)
+        foreach (var debugShip in _debugShipList)
         {
             debugShip.SetActive(false);
+            debugShip.transform.GetChild(0).gameObject.SetActive(false);
         }
         _resultPlayer01.transform.GetChild(0).gameObject.SetActive(false);
     }
@@ -221,7 +224,7 @@ public class ResultData : StrixBehaviour
     //自分が何番目に入室したプレイヤーか検索する
     private int strixMyEntryNumber()
     {
-        int count = 1;
+        int count = 3;
         if (!LocalTestDebug)
         {
             foreach (var RoomMember in StrixNetwork.instance.sortedRoomMembers)
@@ -242,7 +245,7 @@ public class ResultData : StrixBehaviour
     //自分の順位取得
     private int MyPlayerRank()//***************************************************************************************************     GameSceneから
     {
-        int rank = 1;
+        int rank = 2;
 
         return rank;
     }
@@ -363,6 +366,7 @@ public class ResultData : StrixBehaviour
             foreach (var debugShip in _debugShipList)
             {
                 debugShip.SetActive(true);
+                debugShip.transform.GetChild(0).gameObject.SetActive(true);
             }
             _resultPlayer01.transform.GetChild(0).gameObject.SetActive(true);
         }
@@ -395,8 +399,11 @@ public class ResultData : StrixBehaviour
 
         if(speed>0.99f)//このspeedは割合    ここは割と適当な条件
         {
-            _phase01ClosingEventCanvas.SetActive(true);
-           
+            StartCoroutine(WaitCoroutine(1, () =>// 1秒待つ
+            {
+                _phase01ClosingEventCanvas.SetActive(true);
+            }));
+
             if (_textControllerScript.GetTextEnd())//text読み上げ終了時
             {
                 _nowPhase = NowPhase.Phase02;
@@ -406,23 +413,9 @@ public class ResultData : StrixBehaviour
     private void stepPhase02()
     {
         _phaseUiList[0].SetActive(false);
-        _phaseUiList[1].SetActive(true);
-        _shipsPosition2.SetActive(true);
-
-        //船の座標取得
-        Transform myTransform = _playerObject.transform;
-
-        if (OnlyResultPlay)
-        {
-            myTransform = _resultPlayer01.transform;
-        }
-
-        Vector3 myVector3 = _phase02PlayerPosition.transform.position;
-        //座標更新
-        myTransform.position = myVector3;
-        
-        //プレイヤー情報
-        
+        //Cameraを追加
+        _phase02CameraList[strixMyEntryNumber() - 1].SetActive(true);
+        //CameraFocus後にイベントで_phaseUiList[1].SetActive(true);を行う
 
         var key_B = _keyboard.bKey;
 
@@ -446,6 +439,8 @@ public class ResultData : StrixBehaviour
         //ボタン入力処理
     }
 
+
+    //*****     Button   *****
     public void phase03_ResultDetailsButton()
     {
         _nowPhase = NowPhase.Phase04;
@@ -492,6 +487,8 @@ public class ResultData : StrixBehaviour
         _stayButton.enabled = true;
     }
 
+
+    //*****     アニメーション     *****
     public void phase01Start()
     {
         _nowPhase = NowPhase.Phase01;
@@ -505,4 +502,18 @@ public class ResultData : StrixBehaviour
             _gameSceneObject.SetActive(false);
         }   
     }
+
+    //Cameraズーム後にPhase02を進行させる
+    public void phase02CameraFocusEnd()
+    {
+        _phaseUiList[1].SetActive(true);
+    }
+
+    //*****     コルーチン       *****
+    private IEnumerator WaitCoroutine(float waitSeconds, UnityAction callback)
+    {
+        yield return new WaitForSeconds(waitSeconds);
+        callback?.Invoke();
+    }
+
 }

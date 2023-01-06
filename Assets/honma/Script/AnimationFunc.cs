@@ -18,13 +18,18 @@ public class AnimationFunc : MonoBehaviour
         
     }
 
-    void Phase01Start()
+    void Phase01StartEvent()
     {
         _resultDataScript.phase01Start();
     }
 
-    void GameSceneFalse()
+    void GameSceneFalseEvent()
     {
         _resultDataScript.gameSceneFalse();
+    }
+
+    void Phase02CameraFocusEvent()
+    {
+        _resultDataScript.phase02CameraFocusEnd();
     }
 }
