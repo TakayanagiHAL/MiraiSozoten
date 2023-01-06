@@ -23,7 +23,7 @@ public class MoveState : PlayerState
     int moveVol;
     MapIndex[] movePoints;
 
-    float speed = 0.25f;
+    float speed = 5f;
 
     MState state;
 
@@ -319,7 +319,7 @@ public class MoveState : PlayerState
                 break;
             case MState.MOVING:
                 Vector3 dir = hexagonManger.GetMapPos(player.playerPos) - player.transform.position;
-                player.transform.Translate(dir / dir.magnitude*speed,Space.World);
+                player.transform.Translate(dir / dir.magnitude*speed*Time.deltaTime,Space.World);
 
                 if(dir.magnitude < 0.25)
                 {

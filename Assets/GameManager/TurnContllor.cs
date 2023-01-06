@@ -18,9 +18,13 @@ public class TurnContllor : StrixBehaviour
 
     HexagonManger hexagonManger;
 
+    UIManager uiManager;
+
     public Player[] players;
 
     [SerializeField] int playerVol;
+
+    [SerializeField] int maxTurn;
 
     int nowTurn;
 
@@ -57,13 +61,17 @@ public class TurnContllor : StrixBehaviour
     public void SetNextTurnPlayer()
     {
         turnPlayer++;
-        if(turnPlayer % playerVol == 0)
+        if (turnPlayer % playerVol == 0)
         {
             turnPlayer = 0;
             nowTurn++;
+            StartCraftFase();
         }
-        players[turnPlayer].CallRPCOwner(Player.RpcFunctionName.SET_TURN);
-        players[turnPlayer].CallRPCOwner(Player.RpcFunctionName.SET_COMAND_STATE);
+        else
+        {
+            players[turnPlayer].CallRPCOwner(Player.RpcFunctionName.SET_TURN);
+            players[turnPlayer].CallRPCOwner(Player.RpcFunctionName.SET_COMAND_STATE);
+        }
     }
 
     public void SetNextTurnPlayerRPC()
@@ -77,5 +85,17 @@ public class TurnContllor : StrixBehaviour
             Rpc(strixReplicator.ownerUid, "SetNextTurnPlayer");
 
         }
+    }
+
+    void StartCraftFase()
+    {
+        uiManager.SetCanvas(CanvasName.CRAFT_UI, true);
+    }
+
+    public void FinishCraftFase()
+    {
+        uiManager.SetCanvas(CanvasName.CRAFT_UI, false);
+        players[turnPlayer].CallRPCOwner(Player.RpcFunctionName.SET_TURN);
+        players[turnPlayer].CallRPCOwner(Player.RpcFunctionName.SET_COMAND_STATE);
     }
 }

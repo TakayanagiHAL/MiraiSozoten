@@ -12,10 +12,11 @@ public class HexagonManger : StrixBehaviour
 
     int nowMedal = -1;
 
-    List<SeabaseHexagon> seabase;
+    List<Hexagon> seabase;
     // Start is called before the first frame update
     void Start()
     {
+        seabase = new List<Hexagon>();
         map = new Hexagon[mapHeight,mapWidth];
 
         Hexagon[] hexagons = FindObjectsOfType<Hexagon>();
@@ -24,11 +25,14 @@ public class HexagonManger : StrixBehaviour
         {
             MapIndex index = hexagons[i].GetMapIndex();
             map[index.y,index.x] = hexagons[i];
+            hexagons[i].Init();
             if(hexagons[i].GetHexagonType() == HexagonType.SEA_BASE)
             {
-                seabase.Add((SeabaseHexagon)hexagons[i].GetHexagonMethod());
+                seabase.Add(hexagons[i]);
             }
         }
+
+        SetNextMedal();
     }
 
     // Update is called once per frame
@@ -50,13 +54,27 @@ public class HexagonManger : StrixBehaviour
 
     public void SetNextMedal()
     {
-        int m = Random.Range(0, seabase.Capacity);
+        int m = Random.Range(0, seabase.Count);
         while(nowMedal == m)
         {
-            m = Random.Range(0, seabase.Capacity);
+            m = Random.Range(0, seabase.Count);
         }
 
-        seabase[m].SetMedal();
+        for(int i = 0; i < seabase.Count; i++)
+        {
+            if(i == m)
+            {
+                seabase[m].GetHexagonMethod<SeabaseHexagon>().SetMedal();
+                seabase[m].SetHexagonType(HexagonType.SEA_BASE);
+                seabase[m].SetSprite();
+            }
+            else
+            {
+                seabase[i].SetHexagonType(HexagonType.SEA_BASE_OFF);
+                seabase[i].SetSprite();
+            }
+        }
+        
         nowMedal = m;
     }
 }
