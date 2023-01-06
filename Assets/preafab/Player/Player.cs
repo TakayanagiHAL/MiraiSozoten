@@ -202,9 +202,9 @@ public class Player : StrixBehaviour
         seaResource.steel = 15;
         seaResource.wood = 45;
 
-        ResourceUI resourceUI =  FindObjectOfType<ResourceUI>();
+        ResourceUI resourceUI =  uiManager.GetCanvas(CanvasName.RESOURCE_UI).GetComponent<ResourceUI>();
 
-        scoreUI = FindObjectOfType<ScoreUI>();
+        scoreUI = uiManager.GetCanvas(CanvasName.SCORE_UI).GetComponent<ScoreUI>();
 
         resourceUI.SetResource(seaResource);
         resourceUI.SetStack(resourceStack);
@@ -213,17 +213,6 @@ public class Player : StrixBehaviour
         scoreUI.SetOil(seaResource);
         scoreUI.SetMedal(medal);
 
-        foreach (var RoomMember in StrixNetwork.instance.sortedRoomMembers)
-        {
-            if (StrixNetwork.instance.selfRoomMember.GetUid() != RoomMember.GetUid())
-            {
-                turnNum++;
-            }
-            else
-            {
-                break;
-            }
-        }
     }
 
     // Update is called once per frame
@@ -269,7 +258,7 @@ public class Player : StrixBehaviour
 
         turnContllor = FindObjectOfType<TurnContllor>();
 
-        uiManager = FindObjectOfType<UIManager>();
+        //uiManager = FindObjectOfType<UIManager>();
 
         nowState = TurnState.TURN_WAIT;
         nextState = TurnState.TURN_WAIT;
@@ -315,14 +304,14 @@ public class Player : StrixBehaviour
     public void SetTurn()
     {
         isTurn = true;
-        this.transform.GetChild(0).gameObject.SetActive(true);
+        //this.transform.GetChild(0).gameObject.SetActive(true);
     }
 
     [StrixRpc]
     public void SetWait()
     {
         isTurn = false;
-        this.transform.GetChild(0).gameObject.SetActive(false);
+        //this.transform.GetChild(0).gameObject.SetActive(false);
         nextState = TurnState.TURN_WAIT;
     }
 
@@ -389,4 +378,6 @@ public class Player : StrixBehaviour
     {
         GetComponent<Animator>().SetBool("isTornade", false);
     }
+
+    public int GetNumber() { return turnNum; }
 }

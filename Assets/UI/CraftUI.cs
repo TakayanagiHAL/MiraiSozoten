@@ -115,7 +115,7 @@ public class CraftUI : MonoBehaviour
     public void StartCraft()
     {
         craftEnd = false;
-        TimeLimit = 60.0f;
+        TimeLimit = 15.0f;
     }
 
     /* ==========クラフト終了フラグを取得==========*/

@@ -13,8 +13,7 @@ class OffingHexagon : HexagonMethod
     public override void OnReach(Player player)
     {
         player.SetWait();
-
-        player.turnContllor.SetNextTurnPlayerRPC();
+        player.turnContllor.StartCraftFase();
     }
 }
 

@@ -79,8 +79,6 @@ class SeabaseHexagon : HexagonMethod
 
         usePlayer.uiManager.SetCanvas(CanvasName.YES_OR_NO_UI, false);
 
-        Debug.Log("OnMedal_NO");
-
     }
 
     void NoEvent()
@@ -89,7 +87,6 @@ class SeabaseHexagon : HexagonMethod
 
         usePlayer.uiManager.SetCanvas(CanvasName.YES_OR_NO_UI, false);
 
-        Debug.Log("OnMedal_NO");
     }
 }
 
