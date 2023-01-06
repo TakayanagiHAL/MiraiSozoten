@@ -37,8 +37,8 @@ public class ResultData : StrixBehaviour
     private string LobbyMatchingScene;
 
     [Header("=====GameScene‚©‚ç“ü‚ê‚é=====")]
-    [SerializeField]
-    GameObject gameScene;
+    //[SerializeField]
+    //GameObject gameScene;
     [SerializeField]
     [Header("Player‚Ìscript")]
     private List<Player> _playerScript;
