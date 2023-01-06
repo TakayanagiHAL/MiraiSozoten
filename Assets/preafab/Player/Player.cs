@@ -104,7 +104,7 @@ public class Player : StrixBehaviour
     [StrixSyncField]
     public int money = 1000;
     [StrixSyncField]
-    int shipLevel;
+    public int shipLevel;
 
     public List<Item> items;
     public MapIndex playerPos;
@@ -154,6 +154,8 @@ public class Player : StrixBehaviour
     public TurnContllor turnContllor;
 
     public UIManager uiManager;
+
+    public playerCamera playerCamera;
 
     ScoreUI scoreUI;
 
@@ -234,6 +236,10 @@ public class Player : StrixBehaviour
                     playerState = new HappningState();
                     playerState.TurnInit(this, hexagonManger, turnContllor, uiManager);
                     break;
+                case TurnState.MAP_VIEW:
+                    playerState = new MapState();
+                    playerState.TurnInit(this, hexagonManger, turnContllor, uiManager);
+                    break;
             }
             nowState = nextState;
         }
@@ -263,6 +269,8 @@ public class Player : StrixBehaviour
         playerPos.y = 0;
 
         transform.position = hexagonManger.GetMapPos(playerPos);
+
+        playerCamera.SetMapCamera(true);
     }
 
     public void CallRPCOwner(RpcFunctionName fName,params object[] param)
@@ -317,8 +325,12 @@ public class Player : StrixBehaviour
     public void SetComandState()
     {
         nextState = TurnState.SELECT_COMAND;
+    }
 
-        Debug.Log("SetComandState");
+    [StrixRpc]
+    public void SetMapState()
+    {
+        nextState = TurnState.MAP_VIEW;
     }
 
     [StrixRpc]

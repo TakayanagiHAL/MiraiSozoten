@@ -13,7 +13,7 @@ public class HappningState : PlayerState
         EXE_HAPPNING
     }
 
-    HappningUI happningUI;
+    happningUI happningUI;
 
     int useHappning;
 
@@ -24,7 +24,7 @@ public class HappningState : PlayerState
         Debug.Log("HAPPEN");
         base.TurnInit(player, hexagon, turn,ui);
 
-        happningUI = uiManager.GetCanvas(CanvasName.HAPPNING_UI).GetComponent<HappningUI>();
+        happningUI = uiManager.GetCanvas(CanvasName.HAPPNING_UI).GetComponent<happningUI>();
 
         uiManager.SetCanvas(CanvasName.HAPPNING_UI, true);
 

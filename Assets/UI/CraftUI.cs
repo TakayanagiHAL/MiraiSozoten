@@ -3,13 +3,71 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+[System.Serializable]
+public struct Paramater
+{
+    public static Paramater operator +(Paramater a, Paramater b)
+    {
+        b.Speed += a.Speed;
+        b.Lading += a.Lading;
+        b.Armer += a.Armer;
+        b.GetPower += a.GetPower;
+        b.Rate += a.Rate;
+        b.SearchPower += a.SearchPower;
+
+        return b;
+    }
+
+    public static Paramater operator -(Paramater a, Paramater b)
+    {
+        b.Speed -= a.Speed;
+        b.Lading -= a.Lading;
+        b.Armer -= a.Armer;
+        b.GetPower -= a.GetPower;
+        b.Rate -= a.Rate;
+        b.SearchPower -= a.SearchPower;
+
+        return b;
+    }
+
+
+    public int Speed;
+    public int Lading;
+    public int Armer;
+    public float GetPower;
+    public float Rate;
+    public int SearchPower;
+}
+
+
 public class CraftUI : MonoBehaviour
 {
     [SerializeField] Player player;
 
+    // 上昇するパラメータリスト
+    [SerializeField] List<Paramater> DeaselUpParamater;
+    [SerializeField] List<Paramater> BodyUpParamater;
+    [SerializeField] List<Paramater> MouseUpParamater;
+    [SerializeField] List<Paramater> CraneUpParamater;
+    [SerializeField] List<Paramater> RaderUpParamater;
+
+    // 必要素材リスト
+    [SerializeField] List<SeaResource> DeaselUseResource;
+    [SerializeField] List<SeaResource> BodyUseResource;
+    [SerializeField] List<SeaResource> MouseUseResource;
+    [SerializeField] List<SeaResource> CraneUseResource;
+    [SerializeField] List<SeaResource> RaderUseResource;
+
+    Text TimerText;
+
     // 回収量の計算のために必要
     float craneGetPower;
     float mouseGetPower;
+
+    // 制限時間の処理に使用する変数
+    float TimeLimit;    // 制限時間
+    bool craftEnd;      // クラフトが終了するフラグ
+
 
     // Start is called before the first frame update
     void Start()
@@ -18,164 +76,389 @@ public class CraftUI : MonoBehaviour
         {
             Debug.Log("MainPlayer NULL");
         }
-        
-        Init();
+
+        // タイマー用のテキストを取得
+        TimerText = this.gameObject.transform.Find("MainPlayerUIPanel").gameObject.transform.Find("TimeImage").transform.Find("TimeText").GetComponent<Text>();
+
+        craneGetPower = CraneUpParamater[1].GetPower;
+        mouseGetPower = MouseUpParamater[1].GetPower;
+
+        TimeLimit = 60.0f;
+
+        craftEnd = false;
     }
 
     // Update is called once per frame
     void Update()
     {
+        // 時間計測
+        TimeCount();
+    }
 
+    /* ==========制限時間を減らす==========*/
+    void TimeCount()
+    {
+        if (craftEnd == false)
+        {
+            // 時間計測をする
+            TimeLimit -= Time.deltaTime;
+            if (TimeLimit < 0.0f)
+            {
+                TimeLimit = 0.0f;
+                craftEnd = true;
+            }
+
+            TimerText.text = ((int)TimeLimit).ToString();
+        }        
+    }
+
+    /* ==========クラフト終了フラグを取得==========*/
+    public bool GetCraftEnd()
+    {
+        return craftEnd;
     }
 
     /* ==========ディーゼルエンジンの強化========== */
-    public void DieselEngineUpgrade(SeaResource resource, Paramater param,int maxLevel)
+    public void DieselEngineUpgrade()
     {
-        if (player.dieselEngine < maxLevel)
+        if (player.dieselEngine < DeaselUseResource.Count)
         {
-            // 強化レベルアップ
-            player.dieselEngine++;
+            // 素材が足りているか判定する
+            if (UpgradeDecision(DeaselUseResource[player.dieselEngine]))
+            {
+                Debug.Log("player.seaResource:" + player.seaResource.plastic + ", " + player.seaResource.ePlastic + ", " + player.seaResource.wood + ", " + player.seaResource.steel + ", " + player.seaResource.seaFood);
+                //資源処理
+                player.seaResource = DeaselUseResource[player.dieselEngine] - player.seaResource;
 
-            //資源処理
-            player.seaResource = resource - player.seaResource;
+                Debug.Log("DeaselUseResource[player.dieselEngine] :" + DeaselUseResource[player.dieselEngine].plastic + ", " + DeaselUseResource[player.dieselEngine].ePlastic 
+                    + ", " + DeaselUseResource[player.dieselEngine].wood + ", " + DeaselUseResource[player.dieselEngine].steel + ", " + DeaselUseResource[player.dieselEngine].seaFood);
+                Debug.Log("player.seaResource:" + player.seaResource.plastic + ", " + player.seaResource.ePlastic + ", " + player.seaResource.wood + ", " + player.seaResource.steel + ", " + player.seaResource.seaFood);
 
+                //パラメータ処理
+                player.speed += DeaselUpParamater[player.dieselEngine].Speed;
 
-            //パラメータ処理
-            player.speed += param.Speed;
+                // 強化レベルアップ
+                player.dieselEngine++;
 
-            Debug.Log("エンジン強化");
+                player.shipLevel++;
+
+                Debug.Log("エンジン強化");
+            }            
         }
     }
 
     /* ==========船体の強化========== */
-    public void ShipBodyUpgrade(SeaResource resource, Paramater param, int maxLevel)
+    public void ShipBodyUpgrade()
     {
-        if (player.shipBody < maxLevel)
+        if (player.shipBody < BodyUseResource.Count)
         {
-            // 強化レベルアップ
-            player.shipBody++;
+            // 素材が足りているか判定する
+            if (UpgradeDecision(BodyUseResource[player.shipBody]))
+            {
+                //資源処理
+                player.seaResource = BodyUseResource[player.shipBody] - player.seaResource;
 
-            //資源処理
-            player.seaResource = resource - player.seaResource;
+                //パラメータ処理
+                // スピード
+                player.speed += BodyUpParamater[player.shipBody].Speed;
 
-            //パラメータ処理
-            // スピード
-            player.speed += param.Speed;
+                // 積載量
+                player.resourceStack += BodyUpParamater[player.shipBody].Lading;
 
-            // 積載量
-            player.resourceStack += param.Lading;
+                // 装甲厚
+                player.shipArmer += BodyUpParamater[player.shipBody].Armer;
 
-            // 装甲厚
-            player.shipArmer += param.Armer;
+                // 強化レベルアップ
+                player.shipBody++;
 
-            Debug.Log("船体強化");
+                player.shipLevel++;
+
+                Debug.Log("船体強化");
+            }           
         }
     }
 
     /* ==========SWWマウスの強化========== */
-    public void WhaleMouseUpgrade(SeaResource resource, Paramater param, int maxLevel)
+    public void WhaleMouseUpgrade()
     {
 
-        if (player.whaleMouse < maxLevel)
+        if (player.whaleMouse < MouseUseResource.Count)
         {
-            // 強化レベルアップ
-            player.whaleMouse++;
+            // 素材が足りているか判定する
+            if (UpgradeDecision(MouseUseResource[player.whaleMouse]))
+            {               
+                //資源処理
+                player.seaResource = MouseUseResource[player.dieselEngine] - player.seaResource;
 
-            //資源処理
-            player.seaResource = resource - player.seaResource;
+                //パラメータ処理
+                // スピード
+                player.speed += MouseUpParamater[player.whaleMouse].Speed;
 
-            //パラメータ処理
-            // スピード
-            player.speed += param.Speed;
+                // 回収量(100*(クレーンの回収力*マウスの回収力))       
+                if (MouseUpParamater[player.whaleMouse].GetPower > 0.0f)
+                {
+                    player.getPower = (int)(100.0f * (craneGetPower * MouseUpParamater[player.whaleMouse].GetPower));
+                    mouseGetPower = MouseUpParamater[player.whaleMouse].GetPower;
+                }
 
-            // 回収量(100*(クレーンの回収力*マウスの回収力))       
-            if (param.GetPower > 0.0f)
-            {
-                player.getPower = (int)(100.0f * (craneGetPower * param.GetPower));
-                mouseGetPower = param.GetPower;
-            }                
+                // 強化レベルアップ
+                player.whaleMouse++;
 
-            Debug.Log("引き揚げ量強化");
+                player.shipLevel++;
+
+                Debug.Log("引き揚げ量強化");
+            }            
         }
     }
 
     /* ==========クレーンの強化========== */
-    public void CraneUpgrade(SeaResource resource, Paramater param, int maxLevel)
+    public void CraneUpgrade()
     {
-
-        if (player.crane < maxLevel)
+        // 最大強化かどうかを判定する
+        if (player.crane < CraneUseResource.Count)
         {
-            // 強化レベルアップ
-            player.crane++;
+            // 素材が足りているか判定する
+            if (UpgradeDecision(CraneUseResource[player.crane]))
+            {               
+                //資源処理
+                player.seaResource = CraneUseResource[player.crane] - player.seaResource;
 
-            //資源処理
-            player.seaResource = resource - player.seaResource;
+                //パラメータ処理
+                if (CraneUpParamater[player.crane].GetPower > 0.0f)
+                {
+                    player.getPower = (int)(100.0f * (CraneUpParamater[player.crane].GetPower * mouseGetPower));
 
-            //パラメータ処理
-            if (param.GetPower > 0.0f)
-            {
-                player.getPower = (int)(100.0f * (mouseGetPower * param.GetPower));
-                craneGetPower = param.GetPower;
-            }            
+                    craneGetPower = CraneUpParamater[player.crane].GetPower;
+                }
 
-            Debug.Log("クレーン強化");
+                // 強化レベルアップ
+                player.crane++;
+
+                player.shipLevel++;
+
+                Debug.Log("クレーン強化");
+            }
         }
     }
 
     /* ==========レーダーの強化========== */
-    public void SonarUpgrade(SeaResource resource, Paramater param, int maxLevel)
+    public void SonarUpgrade()
     {
 
-        if (player.sonar < maxLevel)
+        if (player.sonar < RaderUseResource.Count)
         {
-            // 強化レベルアップ
-            player.sonar++;
+            // 素材が足りているか判定する
+            if (UpgradeDecision(RaderUseResource[player.sonar]))
+            {                
+                //資源処理
+                player.seaResource = RaderUseResource[player.sonar] - player.seaResource;
 
-            //資源処理
-            player.seaResource = resource - player.seaResource;
+                //パラメータ処理
+                player.searchPower += RaderUpParamater[player.sonar].SearchPower;
 
-            //パラメータ処理
-            player.searchPower += param.SearchPower;
+                // 強化レベルアップ
+                player.sonar++;
 
-            Debug.Log("ソナー強化");
+                player.shipLevel++;
+
+                Debug.Log("ソナー強化");
+            }
         }
     }
 
-    // クラフトが始まる時に呼ぶ初期化処理
-    void Init()
-    {
-        // スピードのステータス表示
-        //NowSpeedText.text = player.speed.ToString();
 
-        //float afterSpeedStatus = player.speed + DieselPalamUpList[player.dieselEngine];
-        //AfterSpeedText.text = afterSpeedStatus.ToString();
+    /* ==========アップグレード出来るか判定する========== */
+    bool UpgradeDecision(SeaResource UseResource)
+    {      
+        // プレイヤーが持っている素材と必要素材数を比較する
+        // プラスチック
+        if (player.seaResource.plastic < UseResource.plastic)
+        {
+            return false;
+        }
 
-        // 積載量のステータス表示
-        //NowLadingText.text = player.resourceStack.ToString();
+        // エンプラ
+        if (player.seaResource.ePlastic < UseResource.ePlastic)
+        {
+            return false;
+        }
 
-        //float afterStackText = player.resourceStack + BodyPalamUpList[player.shipBody].y;
-        //AfterLadingText.text = afterStackText.ToString();
+        // 木材
+        if (player.seaResource.wood < UseResource.wood)
+        {
+            return false;
+        }
 
-        // 回収量のステータス表示
-        //NowSalvageText.text = player.getPower.ToString();
+        // 鋼材
+        if (player.seaResource.steel < UseResource.steel)
+        {
+            return false;
+        }
 
-        //float afterSalvageText = player.getPower + CranePalamUpList[player.crane];
-        //AfterSalvageText.text = afterSalvageText.ToString();
+        // 海鮮
+        if (player.seaResource.seaFood < UseResource.seaFood)
+        {
+            return false;
+        }
 
-        // 探知力のステータス表示
-        //NowRaderText.text = player.searchPower.ToString();
-
-        //float AfterText = player.searchPower + SonarPalamUpList[player.sonar];
-        //AfterRaderText.text = AfterText.ToString();
+        return true;
     }
 
-    public void SetCraneGetower(float power)
+    /* ==========パラメータの加算量を取得========== */
+    public Paramater GetNextParamater(int cursolNum)
     {
-        craneGetPower = power;
+        // カーソルがどこにあるかを判定する
+        if (cursolNum == 0)
+        {
+            int ContenaNum = player.dieselEngine;
+            if(DeaselUpParamater.Count<= player.dieselEngine)
+            {
+                ContenaNum = 0;
+            }
+            return DeaselUpParamater[ContenaNum];
+        }
+        else if(cursolNum == 1)
+        {
+            int ContenaNum = player.shipBody;
+            if (BodyUpParamater.Count <= player.shipBody)
+            {
+                ContenaNum = 0;
+            }
+
+            return BodyUpParamater[ContenaNum];
+        }
+        else if(cursolNum == 2)
+        {
+            int ContenaNum = player.whaleMouse;
+            if (MouseUpParamater.Count <= player.whaleMouse)
+            {
+                ContenaNum = 0;
+            }
+
+            return MouseUpParamater[ContenaNum];
+        }
+        else if (cursolNum == 3)
+        {
+            int ContenaNum = player.crane;
+            if (CraneUpParamater.Count <= player.crane)
+            {
+                ContenaNum = 0;
+            }
+
+            return CraneUpParamater[ContenaNum];
+        }
+        else if(cursolNum == 4)
+        {
+            int ContenaNum = player.sonar;
+            if (RaderUpParamater.Count <= player.sonar)
+            {
+                ContenaNum = 0;
+            }
+
+            return RaderUpParamater[ContenaNum];
+        }
+
+        // カーソルが０～４以外だった場合
+        Paramater param;
+        param.Speed = -1;
+        param.Lading = -1;
+        param.Armer = -1;
+        param.GetPower = -1.0f;
+        param.Rate = -1.0f;
+        param.SearchPower = -1;
+
+        return param;
     }
 
-    public void SetMouseGetower(float power)
+    // 強化に使うリソース量を取得
+    public SeaResource GetNextUseResource(int cursolNum)
+    {        
+        // カーソルがどこにあるかを判定する
+        if (cursolNum == 0)
+        {
+            int ContenaNum = player.dieselEngine;
+            if (DeaselUpParamater.Count <= player.dieselEngine)
+            {
+                ContenaNum = 0;
+            }
+            return DeaselUseResource[ContenaNum];
+        }
+        else if (cursolNum == 1)
+        {
+            int ContenaNum = player.shipBody;
+            if (BodyUpParamater.Count <= player.shipBody)
+            {
+                ContenaNum = 0;
+            }
+
+            return BodyUseResource[ContenaNum];
+        }
+        else if (cursolNum == 2)
+        {
+            int ContenaNum = player.whaleMouse;
+            if (MouseUpParamater.Count <= player.whaleMouse)
+            {
+                ContenaNum = 0;
+            }
+
+            return MouseUseResource[ContenaNum];
+        }
+        else if (cursolNum == 3)
+        {
+            int ContenaNum = player.crane;
+            if (CraneUpParamater.Count <= player.crane)
+            {
+                ContenaNum = 0;
+            }
+
+            return CraneUseResource[ContenaNum];
+        }
+        else if (cursolNum == 4)
+        {
+            int ContenaNum = player.sonar;
+            if (RaderUpParamater.Count <= player.sonar)
+            {
+                ContenaNum = 0;
+            }
+
+            return RaderUseResource[ContenaNum];
+        }
+
+        // カーソルが０～４以外だった場合
+        SeaResource resource;
+        resource.plastic = -1;
+        resource.ePlastic = -1;
+        resource.wood = -1;
+        resource.steel = -1;
+        resource.seaFood = -1;
+
+        return resource;
+    }
+
+    
+    // クレーンのの回収力を取得する
+    public float GetCraneGetPower()
     {
-        mouseGetPower = power;
+        return craneGetPower;
+    }
+
+    // マウスの回収力を取得
+    public float GetMouseGetPower()
+    {
+        return mouseGetPower;
+    }
+
+
+    // プレイヤー取得
+    public Player GetPlayer()
+    {
+        if (player != null)
+        {
+            return player;
+        }
+        else
+        {
+            return null;
+        }
     }
 }
