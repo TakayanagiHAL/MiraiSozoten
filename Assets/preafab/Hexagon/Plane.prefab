@@ -52,8 +52,7 @@ MonoBehaviour:
   useSprites:
     keyValuePairs:
     - hexagonType: 0
-      sprite: {fileID: 3552028377891350464, guid: 70e4127db14159c49ad592a9555fcce1,
-        type: 3}
+      sprite: {fileID: 2100000, guid: df255826d758268418353ab8bf85b18b, type: 2}
     - hexagonType: 1
       sprite: {fileID: 4874126678125670354, guid: bd0cd0cbbbc05d04d9452a21b3d10be0,
         type: 3}
