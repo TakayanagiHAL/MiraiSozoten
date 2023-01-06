@@ -22,6 +22,8 @@ public class TurnContllor : StrixBehaviour
 
     OnotherUI onotherUI;
 
+    [SerializeField] ResultData result;
+
     public Player[] players;
     [StrixSyncField]
     int playerVol;
@@ -96,7 +98,7 @@ public class TurnContllor : StrixBehaviour
             
             if (nowTurn > maxTurn)
             {
-                FindObjectOfType<ResultData>().ResultStart = true;
+                result.ResultStart = true;
             }
             else
             {
