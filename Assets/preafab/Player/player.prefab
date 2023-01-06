@@ -50,7 +50,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   strixBehaviours:
   - {fileID: 8410475785638066886}
-  objectType: 6
+  objectType: 5
   sendRate: 5
   syncDestroy: 1
   networkInstanceId: -1

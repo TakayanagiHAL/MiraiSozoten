@@ -11,7 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/fujiwara/Scenes/OnlineLobbyScene.unity
     guid: 1e4f27ab5ec58b34cb83dd1adabf2129
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/OpeningCreate.unity
     guid: 6b0c4206083487f48bc9b411daa31062
   - enabled: 1

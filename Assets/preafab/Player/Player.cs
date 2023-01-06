@@ -136,7 +136,6 @@ public class Player : StrixBehaviour
     public int sonar = 1;
 
     //Ž‘Œ¹
-    [StrixSyncField]
     public SeaResource seaResource;
 
     public int medal = 0;
@@ -160,7 +159,7 @@ public class Player : StrixBehaviour
     ScoreUI scoreUI;
 
     [StrixSyncField]
-    public int turnNum;
+    public int turnNum = 0;
 
     [StrixSyncField]
     public bool isTurn;
@@ -203,9 +202,9 @@ public class Player : StrixBehaviour
         seaResource.steel = 15;
         seaResource.wood = 45;
 
-        ResourceUI resourceUI =  FindObjectOfType<ResourceUI>();
+        ResourceUI resourceUI =  uiManager.GetCanvas(CanvasName.RESOURCE_UI).GetComponent<ResourceUI>();
 
-        scoreUI = FindObjectOfType<ScoreUI>();
+        scoreUI = uiManager.GetCanvas(CanvasName.SCORE_UI).GetComponent<ScoreUI>();
 
         resourceUI.SetResource(seaResource);
         resourceUI.SetStack(resourceStack);
@@ -213,6 +212,7 @@ public class Player : StrixBehaviour
         scoreUI.SetMoney(money);
         scoreUI.SetOil(seaResource);
         scoreUI.SetMedal(medal);
+
     }
 
     // Update is called once per frame
@@ -258,7 +258,7 @@ public class Player : StrixBehaviour
 
         turnContllor = FindObjectOfType<TurnContllor>();
 
-        uiManager = FindObjectOfType<UIManager>();
+        //uiManager = FindObjectOfType<UIManager>();
 
         nowState = TurnState.TURN_WAIT;
         nextState = TurnState.TURN_WAIT;
@@ -304,14 +304,14 @@ public class Player : StrixBehaviour
     public void SetTurn()
     {
         isTurn = true;
-        this.transform.GetChild(0).gameObject.SetActive(true);
+        //this.transform.GetChild(0).gameObject.SetActive(true);
     }
 
     [StrixRpc]
     public void SetWait()
     {
         isTurn = false;
-        this.transform.GetChild(0).gameObject.SetActive(false);
+        //this.transform.GetChild(0).gameObject.SetActive(false);
         nextState = TurnState.TURN_WAIT;
     }
 
@@ -378,4 +378,6 @@ public class Player : StrixBehaviour
     {
         GetComponent<Animator>().SetBool("isTornade", false);
     }
+
+    public int GetNumber() { return turnNum; }
 }
