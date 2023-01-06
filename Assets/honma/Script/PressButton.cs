@@ -31,9 +31,10 @@ public class PressButton : MonoBehaviour
         // Bキーの入力状態取得
         var Key_putB = _keyboard.bKey;
 
-        if (Key_putB.wasPressedThisFrame)
+        if (Gamepad.current.bButton.wasPressedThisFrame||Input.GetKey(KeyCode.Return))
         {
-            _nextSceneLoadScript.LoadSceneStart("メインメニューScene");//シーン名入力
+            Debug.Log("Go");
+            _nextSceneLoadScript.LoadSceneStart("Scenes/OpeningCreate");//シーン名入力
         }
     }
 }

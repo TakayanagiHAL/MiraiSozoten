@@ -100,7 +100,7 @@ public struct SeaResource
 public class Player : StrixBehaviour
 {
     //表示パラメータ
-    string playerName;
+    public string playerName;
     [StrixSyncField]
     public int money = 1000;
     [StrixSyncField]
@@ -264,9 +264,6 @@ public class Player : StrixBehaviour
         nextState = TurnState.TURN_WAIT;
 
         SetWait();
-
-        playerPos.x = 0;
-        playerPos.y = 0;
 
         transform.position = hexagonManger.GetMapPos(playerPos);
 

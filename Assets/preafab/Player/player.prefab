@@ -68,11 +68,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d9725f68ebae194bbc7ad218a15029b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerName: 
   money: 1000
   shipLevel: 0
   playerPos:
-    x: 0
-    y: 0
+    x: 15
+    y: 10
   speed: 1
   resourceStack: 1200
   getPower: 100

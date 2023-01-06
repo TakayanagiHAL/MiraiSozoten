@@ -743,6 +743,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: turnStartCanvas
       objectReference: {fileID: 0}
+    - target: {fileID: 4981745487579282391, guid: 48d9f91cc07f224429b0ac38a9f8f1b0,
+        type: 3}
+      propertyPath: m_SortingOrder
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8751627163113463006, guid: 48d9f91cc07f224429b0ac38a9f8f1b0,
         type: 3}
       propertyPath: m_Pivot.x
