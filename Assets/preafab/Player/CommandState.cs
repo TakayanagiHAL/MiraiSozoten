@@ -10,6 +10,8 @@ public class CommandState : PlayerState
         player.nowState = TurnState.SELECT_COMAND;
         uiManager.SetCanvas(CanvasName.COMMAND_UI, true);
         player.playerCamera.SetMapCamera(false);
+
+        uiManager.GetCanvas(CanvasName.SCORE_UI).GetComponent<ScoreUI>().SetTurn(turnContllor.nowTurn);
     }
     override public void TurnUpdate (Player player){
 
