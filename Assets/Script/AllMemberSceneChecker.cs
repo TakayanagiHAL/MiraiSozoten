@@ -70,7 +70,6 @@ public class AllMemberSceneChecker : MonoBehaviour
             {
                 Debug.Log("プロパティ「nowScene」がありませんでした。");
                 return false;
-
             }
 
             if ((int)value != num)
@@ -79,8 +78,6 @@ public class AllMemberSceneChecker : MonoBehaviour
                 return false;
             }
         }
-
         return true;
     }
-
 }

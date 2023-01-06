@@ -80,7 +80,7 @@ public class F_StrixConnect : MonoBehaviour
     //失敗ハンドラー
     private void OnConnectFailedCallback(StrixNetworkConnectFailedEventArgs args)
     {
-        string error = "";
+        string error = "接続できませんでした";
 
         if (args.cause != null)
         {
@@ -103,23 +103,33 @@ public class F_StrixConnect : MonoBehaviour
         strixNetwork.SearchJoinableRoom(
                            condition: ConditionBuilder.Builder().Field("key3").EqualTo(roomid).Build(),  //key3(ルーム番号)がroomidと一致する部屋のみ出力
                             order: null,
-                           limit: 10,                                                                            // 結果を10件のみ取得します
+                           limit: 1,                                                                            // 結果を10件のみ取得します
                            offset: 0,                                                                            // 結果を先頭から取得します
                            handler: searchResults => {
+
+
                                //ヒットしたルーム情報がリストとして返される
-
-                               var foundRooms = searchResults.roomInfoCollection;
-                               var roomInfo = foundRooms.First();
-
-                               GetComponent<F_StrixEntreRoom>().IDHitRoom(roomInfo);
+                               //※どの部屋がヒットしなかったとしてもこの成功ハンドラーが呼ばれるが、roomInfoCollectionは空である
 
                                
+                               var foundRooms = searchResults.roomInfoCollection;
 
+                               if(foundRooms.Count>0)
+                               {
+                                   var roomInfo = foundRooms.First();
+
+                                   GetComponent<F_StrixEntreRoom>().IDHitRoom(roomInfo);
+                               }
+                               else
+                               {
+                                   Debug.Log("部屋をサーチできませんでした");
+                                   GameObject.Find("UI_Canvas").GetComponent<MenuSceneUI>().RoomAccessError();
+
+                               }
+
+                              
+                               
                            },
-                           failureHandler: searchError => Debug.LogError("Search failed.Reason: "));
-
-
-
-
+                           failureHandler: searchError => Debug.LogError("部屋をサーチできませんでした"));
     }
 }
