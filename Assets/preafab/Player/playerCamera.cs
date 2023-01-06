@@ -26,12 +26,15 @@ public class playerCamera : MonoBehaviour
         {
             pCamera.enabled = false;
             mCamera.enabled = true;
+            player.GetComponent<Player>().uiManager.SetCamera(mCamera);
         }
         else
         {
             pCamera.enabled = true;
             mCamera.enabled = false;
+            player.GetComponent<Player>().uiManager.SetCamera(pCamera);
         }
+
     }
 
     public void MapCameraMove(Vector3 delta)
@@ -42,5 +45,24 @@ public class playerCamera : MonoBehaviour
     public void ResetMapCamera()
     {
         mCamera.transform.position = mapCameraPos;
+    }
+
+    public Camera GetCamera()
+    {
+        if (pCamera.enabled)
+        {
+            return pCamera;
+        }
+        else
+        {
+            return mCamera;
+        }
+    }
+
+    public void SetRenderTexture(RenderTexture renderTexture)
+    {
+        pCamera.targetTexture = renderTexture;
+        mCamera.targetTexture = renderTexture;
+
     }
 }

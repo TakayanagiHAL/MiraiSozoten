@@ -20,15 +20,22 @@ public class TurnContllor : StrixBehaviour
 
     UIManager uiManager;
 
-    [StrixSyncField] public Player[] players;
+    OnotherUI onotherUI;
 
-    [StrixSyncField] int playerVol;
+    public Player[] players;
+    [StrixSyncField]
+    int playerVol;
 
     [SerializeField] int maxTurn;
 
-    [StrixSyncField] int nowTurn =1;
+    [StrixSyncField]
+    int nowTurn =1;
+    [StrixSyncField]
+    int turnPlayer =0;
+    [StrixSyncField]
+    RenderTexture[] renderTextures;
 
-    [StrixSyncField] int turnPlayer;
+    int thisPlayer = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -37,16 +44,40 @@ public class TurnContllor : StrixBehaviour
         turnPlayer = 0;
         uiManager = FindObjectOfType<UIManager>();
 
-        players = FindObjectsOfType<Player>();
+        onotherUI = FindObjectOfType<OnotherUI>();
+
+        Player[] p = FindObjectsOfType<Player>();
+        players = new Player[p.Length];
+        playerVol = players.Length;
+
+        renderTextures = new RenderTexture[4];
+
+        foreach(var RoomMember in StrixNetwork.instance.sortedRoomMembers)
+        {
+            if(StrixNetwork.instance.selfRoomMember.GetUid() != RoomMember.GetUid())
+            {
+                thisPlayer++;
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        for(int i = 0; i < 4; i++)
+        {
+            renderTextures[i] = new RenderTexture(1920, 1080, 16);
+        }
 
         for (int i = 0; i < players.Length; i++)
         {
-            players[i].turnNum = i;
-
-            playerVol = players.Length;
-
-            players[i].CallRPCOwner(Player.RpcFunctionName.INIT_PLAYER);
+            players[p[i].turnNum] = p[i];         
         }
+        players[thisPlayer].CallRPCOwner(Player.RpcFunctionName.INIT_PLAYER);
+
+        players[thisPlayer].playerCamera.SetRenderTexture(renderTextures[thisPlayer]);
+
+        uiManager.SetCamera(players[thisPlayer].playerCamera.GetCamera());
 
         uiManager.GetCanvas(CanvasName.TURN_START_UI).GetComponent<TurnStartUI>().SetTurn(nowTurn);
         uiManager.SetCanvas(CanvasName.TURN_START_UI, true);
@@ -56,7 +87,7 @@ public class TurnContllor : StrixBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        onotherUI.SetTurnTexture(renderTextures[turnPlayer]);
     }
 
     [StrixRpc]
@@ -67,7 +98,15 @@ public class TurnContllor : StrixBehaviour
         {
             turnPlayer = 0;
             nowTurn++;
-            Invoke("StartCraftFase", 3);
+            if (nowTurn > maxTurn)
+            {
+                FindObjectOfType<ResultData>().ResultStart = true;
+            }
+            else
+            {
+                Invoke("StartCraftFase", 1);
+            }
+
         }
         else
         {
@@ -92,6 +131,7 @@ public class TurnContllor : StrixBehaviour
     void StartCraftFase()
     {
         uiManager.SetCanvas(CanvasName.CRAFT_UI, true);
+        uiManager.GetCanvas(CanvasName.CRAFT_UI).GetComponent<CraftUI>().StartCraft();
         Invoke("FinishCraftFase", 60);
     }
 

@@ -20,7 +20,11 @@ public class ResultData : StrixBehaviour
 
     public bool ResultStart;
 
+    public bool LocalTestDebug;
+
     [Header("=====GameSceneから入れる=====")]
+    [SerializeField]
+    GameObject gameScene;
     [SerializeField]
     [Header("Playerのscript")]
     private Player _playerScript;
@@ -35,7 +39,10 @@ public class ResultData : StrixBehaviour
     [Header("ClickLoadSceneのscript")]
     private NextSceneLoad _nextSceneLoadScript;
 
-    [SerializeField] [Header("***リザルト状態になるまでfalse***\n")]
+    //[SerializeField][Header("***リザルト状態になるまでfalse***\n")]
+    //private GameObject AnimationObject;
+
+    [SerializeField]
     private GameObject ResultSceneGameOblect;
     [SerializeField]
     private GameObject UiCanvas;
@@ -118,7 +125,7 @@ public class ResultData : StrixBehaviour
 
     Keyboard _keyboard;
 
-    // Start is called before the first frame update
+     //Start is called before the first frame update
     void Start()
     {
         // 現在のキーボード情報
@@ -136,6 +143,7 @@ public class ResultData : StrixBehaviour
         _nowPhase = NowPhase.Start;
 
         //Gameシーン時に使わないオブジェクトをfalseにする
+        //AnimationObject.SetActive(false);
         ResultSceneGameOblect.SetActive(false);
         UiCanvas.SetActive(false);
         _phase04InformationUi.SetActive(false);
@@ -152,14 +160,16 @@ public class ResultData : StrixBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!isLocal) return;
+        if (!LocalTestDebug)
+        {
+            if (!isLocal) return;
 
-        if (ResultStart == false) return;
+            if (ResultStart == false) return;
+        }
 
         switch (_nowPhase)
         {
             case NowPhase.Start:
-                ResultSceneGameOblect.SetActive(true);
                 StartStep();
                 _nowPhase = NowPhase.Phase01;
                 break;
@@ -183,20 +193,22 @@ public class ResultData : StrixBehaviour
     private int strixMyEntryNumber()
     {
         int count = 1;
-
-        foreach (var RoomMember in StrixNetwork.instance.sortedRoomMembers)
+        if (!LocalTestDebug)
         {
-            if (StrixNetwork.instance.selfRoomMember.GetUid() != RoomMember.GetUid())
+            foreach (var RoomMember in StrixNetwork.instance.sortedRoomMembers)
             {
-                count++;
-            }
-            else//  selfRoomMember.GetUid() = RoomMember.GetUid()のとき
-            {
-                Debug.Log("あなたは" + count + "人目です");
-                return count;
+                if (StrixNetwork.instance.selfRoomMember.GetUid() != RoomMember.GetUid())
+                {
+                    count++;
+                }
+                else//  selfRoomMember.GetUid() = RoomMember.GetUid()のとき
+                {
+                    Debug.Log("あなたは" + count + "人目です");
+                    return count;
+                }
             }
         }
-        return -1;
+        return count;
     }
     //自分の順位取得
     private int MyPlayerRank()//***************************************************************************************************     GameSceneから
@@ -217,9 +229,13 @@ public class ResultData : StrixBehaviour
     //自分の名前を取得する
     private string strixMyPlayerName()
     {
-        string _myPlayerName = StrixNetwork.instance.selfRoomMember.GetName();
+        string _myPlayerName = "Testモード";
 
-        return _myPlayerName;
+        if (!LocalTestDebug)
+        {
+            _myPlayerName = StrixNetwork.instance.selfRoomMember.GetName();
+        }
+            return _myPlayerName;
     }
 
     //ResultシーンのPlayerNameを一括変更
@@ -233,7 +249,12 @@ public class ResultData : StrixBehaviour
 
     private int MyPlayerOrderCount()//***************************************************************************************************     GameSceneから
     {
-        int myOrder = _playerScript.medal;//要確認
+        int myOrder = 123;
+
+        if (!LocalTestDebug)
+        {
+            myOrder = _playerScript.medal;//要確認
+        }
         return myOrder;
     }
 
@@ -247,7 +268,12 @@ public class ResultData : StrixBehaviour
 
     private int MyPlayerMoneyCount()//***************************************************************************************************     GameSceneから
     {
-        int myMoney = _playerScript.money;
+        int myMoney = 1234;
+        
+        if (!LocalTestDebug)
+        {
+            myMoney = _playerScript.money;
+        }
         return myMoney;
     }
 
@@ -265,6 +291,10 @@ public class ResultData : StrixBehaviour
     //所定の位置に置くためにサイズなどの初期化を行う
     private void PlayerGameObjectInitialization()
     {
+        if (!LocalTestDebug)
+        {
+            //debug用のプレイヤーを代用
+        }
         _playerObject.transform.localScale = _resultPlayer01.transform.localScale;
         _playerObject.transform.eulerAngles = _resultPlayer01.transform.eulerAngles;
         _playerObject.transform.position = _resultPlayer01.transform.position;
@@ -279,10 +309,24 @@ public class ResultData : StrixBehaviour
         }
     }
 
+    //Playerの階層をGameSceneから外す
+    private void PlayerParentDetachChildren()
+    {
+        Transform _playerParent = _playerObject.transform.parent;//playerの一つ上のオブジェクトを取得
+        _playerParent.DetachChildren();
+    }
+
     //最初の位置決め   一度だけ呼び出す
     private void StartStep()
     {
+        if (!LocalTestDebug)
+        {
+            PlayerParentDetachChildren();// 恐らくGameSceneObjectとResultSceneObjectの間にPlayerが出現する
+        }
+        //AnimationObject.SetActive(true);
         UiCanvas.SetActive(true);
+        //ここでGameシーンをオフにする  **********************************************************************************************:
+        ResultSceneGameOblect.SetActive(true);
         PlayerGameObjectInitialization();
         RankImageChange();
         MyPlayerNameChange();
@@ -292,10 +336,8 @@ public class ResultData : StrixBehaviour
 
     private void stepPhase01()
     {
-        _phaseUiList[0].SetActive(true);
+        _phaseUiList[0].SetActive(true);//    animationでtrueにした
         
-        //_phase01OrderCountTextLists[strixMyEntryNumber()].text = $"{/*勲章の数*/}";
-
         //船の入場座標取得
         Transform myTransform = _playersPosition.transform;
         Vector3 StartPosition = myTransform.position;
@@ -325,7 +367,7 @@ public class ResultData : StrixBehaviour
         _shipsPosition2.SetActive(true);
 
         //船の座標取得
-        Transform myTransform = _playersPosition.transform;
+        Transform myTransform = _playerObject.transform;//tigau
         Vector3 myVector3 = _phase02PlayerPosition.transform.position;
         //座標更新
         myTransform.position = myVector3;

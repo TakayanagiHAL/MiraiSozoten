@@ -10,7 +10,6 @@ public class MenuSceneUI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
     }
 
     // Update is called once per frame
@@ -23,9 +22,6 @@ public class MenuSceneUI : MonoBehaviour
     //「マルチプレイ」押下
     public void Press_MultiPlay()
     {
-        //プレイモードコマンドを非表示
-        transform.Find("PlayModeGroup").gameObject.SetActive(false);
-
         //マルチプレイコマンドを表示
         transform.Find("MultiPlayGroup").gameObject.SetActive(true);
     }
@@ -41,21 +37,16 @@ public class MenuSceneUI : MonoBehaviour
     //「部屋を検索」押下
     public void Press_JoinRoom()
     {
-        //プレイモードコマンドを非表示
-        transform.Find("MultiPlayGroup").gameObject.SetActive(false);
 
         //マルチプレイコマンドを表示
         transform.Find("RoomIDInputGroup").gameObject.SetActive(true);
     }
 
-    //「キャンセル」押下
+    //検索ウィンドウで、「キャンセル」押下
     public void Press_MultiPlayCancell()
     {
         //プレイモードコマンドを非表示
         transform.Find("MultiPlayGroup").gameObject.SetActive(false);
-
-        //マルチプレイコマンドを表示
-        transform.Find("PlayModeGroup").gameObject.SetActive(true);
     }
 
     //部屋番号入力後、「参加」押下
@@ -67,5 +58,49 @@ public class MenuSceneUI : MonoBehaviour
     }
 
 
+    //部屋番号入力後、「参加」押下
+    public void Press_RoomFoundCancel()
+    {
+
+        //マルチプレイコマンドを表示
+        transform.Find("RoomIDInputGroup").gameObject.SetActive(false);
+    }
+
+    /// <summary>
+    /// ルーム検索失敗時処理
+    /// </summary>
+    public void RoomAccessError()
+    {
+        transform.Find("RoomIDInputGroup").gameObject.SetActive(false);
+        transform.Find("RoomAccessErrorGroup").gameObject.SetActive(true);
+
+        GameObject.Find("MainMenuManager").GetComponent<PadControll_MenuScene>().StateChange_Back();
+    }
+
+    /// <summary>
+    /// ルーム検索失敗ウィンドウで「戻る」を押したとき
+    /// </summary>
+    public void Press_ErrorBackButton()
+    {
+        transform.Find("RoomAccessErrorGroup").gameObject.SetActive(false);
+        transform.Find("RoomIDInputGroup").gameObject.SetActive(true);
+    }
+
+    /// <summary>
+    /// 検索ウィンドウからマルチプレイウィンドウに戻る
+    /// </summary>
+    public void Back_AccessToMulti()
+    {
+        transform.Find("RoomIDInputGroup").gameObject.SetActive(false);
+    }
+
+    /// <summary>
+    /// マルチプレイウィンドウからモード選択ウィンドウに戻る
+    /// </summary>
+    public void Back_MultiToMode()
+    {
+
+        transform.Find("MultiPlayGroup").gameObject.SetActive(false);
+    }
 
 }

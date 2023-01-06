@@ -67,7 +67,7 @@ Camera:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RenderingPath: -1
-  m_TargetTexture: {fileID: 0}
+  m_TargetTexture: {fileID: 8400000, guid: 51e7592ff0b295e44bbe35ec2e656700, type: 2}
   m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 1
@@ -260,6 +260,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1067536301096755337}
     m_Modifications:
+    - target: {fileID: 210269971307818661, guid: d3deeb9515663b2478fad3c4bfbb75f9,
+        type: 3}
+      propertyPath: m_TargetTexture
+      value: 
+      objectReference: {fileID: 8400000, guid: 51e7592ff0b295e44bbe35ec2e656700, type: 2}
     - target: {fileID: 1812561106318963848, guid: d3deeb9515663b2478fad3c4bfbb75f9,
         type: 3}
       propertyPath: m_RootOrder

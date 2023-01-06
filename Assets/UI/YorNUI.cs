@@ -12,6 +12,13 @@ public class YorNUI : MonoBehaviour
     [SerializeField] Text message;
     EventTrigger yesEvent;
     EventTrigger noEvent;
+
+    [SerializeField] GameObject firstButton;
+
+    public void SetFirstButton()
+    {
+        EventSystem.current.SetSelectedGameObject(firstButton);
+    }
     // Start is called before the first frame update
     void Start()
     {
