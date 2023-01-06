@@ -353,7 +353,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _nowLoadingUi: {fileID: 6058764414960916507}
   _nowLodingSlider: {fileID: 6058764415017544256}
-  _nexySceneName: 
   _loadingText: {fileID: 6058764413016471500}
   _textCnt: 100
   _imageTexture: {fileID: 6058764414531055081}

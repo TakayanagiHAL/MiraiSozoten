@@ -67,7 +67,15 @@ public class TurnContllor : StrixBehaviour
         {
             turnPlayer = 0;
             nowTurn++;
-            Invoke("StartCraftFase", 3);
+            if (nowTurn > maxTurn)
+            {
+                FindObjectOfType<ResultData>().ResultStart = true;
+            }
+            else
+            {
+                Invoke("StartCraftFase", 3);
+            }
+
         }
         else
         {
@@ -92,6 +100,7 @@ public class TurnContllor : StrixBehaviour
     void StartCraftFase()
     {
         uiManager.SetCanvas(CanvasName.CRAFT_UI, true);
+        uiManager.GetCanvas(CanvasName.CRAFT_UI).GetComponent<CraftUI>().StartCraft();
         Invoke("FinishCraftFase", 60);
     }
 

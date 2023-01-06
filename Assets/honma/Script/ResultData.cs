@@ -29,6 +29,8 @@ public class ResultData : StrixBehaviour
 
     [Header("=====GameScene‚©‚ç“ü‚ê‚é=====")]
     [SerializeField]
+    GameObject gameScene;
+    [SerializeField]
     [Header("Player‚Ìscript")]
     private Player _playerScript;
 
