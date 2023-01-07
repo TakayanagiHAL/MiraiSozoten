@@ -14,6 +14,8 @@ public class OpeningManager : MonoBehaviour
 
     [SerializeField] SeaResource distResource;
 
+    [SerializeField] NextSceneLoad sceneLoad;
+
     int EventNum;       // テキスト終了フラグを取得した数
     bool ResourceEvent; // リソース取得イベントの通過フラグ
     bool EventClear;    // リソース取得イベントが終了して次の文章を始める
@@ -96,6 +98,6 @@ public class OpeningManager : MonoBehaviour
     // シーン変更用の関数
     void OpeningEnd()
     {
-        SceneManager.LoadScene(3);
+        sceneLoad.LoadSceneStart("Scenes/SampleScene");
     }
 }

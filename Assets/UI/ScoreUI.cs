@@ -45,4 +45,9 @@ public class ScoreUI : MonoBehaviour
     {
         medalText.text = medal.ToString();
     }
+
+    public void SetTurn(int turn)
+    {
+        turnText.text = turn.ToString();
+    }
 }

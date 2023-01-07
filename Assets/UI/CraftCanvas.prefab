@@ -4625,7 +4625,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &7215713354112402098
 RectTransform:
   m_ObjectHideFlags: 0
@@ -12212,6 +12212,7 @@ MonoBehaviour:
     wood: 44
     steel: 26
     seaFood: 0
+  tabController: {fileID: 7215713354528697573}
 --- !u!1 &7215713355457491736
 GameObject:
   m_ObjectHideFlags: 0
