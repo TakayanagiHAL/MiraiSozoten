@@ -173,7 +173,7 @@ public class ResultData : StrixBehaviour
             return;
         }
 
-        //ResultStart = false;
+        ResultStart = false;
         _nowPhase = NowPhase.Start;
 
         //Gameシーン時に使わないオブジェクトをfalseにする
