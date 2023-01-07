@@ -613,13 +613,33 @@ public class ResultData : StrixBehaviour
         _phaseUiList[2].SetActive(true);
 
         //ボタン入力処理
+        if (Input.GetKeyDown(KeyCode.Return) || Gamepad.current.bButton.wasPressedThisFrame)
+        {
+            phase03_ResultDetailsButton();
+        }
     }
     private void stepPhase04()
     {
         _phaseUiList[2].SetActive(false);
         _phaseUiList[3].SetActive(true);
 
+        bool test = false;
         //ボタン入力処理
+        if ((Input.GetKeyDown(KeyCode.Return) || Gamepad.current.bButton.wasPressedThisFrame)&& !test)
+        {
+            phase04_RoomExitButton();
+            test = true;
+        }
+
+        if (test)
+        {
+            if (Input.GetKeyDown(KeyCode.Return) || Gamepad.current.aButton.wasPressedThisFrame)
+            {
+                phase04_Information_NO_Button();
+                test = false;
+            }
+            
+        }
     }
 
 
