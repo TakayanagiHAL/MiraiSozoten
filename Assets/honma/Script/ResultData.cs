@@ -535,10 +535,7 @@ public class ResultData : StrixBehaviour
             PlayerParentDetachChildren();// 恐らくGameSceneObjectとResultSceneObjectの間にPlayerが出現する
             for (int i = 0; i < _resultPlayer01.Count; i++)
             {
-                Vector3 localsize = new(1, 1, 1);
                 _resultPlayer01[i].SetActive(true);
-                _resultPlayer01[i].transform.GetChild(0).gameObject.SetActive(true);
-                _resultPlayer01[i].transform.localScale = localsize;
             }
         }
         else
@@ -547,7 +544,7 @@ public class ResultData : StrixBehaviour
             for (int i = 0; i < _resultPlayer01.Count; i++)
             {
                 _resultPlayer01[i].SetActive(true);
-                _resultPlayer01[i].transform.GetChild(0).gameObject.SetActive(true);
+                _resultPlayer01[i].transform.GetChild(1).gameObject.SetActive(true);
 
             }
         }
@@ -573,7 +570,7 @@ public class ResultData : StrixBehaviour
         float speed = Time.deltaTime * ShipsMovingSpeed / Mathf.Abs(_distance);
 
         //船の入場座標更新
-        myTransform.position = Vector3.Lerp(StartPosition, EndPosition, 1);//代替案
+        myTransform.position = Vector3.Lerp(StartPosition, EndPosition, speed);//代替案
 
         Debug.Log("StartPosition" + StartPosition);
         Debug.Log("EndPosition" + EndPosition);
