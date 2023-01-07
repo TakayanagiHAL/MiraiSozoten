@@ -601,9 +601,8 @@ public class ResultData : StrixBehaviour
         _phase02CameraList[strixMyEntryNumber() - 1].SetActive(true);
         //CameraFocus後にイベントで_phaseUiList[1].SetActive(true);を行う
 
-        var key_B = _keyboard.bKey;
-
-        if (key_B.wasPressedThisFrame)
+       
+        if (Input.GetKeyDown(KeyCode.Return) || Gamepad.current.bButton.wasPressedThisFrame)
         {
             _nowPhase = NowPhase.Phase03;
         }
