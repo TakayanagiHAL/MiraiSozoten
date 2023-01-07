@@ -5,13 +5,19 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/fujiwara/Scenes/MainMenuScene.unity
     guid: 72b2d2dd5b4f67b4b97ae74f97097a40
-  - enabled: 1
+  - enabled: 0
+    path: Assets/honma/Title.unity
+    guid: 952b753fe2244c04782b94f4d6386722
+  - enabled: 0
     path: Assets/fujiwara/Scenes/OnlineLobbyScene.unity
     guid: 1e4f27ab5ec58b34cb83dd1adabf2129
-  - enabled: 0
+  - enabled: 1
+    path: Assets/Scenes/Title.unity
+    guid: 8aa9ec78f7fa4a440be9f730173d663f
+  - enabled: 1
     path: Assets/Scenes/OpeningCreate.unity
     guid: 6b0c4206083487f48bc9b411daa31062
   - enabled: 1

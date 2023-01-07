@@ -55,7 +55,7 @@ class SeabaseHexagon : HexagonMethod
         {
             player.SetWait();
 
-            player.turnContllor.SetNextTurnPlayerRPC();
+            player.turnContllor.StartCraftFase();
 
         }
 
@@ -75,7 +75,7 @@ class SeabaseHexagon : HexagonMethod
 
         isMedal = false;
 
-        usePlayer.turnContllor.SetNextTurnPlayerRPC();
+        usePlayer.turnContllor.StartCraftFase();
 
         usePlayer.uiManager.SetCanvas(CanvasName.YES_OR_NO_UI, false);
 
@@ -83,7 +83,7 @@ class SeabaseHexagon : HexagonMethod
 
     void NoEvent()
     {
-        usePlayer.turnContllor.SetNextTurnPlayerRPC();
+        usePlayer.turnContllor.StartCraftFase();
 
         usePlayer.uiManager.SetCanvas(CanvasName.YES_OR_NO_UI, false);
 

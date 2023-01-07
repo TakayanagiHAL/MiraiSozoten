@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
 
 public class TextController : MonoBehaviour
 {
@@ -88,7 +89,7 @@ public class TextController : MonoBehaviour
     void Update()
     {
         // Enterキーで文章を進ませる
-        if (Input.GetKeyDown(KeyCode.Return))
+        if (Input.GetKeyDown(KeyCode.Return) || Gamepad.current.bButton.wasPressedThisFrame)
         {
             // 表示内容を初期化
             TextClear();

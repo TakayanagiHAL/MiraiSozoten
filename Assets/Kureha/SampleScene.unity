@@ -16458,7 +16458,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   strixBehaviours:
   - {fileID: 595389768}
-  objectType: 1048577
+  objectType: 1835009
   sendRate: 5
   syncDestroy: 1
   networkInstanceId: -1
@@ -37856,8 +37856,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   players:
   - {fileID: 8410475787298406017}
-  playerVol: 1
   maxTurn: 0
+  nowTurn: 1
+  turnPlayer: 0
 --- !u!114 &1408910507
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -37872,7 +37873,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   strixBehaviours:
   - {fileID: 1408910506}
-  objectType: 1048578
+  objectType: 1835010
   sendRate: 5
   syncDestroy: 1
   networkInstanceId: -1
@@ -60323,6 +60324,8 @@ MonoBehaviour:
   medalText: {fileID: 2617264335670326986}
   moneyText: {fileID: 7519369362051789919}
   oilText: {fileID: 7634063929109511112}
+  turnText: {fileID: 0}
+  playerText: {fileID: 0}
 --- !u!114 &1997876236368962104
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -61981,6 +61984,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   selectUI: {fileID: 2906975649855283777}
   allowPos: {fileID: 299632169923754558}
+  firstButton: {fileID: 0}
 --- !u!1 &4108112038879265258
 GameObject:
   m_ObjectHideFlags: 0
@@ -62306,6 +62310,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60163e85f5ce2544e96b0aeea39419f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  firstButton: {fileID: 0}
 --- !u!1 &4583119912729634100
 GameObject:
   m_ObjectHideFlags: 0
@@ -64042,6 +64047,8 @@ MonoBehaviour:
   diceVol: {fileID: 7361375747624311991}
   stopUI: {fileID: 6500904793816919973}
   rollButton: {fileID: 2556504963475466491}
+  firstButton: {fileID: 0}
+  nextButton: {fileID: 0}
 --- !u!222 &7269023103091393433
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -65048,7 +65055,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d9725f68ebae194bbc7ad218a15029b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerName: 
   money: 1000
+  shipLevel: 0
   playerPos:
     x: 20
     y: 4
@@ -65075,6 +65084,7 @@ MonoBehaviour:
   hexagonManger: {fileID: 0}
   turnContllor: {fileID: 1408910506}
   uiManager: {fileID: 0}
+  playerCamera: {fileID: 0}
   turnNum: 0
   isTurn: 0
   getRVol: 0
@@ -65616,7 +65626,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   strixBehaviours:
   - {fileID: 8410475787298406017}
-  objectType: 1048579
+  objectType: 1835011
   sendRate: 5
   syncDestroy: 1
   networkInstanceId: -1
