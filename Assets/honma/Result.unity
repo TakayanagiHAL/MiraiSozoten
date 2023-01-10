@@ -369,6 +369,11 @@ PrefabInstance:
     - target: {fileID: 1035049978774132793, guid: 494ea03a28d37f0429b668074b63f882,
         type: 3}
       propertyPath: ResultStart
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1035049978774132793, guid: 494ea03a28d37f0429b668074b63f882,
+        type: 3}
+      propertyPath: OnlyResultPlay
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1035049978774132793, guid: 494ea03a28d37f0429b668074b63f882,
