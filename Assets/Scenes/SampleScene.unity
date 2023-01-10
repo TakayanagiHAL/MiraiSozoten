@@ -3275,6 +3275,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5649749386329722186, guid: 4feb708916304114c9f098c06fed3116,
         type: 3}
+      propertyPath: medal
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5649749386329722186, guid: 4feb708916304114c9f098c06fed3116,
+        type: 3}
       propertyPath: playerName
       value: PlayerGreen
       objectReference: {fileID: 0}
@@ -28080,6 +28085,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1078734006}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1082064498 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1084866906382401550, guid: 4feb708916304114c9f098c06fed3116,
+    type: 3}
+  m_PrefabInstance: {fileID: 122436087}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1082749211
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -30877,6 +30888,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5649749386329722186, guid: 4feb708916304114c9f098c06fed3116,
         type: 3}
+      propertyPath: medal
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5649749386329722186, guid: 4feb708916304114c9f098c06fed3116,
+        type: 3}
       propertyPath: playerName
       value: PlayerRed
       objectReference: {fileID: 0}
@@ -31524,6 +31540,11 @@ PrefabInstance:
         type: 3}
       propertyPath: objectType
       value: 786437
+      objectReference: {fileID: 0}
+    - target: {fileID: 5649749386329722186, guid: 4feb708916304114c9f098c06fed3116,
+        type: 3}
+      propertyPath: medal
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5649749386329722186, guid: 4feb708916304114c9f098c06fed3116,
         type: 3}
@@ -45460,6 +45481,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5649749386329722186, guid: 4feb708916304114c9f098c06fed3116,
         type: 3}
+      propertyPath: medal
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5649749386329722186, guid: 4feb708916304114c9f098c06fed3116,
+        type: 3}
       propertyPath: playerName
       value: PlayerYellow
       objectReference: {fileID: 0}
@@ -47499,7 +47525,7 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 122436087}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1082064498}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8d9725f68ebae194bbc7ad218a15029b, type: 3}
@@ -50708,7 +50734,7 @@ PrefabInstance:
         type: 3}
       propertyPath: _playerObject.Array.data[3]
       value: 
-      objectReference: {fileID: 1498288356}
+      objectReference: {fileID: 1082064498}
     - target: {fileID: 1035049978774132793, guid: 494ea03a28d37f0429b668074b63f882,
         type: 3}
       propertyPath: _playerScript.Array.data[0]
