@@ -262,9 +262,16 @@ public class ResultData : StrixBehaviour
                 else//  selfRoomMember.GetUid() = RoomMember.GetUid()のとき
                 {
                     Debug.Log("あなたは" + count + "人目です");
-                    return count;
+                    return count - 1;
                 }
             }
+        }
+        else
+        {
+            //  1位にの要素番号を返す
+            count = MyPlayerRank(0);
+            //補正値
+            return count;
         }
         return count;
     }
@@ -274,10 +281,10 @@ public class ResultData : StrixBehaviour
         List<int> _medalList = new List<int>();
         if (!OnlyResultPlay)
         {
-            _medalList.Add(_playerScript[0].medal);
-            _medalList.Add(_playerScript[1].medal);
-            _medalList.Add(_playerScript[2].medal);
-            _medalList.Add(_playerScript[3].medal);
+            _medalList.Add(_playerScript[0].medal);//   5
+            _medalList.Add(_playerScript[1].medal);//   3
+            _medalList.Add(_playerScript[2].medal);//   11
+            _medalList.Add(_playerScript[3].medal);//   6
         }
         else
         {
@@ -292,24 +299,23 @@ public class ResultData : StrixBehaviour
 
         int orderCount = _medalList[number];
 
-        //number位のメダルの数を返す0~3
+        //number位のメダルの数を返す
         return orderCount;
     }
 
     //順位取得
     private int MyPlayerRank(int number)//***************************************************************************************************     GameSceneから
     {
-        //  PlayerOrderCount(3)   =   5
-        number = PlayerOrderCount(number);//number位のメダルの数
+        int cnt = PlayerOrderCount(number);//number位のメダルの数
 
         List<int> _medalList = new List<int>(4); 
         
         if (!OnlyResultPlay)
         {
-            _medalList.Add(_playerScript[0].medal);
-            _medalList.Add(_playerScript[1].medal);
-            _medalList.Add(_playerScript[2].medal);
-            _medalList.Add(_playerScript[3].medal);
+            _medalList.Add(_playerScript[0].medal);//   5
+            _medalList.Add(_playerScript[1].medal);//   3
+            _medalList.Add(_playerScript[2].medal);//   11
+            _medalList.Add(_playerScript[3].medal);//   6
         }
         else
         {
@@ -319,26 +325,30 @@ public class ResultData : StrixBehaviour
             _medalList.Add(6);
         }
 
-        //降順にソート
-        _medalList.Sort((a, b) => b - a);
-
-        int rank = _medalList.IndexOf(number);
-        
-        //number位を入力するとその人が何位にいるか分かる
+        int rank = _medalList.IndexOf(cnt);
 
         return rank;
-
-        //MyPlayerRank(2)は2を返す
-        //MyPlayerRank(1)は1を返す
-
     }
 
     private void RankImageChange()
     {
-        _phase02RankCrownImage.sprite = RankCrownImageLists[MyPlayerRank(0)];//1位
-        _phase02RankNumberImage.sprite = RankNumberImageLists[MyPlayerRank(0)];
-        _phase03CrownImage.sprite = RankCrownImageLists[MyPlayerRank(0)];
-        _phase03NumberImage.sprite = RankNumberImageLists[MyPlayerRank(0)];
+        if(!LocalPlay)
+        {
+            _phase02RankCrownImage.sprite = RankCrownImageLists[strixMyEntryNumber()];
+            _phase02RankNumberImage.sprite = RankNumberImageLists[strixMyEntryNumber()];
+
+            _phase03CrownImage.sprite = RankCrownImageLists[strixMyEntryNumber()];
+            _phase03NumberImage.sprite = RankNumberImageLists[strixMyEntryNumber()];
+        }
+        else
+        {
+            _phase02RankCrownImage.sprite = RankCrownImageLists[0];
+            _phase02RankNumberImage.sprite = RankNumberImageLists[0];
+
+            _phase03CrownImage.sprite = RankCrownImageLists[0];
+            _phase03NumberImage.sprite = RankNumberImageLists[0];
+        }
+       
     }
 
     //自分の名前を取得する
@@ -373,11 +383,10 @@ public class ResultData : StrixBehaviour
             _phase02PlayerName.text = strixMyPlayerName(MyPlayerRank(0));
             _phase03PlayerName.text = strixMyPlayerName(MyPlayerRank(0));
 
-           
-            _phase04PlayerNameList[0].text = _playerScript[MyPlayerRank(0)].playerName;
-            _phase04PlayerNameList[1].text = _playerScript[MyPlayerRank(1)].playerName;
-            _phase04PlayerNameList[2].text = _playerScript[MyPlayerRank(2)].playerName;
-            _phase04PlayerNameList[3].text = _playerScript[MyPlayerRank(3)].playerName;
+           for(int i=0;i<_playerScript.Count;i++)
+            {
+                _phase04PlayerNameList[i].text = _phase01PlayerNameTextLists[MyPlayerRank(i)].text;
+            }
 
         }
         else
@@ -403,26 +412,20 @@ public class ResultData : StrixBehaviour
 
     private void OrderCountChange()
     {
-        // PlayerがListじゃない場合
-        //_phase01OrderCountTextLists[strixMyEntryNumber() - 1].text = $"{MyPlayerOrderCount()}";
-        //_phase02OrderCount.text = $"{MyPlayerOrderCount()}";
-        //_phase03OrderCount.text = $"{MyPlayerOrderCount()}";
-        //_phase04OrderCountList[MyPlayerRank() - 1].text = $"{MyPlayerOrderCount()}";
-
         if (!OnlyResultPlay)
         {
-            _phase01OrderCountTextLists[0].text = $"{_playerScript[0].medal}";
-            _phase01OrderCountTextLists[1].text = $"{_playerScript[1].medal}";
-            _phase01OrderCountTextLists[2].text = $"{_playerScript[2].medal}";
-            _phase01OrderCountTextLists[3].text = $"{_playerScript[3].medal}";
+            for (int i = 0; i < _phase04OrderCountList.Count; i++)
+            {
+                _phase01OrderCountTextLists[i].text = $"{_playerScript[i].medal}";
+            }
 
             _phase02OrderCount.text = $"{PlayerOrderCount(0)}";
             _phase03OrderCount.text = $"{PlayerOrderCount(0)}";
 
-            _phase04OrderCountList[MyPlayerRank(0)].text = $"{PlayerOrderCount(0)}";
-            _phase04OrderCountList[MyPlayerRank(1)].text = $"{PlayerOrderCount(1)}";
-            _phase04OrderCountList[MyPlayerRank(2)].text = $"{PlayerOrderCount(2)}";
-            _phase04OrderCountList[MyPlayerRank(3)].text = $"{PlayerOrderCount(3)}";
+            for(int i=0;i<_phase04OrderCountList.Count;i++)
+            {
+                _phase04OrderCountList[i].text = $"{PlayerOrderCount(i)}";
+            }
         }
         else
         {
@@ -434,10 +437,10 @@ public class ResultData : StrixBehaviour
             _phase02OrderCount.text = $"{PlayerOrderCount(0)}";
             _phase03OrderCount.text = $"{PlayerOrderCount(0)}";
 
-            _phase04OrderCountList[MyPlayerRank(0)].text = $"{PlayerOrderCount(0)}";
-            _phase04OrderCountList[MyPlayerRank(1)].text = $"{PlayerOrderCount(1)}";
-            _phase04OrderCountList[MyPlayerRank(2)].text = $"{PlayerOrderCount(2)}";
-            _phase04OrderCountList[MyPlayerRank(3)].text = $"{PlayerOrderCount(3)}";
+            for (int i = 0; i < _phase04OrderCountList.Count; i++)
+            {
+                _phase04OrderCountList[i].text = $"{PlayerOrderCount(i)}";
+            }
         }
         
 
@@ -456,11 +459,11 @@ public class ResultData : StrixBehaviour
 
     private void MoneyCountChange()
     {
-        _phase04MoneyCountList[MyPlayerRank(0)].text = $"{MyPlayerMoneyCount(MyPlayerRank(0))}";
-        _phase04MoneyCountList[MyPlayerRank(1)].text = $"{MyPlayerMoneyCount(MyPlayerRank(1))}";
-        _phase04MoneyCountList[MyPlayerRank(2)].text = $"{MyPlayerMoneyCount(MyPlayerRank(2))}";
-        _phase04MoneyCountList[MyPlayerRank(3)].text = $"{MyPlayerMoneyCount(MyPlayerRank(3))}";
-
+        for(int i=0;i<_phase04MoneyCountList.Count;i++)
+        {
+            _phase04MoneyCountList[i].text = $"{MyPlayerMoneyCount(MyPlayerRank(i))}";
+        }
+        
     }
 
     //所定の位置に置くためにサイズなどの初期化を行う
@@ -476,7 +479,6 @@ public class ResultData : StrixBehaviour
         //}
        
 
-       
         for(int i=0;i<_playerObject.Count;i++)
         {
             _playerObject[i].transform.localScale = _resultPlayer01[i].transform.localScale;
@@ -559,15 +561,17 @@ public class ResultData : StrixBehaviour
         OrderCountChange();
         MoneyCountChange();
     }
-
+    float speed_time;
     private void stepPhase01()
     {
         _phaseUiList[0].SetActive(true);//    animationでtrueにした
-        
+
         //船の入場座標取得
-       
+        speed_time += Time.deltaTime;
+
         float _distance = StartPosition.z - EndPosition.z;
-        float speed = Time.deltaTime * ShipsMovingSpeed / Mathf.Abs(_distance);
+        float speed = speed_time * ShipsMovingSpeed / Mathf.Abs(_distance);
+
 
         //船の入場座標更新
         myTransform.position = Vector3.Lerp(StartPosition, EndPosition, speed);//代替案
@@ -582,12 +586,13 @@ public class ResultData : StrixBehaviour
         {
             StartCoroutine(WaitCoroutine(1, () =>// 1秒待つ
             {
-                _phase01ClosingEventCanvas.SetActive(true);
+                //_phase01ClosingEventCanvas.SetActive(true);
+                _nowPhase = NowPhase.Phase02;
             }));
 
             if (_textControllerScript.GetTextEnd())//text読み上げ終了時
             {
-                _nowPhase = NowPhase.Phase02;
+                //_nowPhase = NowPhase.Phase02;
             }
         }
     }
@@ -595,11 +600,11 @@ public class ResultData : StrixBehaviour
     {
         _phaseUiList[0].SetActive(false);
         //Cameraを追加
-        _phase02CameraList[strixMyEntryNumber() - 1].SetActive(true);
+        _phase02CameraList[strixMyEntryNumber()].SetActive(true);
         //CameraFocus後にイベントで_phaseUiList[1].SetActive(true);を行う
 
        
-        if (Input.GetKeyDown(KeyCode.Return) || Gamepad.current.bButton.wasPressedThisFrame)
+        if (Input.GetKeyDown(KeyCode.Return)/* || Gamepad.current.bButton.wasPressedThisFrame*/)
         {
             _nowPhase = NowPhase.Phase03;
         }
@@ -610,7 +615,7 @@ public class ResultData : StrixBehaviour
         _phaseUiList[2].SetActive(true);
 
         //ボタン入力処理
-        if (Input.GetKeyDown(KeyCode.Return) || Gamepad.current.bButton.wasPressedThisFrame)
+        if (Input.GetKeyDown(KeyCode.Return)/* || Gamepad.current.bButton.wasPressedThisFrame*/)
         {
             phase03_ResultDetailsButton();
         }
@@ -622,7 +627,7 @@ public class ResultData : StrixBehaviour
 
         bool test = false;
         //ボタン入力処理
-        if ((Input.GetKeyDown(KeyCode.Return) || Gamepad.current.bButton.wasPressedThisFrame)&& !test)
+        if ((Input.GetKeyDown(KeyCode.Return)/*Gamepad.current.bButton.wasPressedThisFrame)*/&&!test))
         {
             phase04_RoomExitButton();
             test = true;
@@ -630,7 +635,7 @@ public class ResultData : StrixBehaviour
 
         if (test)
         {
-            if (Input.GetKeyDown(KeyCode.Return) || Gamepad.current.aButton.wasPressedThisFrame)
+            if (Input.GetKeyDown(KeyCode.Return)/* || Gamepad.current.aButton.wasPressedThisFrame*/)
             {
                 phase04_Information_NO_Button();
                 test = false;
