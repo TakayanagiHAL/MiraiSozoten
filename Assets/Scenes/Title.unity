@@ -884,6 +884,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 6058764413784988647, guid: 0226e28fe7076d24d81b2eb00b741203,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6058764414126542058, guid: 0226e28fe7076d24d81b2eb00b741203,
         type: 3}
       propertyPath: m_RootOrder
@@ -943,6 +948,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: ClickLoadScene
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058764414200146887, guid: 0226e28fe7076d24d81b2eb00b741203,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6058764414960916507, guid: 0226e28fe7076d24d81b2eb00b741203,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0226e28fe7076d24d81b2eb00b741203, type: 3}
