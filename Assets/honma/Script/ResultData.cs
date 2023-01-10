@@ -23,8 +23,9 @@ public class ResultData : StrixBehaviour
     public bool ResultStart;
 
     [Header("【デバッグチェック】")]
-    [Header("ストリクスOFF ＆ デバッグ時にチェックを入れる")]
-    public bool LocalTestDebug;
+    [Header("ストリクスOFF にチェックを入れる")]
+    public bool LocalPlay;
+
     [Header("Gameシーン未接続状態のときにチェックを入れる(シーン遷移もなし)")]
     public bool OnlyResultPlay;
 
@@ -50,8 +51,16 @@ public class ResultData : StrixBehaviour
     //private GameObject _playerObject;
 
     [SerializeField]
+    [Header("GameSceneのPlayerParent")]
+    private List<GameObject> _playerParentList;
+
+    [SerializeField]
     [Header("GameSceneのGameSceneオブジェクト")]
     private GameObject _gameSceneObject;
+
+    [SerializeField]
+    [Header("GameSceneのCameraオブジェクト")]
+    private GameObject _gameSceneCamera;
 
     [Header("==============================\n")]
 
@@ -97,8 +106,6 @@ public class ResultData : StrixBehaviour
     private List<Text> _phase01OrderCountTextLists;
     [SerializeField]
     private List<Text> _phase01PlayerNameTextLists;
-    [SerializeField]
-    private List<GameObject> _debugShipList;
 
 
     [Header("Phase02")]
@@ -148,7 +155,9 @@ public class ResultData : StrixBehaviour
 
     Keyboard _keyboard;
 
-    private List<int> _medalList;
+    private Transform myTransform;
+    private Vector3 StartPosition;
+    Vector3 EndPosition;
 
      //Start is called before the first frame update
     void Start()
@@ -177,6 +186,15 @@ public class ResultData : StrixBehaviour
             ListObject.SetActive(false);
         }
 
+        if (!LocalPlay)
+        {
+            //debug用のプレイヤーを代用
+            for (int i = 0; i < _playerObject.Count; i++)
+            {
+                _playerObject[i] = _resultPlayer01[i];
+            }
+        }
+
         //各フェーズのアクティブ初期化
         _phase01ClosingEventCanvas.SetActive(false);
 
@@ -186,30 +204,28 @@ public class ResultData : StrixBehaviour
             camera.SetActive(false);
         }
 
-        //デバッグ用の船のオブジェクト
-        foreach (var debugShip in _debugShipList)
-        {
-            debugShip.SetActive(false);
-            debugShip.transform.GetChild(0).gameObject.SetActive(false);
-        }
-
+    
         foreach(var ResultPlayer in _resultPlayer01)
         {
             ResultPlayer.transform.GetChild(0).gameObject.SetActive(false);
         }
-        
+
+
+        myTransform = _playersPosition.transform;
+        StartPosition = myTransform.position;
+        EndPosition = _phase01PlayersEndPosition.transform.position;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!LocalTestDebug)
+        if (!LocalPlay)
         {
-            if (!isLocal) return;
-
-            if (ResultStart == false) return;
+            if (!isLocal) return;    
         }
-
+        
+        if (ResultStart == false) return;
+        
         switch (_nowPhase)
         {
             case NowPhase.Start:
@@ -235,7 +251,7 @@ public class ResultData : StrixBehaviour
     private int strixMyEntryNumber()
     {
         int count = 3;
-        if (!LocalTestDebug)
+        if (!LocalPlay)
         {
             foreach (var RoomMember in StrixNetwork.instance.sortedRoomMembers)
             {
@@ -252,37 +268,90 @@ public class ResultData : StrixBehaviour
         }
         return count;
     }
-    //自分の順位取得
-    private int MyPlayerRank(int number)//***************************************************************************************************     GameSceneから
-    {
-        _medalList[0] = _playerScript[0].medal;
-        _medalList[1] = _playerScript[1].medal;
-        _medalList[2] = _playerScript[2].medal;
-        _medalList[3] = _playerScript[3].medal;
 
+    private int PlayerOrderCount(int number)//***************************************************************************************************     GameSceneから
+    {
+        List<int> _medalList = new List<int>();
+        if (!OnlyResultPlay)
+        {
+            _medalList.Add(_playerScript[0].medal);
+            _medalList.Add(_playerScript[1].medal);
+            _medalList.Add(_playerScript[2].medal);
+            _medalList.Add(_playerScript[3].medal);
+        }
+        else
+        {
+            _medalList.Add(5);
+            _medalList.Add(3);
+            _medalList.Add(11);
+            _medalList.Add(6);
+        }
         //降順にソート
         _medalList.Sort((a, b) => b - a);
 
 
-        int rank = _medalList.IndexOf(number-1);
+        int orderCount = _medalList[number];
+
+        //number位のメダルの数を返す0~3
+        return orderCount;
+    }
+
+    //順位取得
+    private int MyPlayerRank(int number)//***************************************************************************************************     GameSceneから
+    {
+        //  PlayerOrderCount(3)   =   5
+        number = PlayerOrderCount(number);//number位のメダルの数
+
+        List<int> _medalList = new List<int>(4); 
+        
+        if (!OnlyResultPlay)
+        {
+            _medalList.Add(_playerScript[0].medal);
+            _medalList.Add(_playerScript[1].medal);
+            _medalList.Add(_playerScript[2].medal);
+            _medalList.Add(_playerScript[3].medal);
+        }
+        else
+        {
+            _medalList.Add(5);
+            _medalList.Add(3);
+            _medalList.Add(11);
+            _medalList.Add(6);
+        }
+
+        //降順にソート
+        _medalList.Sort((a, b) => b - a);
+
+        int rank = _medalList.IndexOf(number);
+        
+        //number位を入力するとその人が何位にいるか分かる
 
         return rank;
+
+        //MyPlayerRank(2)は2を返す
+        //MyPlayerRank(1)は1を返す
+
     }
 
     private void RankImageChange()
     {
-        _phase02RankCrownImage.sprite = RankCrownImageLists[MyPlayerRank(1) - 1];
-        _phase02RankNumberImage.sprite = RankNumberImageLists[MyPlayerRank(1) - 1];
-        _phase03CrownImage.sprite = RankCrownImageLists[MyPlayerRank(1) - 1];
-        _phase03NumberImage.sprite = RankNumberImageLists[MyPlayerRank(1) - 1];
+        _phase02RankCrownImage.sprite = RankCrownImageLists[MyPlayerRank(0)];//1位
+        _phase02RankNumberImage.sprite = RankNumberImageLists[MyPlayerRank(0)];
+        _phase03CrownImage.sprite = RankCrownImageLists[MyPlayerRank(0)];
+        _phase03NumberImage.sprite = RankNumberImageLists[MyPlayerRank(0)];
     }
 
     //自分の名前を取得する
-    private string strixMyPlayerName(int rank)
+    private string strixMyPlayerName(int number)
     {
-        string _myPlayerName = _playerScript[rank].playerName;// = "Testモード";
+        string _myPlayerName = "TestPlayer";// = "Testモード";
 
-        if (!LocalTestDebug)
+        if (!OnlyResultPlay)
+        {
+           _myPlayerName = _playerScript[number].playerName;// = "Testモード";
+
+        }
+        if (!LocalPlay)
         {
             _myPlayerName = StrixNetwork.instance.selfRoomMember.GetName();
         }
@@ -292,40 +361,45 @@ public class ResultData : StrixBehaviour
     //ResultシーンのPlayerNameを一括変更
     private void MyPlayerNameChange()
     {
-        //_phase01PlayerNameTextLists[strixMyEntryNumber() - 1].text = strixMyPlayerName();
-        _phase01PlayerNameTextLists[MyPlayerRank(1)].text = _playerScript[MyPlayerRank(1)].playerName;//
-        _phase01PlayerNameTextLists[MyPlayerRank(2)].text = _playerScript[MyPlayerRank(2)].playerName;
-        _phase01PlayerNameTextLists[MyPlayerRank(3)].text = _playerScript[MyPlayerRank(3)].playerName;
-        _phase01PlayerNameTextLists[MyPlayerRank(4)].text = _playerScript[MyPlayerRank(4)].playerName;
+        if (!OnlyResultPlay)
+        {
+           
+            _phase01PlayerNameTextLists[0].text = _playerScript[0].playerName;
+            _phase01PlayerNameTextLists[1].text = _playerScript[1].playerName;
+            _phase01PlayerNameTextLists[2].text = _playerScript[2].playerName;
+            _phase01PlayerNameTextLists[3].text = _playerScript[3].playerName;
 
 
-        _phase02PlayerName.text = strixMyPlayerName(1);
-        _phase03PlayerName.text = strixMyPlayerName(1);
+            _phase02PlayerName.text = strixMyPlayerName(MyPlayerRank(0));
+            _phase03PlayerName.text = strixMyPlayerName(MyPlayerRank(0));
 
-        //_phase04PlayerNameList[MyPlayerRank() - 1].text = strixMyPlayerName();
-        _phase04PlayerNameList[MyPlayerRank(1)].text = _playerScript[MyPlayerRank(1)].playerName;
-        _phase04PlayerNameList[MyPlayerRank(2)].text = _playerScript[MyPlayerRank(2)].playerName;
-        _phase04PlayerNameList[MyPlayerRank(3)].text = _playerScript[MyPlayerRank(3)].playerName;
-        _phase04PlayerNameList[MyPlayerRank(4)].text = _playerScript[MyPlayerRank(4)].playerName;
+            _phase04PlayerNameList[0].text = _playerScript[MyPlayerRank(0)].playerName;
+            _phase04PlayerNameList[1].text = _playerScript[MyPlayerRank(1)].playerName;
+            _phase04PlayerNameList[2].text = _playerScript[MyPlayerRank(2)].playerName;
+            _phase04PlayerNameList[3].text = _playerScript[MyPlayerRank(3)].playerName;
+
+        }
+        else
+        {
+            _phase01PlayerNameTextLists[0].text = "Player01";
+            _phase01PlayerNameTextLists[1].text = "Player02";
+            _phase01PlayerNameTextLists[2].text = "Player03";
+            _phase01PlayerNameTextLists[3].text = "Player04";
 
 
+            _phase02PlayerName.text = strixMyPlayerName(MyPlayerRank(0));
+            _phase03PlayerName.text = strixMyPlayerName(MyPlayerRank(0));
+
+
+          
+            _phase04PlayerNameList[0].text = _phase01PlayerNameTextLists[MyPlayerRank(0)].text;
+            _phase04PlayerNameList[1].text = _phase01PlayerNameTextLists[MyPlayerRank(1)].text;
+            _phase04PlayerNameList[2].text = _phase01PlayerNameTextLists[MyPlayerRank(2)].text;
+            _phase04PlayerNameList[3].text = _phase01PlayerNameTextLists[MyPlayerRank(3)].text;
+        }
     }
 
-    private int MyPlayerOrderCount(int number)//***************************************************************************************************     GameSceneから
-    {
-        _medalList[0] = _playerScript[0].medal;
-        _medalList[1] = _playerScript[1].medal;
-        _medalList[2] = _playerScript[2].medal;
-        _medalList[3] = _playerScript[3].medal;
 
-        //降順にソート
-        _medalList.Sort((a, b) => b - a);
-
-
-        int rank = _medalList[number - 1];
-
-        return rank;
-    }
 
     private void OrderCountChange()
     {
@@ -335,18 +409,37 @@ public class ResultData : StrixBehaviour
         //_phase03OrderCount.text = $"{MyPlayerOrderCount()}";
         //_phase04OrderCountList[MyPlayerRank() - 1].text = $"{MyPlayerOrderCount()}";
 
-        _phase01OrderCountTextLists[0].text = $"{MyPlayerOrderCount(0)}";
-        _phase01OrderCountTextLists[1].text = $"{MyPlayerOrderCount(1)}";
-        _phase01OrderCountTextLists[2].text = $"{MyPlayerOrderCount(2)}";
-        _phase01OrderCountTextLists[3].text = $"{MyPlayerOrderCount(3)}";
+        if (!OnlyResultPlay)
+        {
+            _phase01OrderCountTextLists[0].text = $"{_playerScript[0].medal}";
+            _phase01OrderCountTextLists[1].text = $"{_playerScript[1].medal}";
+            _phase01OrderCountTextLists[2].text = $"{_playerScript[2].medal}";
+            _phase01OrderCountTextLists[3].text = $"{_playerScript[3].medal}";
 
-        _phase02OrderCount.text = $"{MyPlayerOrderCount(0)}";
-        _phase03OrderCount.text = $"{MyPlayerOrderCount(0)}";
+            _phase02OrderCount.text = $"{PlayerOrderCount(0)}";
+            _phase03OrderCount.text = $"{PlayerOrderCount(0)}";
 
-        _phase04OrderCountList[MyPlayerRank(0)].text = $"{MyPlayerOrderCount(0)}";
-        _phase04OrderCountList[MyPlayerRank(1)].text = $"{MyPlayerOrderCount(1)}";
-        _phase04OrderCountList[MyPlayerRank(2)].text = $"{MyPlayerOrderCount(2)}";
-        _phase04OrderCountList[MyPlayerRank(3)].text = $"{MyPlayerOrderCount(3)}";
+            _phase04OrderCountList[MyPlayerRank(0)].text = $"{PlayerOrderCount(0)}";
+            _phase04OrderCountList[MyPlayerRank(1)].text = $"{PlayerOrderCount(1)}";
+            _phase04OrderCountList[MyPlayerRank(2)].text = $"{PlayerOrderCount(2)}";
+            _phase04OrderCountList[MyPlayerRank(3)].text = $"{PlayerOrderCount(3)}";
+        }
+        else
+        {
+            _phase01OrderCountTextLists[0].text = $"5";
+            _phase01OrderCountTextLists[1].text = $"3";
+            _phase01OrderCountTextLists[2].text = $"11";
+            _phase01OrderCountTextLists[3].text = $"6";
+
+            _phase02OrderCount.text = $"{PlayerOrderCount(0)}";
+            _phase03OrderCount.text = $"{PlayerOrderCount(0)}";
+
+            _phase04OrderCountList[MyPlayerRank(0)].text = $"{PlayerOrderCount(0)}";
+            _phase04OrderCountList[MyPlayerRank(1)].text = $"{PlayerOrderCount(1)}";
+            _phase04OrderCountList[MyPlayerRank(2)].text = $"{PlayerOrderCount(2)}";
+            _phase04OrderCountList[MyPlayerRank(3)].text = $"{PlayerOrderCount(3)}";
+        }
+        
 
     }
 
@@ -363,27 +456,25 @@ public class ResultData : StrixBehaviour
 
     private void MoneyCountChange()
     {
+
+        _phase04MoneyCountList[MyPlayerRank(0)].text = $"{MyPlayerMoneyCount(MyPlayerRank(0))}";
         _phase04MoneyCountList[MyPlayerRank(1)].text = $"{MyPlayerMoneyCount(MyPlayerRank(1))}";
+        _phase04MoneyCountList[MyPlayerRank(2)].text = $"{MyPlayerMoneyCount(MyPlayerRank(2))}";
+        _phase04MoneyCountList[MyPlayerRank(3)].text = $"{MyPlayerMoneyCount(MyPlayerRank(3))}";
 
-        _phase04MoneyCountList[MyPlayerRank(2)].text = $"{MyPlayerMoneyCount(2)}";
-        _phase04MoneyCountList[MyPlayerRank(3)].text = $"{MyPlayerMoneyCount(3)}";
-        _phase04MoneyCountList[MyPlayerRank(4)].text = $"{MyPlayerMoneyCount(4)}";
-
-    }
-
-    //他のプレイヤーの名前、勲章の数、コインの数を取得していく
-    private void OtherPlayers()
-    {
-        int rank = _playerScript[0].medal;
     }
 
     //所定の位置に置くためにサイズなどの初期化を行う
     private void PlayerGameObjectInitialization()
     {
-        if (!LocalTestDebug)
-        {
-            //debug用のプレイヤーを代用
-        }
+        //if (!LocalPlay)
+        //{
+        //    //debug用のプレイヤーを代用
+        //    for(int i=0;i<_playerObject.Count;i++)
+        //    {
+        //        _playerObject[i] = _resultPlayer01[i];
+        //    }
+        //}
        
 
        
@@ -414,11 +505,15 @@ public class ResultData : StrixBehaviour
     {
         //Transform _playerParent = _playerObject.transform.parent;
 
-
-        for(int i=0;i<_playerObject.Count;i++)
+        foreach(var parent in _playerParentList)
         {
-            GameObject gameObjectPaerent = _playerObject[i].transform.parent.gameObject;//playerの一つ上のオブジェクトを取得
-            gameObjectPaerent.transform.DetachChildren();
+            parent.transform.DetachChildren();
+        }
+
+
+        for(int i=0;i< _playerObject.Count;i++)
+        {
+            _playerObject[i].transform.parent = _resultPlayer01[i].transform;
         }
     }
 
@@ -426,27 +521,31 @@ public class ResultData : StrixBehaviour
     //最初の位置決め   一度だけ呼び出す
     private void StartStep()
     {
-        if (!LocalTestDebug)
+        if (ResultStart)
         {
-            
+            if (!OnlyResultPlay)
+            {
+                //リザルト用のカメラに切り替えるためにオフにする
+                _gameSceneCamera.SetActive(false);
+            }
         }
+
 
         if (!OnlyResultPlay)
         {
             PlayerParentDetachChildren();// 恐らくGameSceneObjectとResultSceneObjectの間にPlayerが出現する
-            
+            for (int i = 0; i < _resultPlayer01.Count; i++)
+            {
+                _resultPlayer01[i].SetActive(true);
+            }
         }
         else
         {
-            foreach (var debugShip in _debugShipList)
-            {
-                debugShip.SetActive(true);
-                debugShip.transform.GetChild(0).gameObject.SetActive(true);
-            }
-            
+            //debug用のPlayerを表示する
             for (int i = 0; i < _resultPlayer01.Count; i++)
             {
-               _resultPlayer01[i].transform.GetChild(0).gameObject.SetActive(true);
+                _resultPlayer01[i].SetActive(true);
+                _resultPlayer01[i].transform.GetChild(1).gameObject.SetActive(true);
 
             }
         }
@@ -462,26 +561,31 @@ public class ResultData : StrixBehaviour
         MoneyCountChange();
     }
 
+    float time = 0.0f;
     private void stepPhase01()
     {
         _phaseUiList[0].SetActive(true);//    animationでtrueにした
-        
-        //船の入場座標取得
-        Transform myTransform = _playersPosition.transform;
-        Vector3 StartPosition = myTransform.position;
-        Vector3 EndPosition = _phase01PlayersEndPosition.transform.position;
 
+        //船の入場座標取得
+        time += Time.deltaTime;
         float _distance = StartPosition.z - EndPosition.z;
-        float speed = Time.deltaTime * ShipsMovingSpeed / Mathf.Abs(_distance);
+        float speed = time * ShipsMovingSpeed / Mathf.Abs(_distance);
 
         //船の入場座標更新
-        myTransform.position = Vector3.Lerp(StartPosition, EndPosition, speed);
+        myTransform.position = Vector3.Lerp(StartPosition, EndPosition, speed);//代替案
 
-        if(speed>0.99f)//このspeedは割合    ここは割と適当な条件
+        Debug.Log("StartPosition" + StartPosition);
+        Debug.Log("EndPosition" + EndPosition);
+        Debug.Log("_distance" + _distance);
+        //Debug.Log("speed" + speed);
+        Debug.Log("myTransform.position" + myTransform.position);
+
+        if (speed>0.99f)//このspeedは割合    ここは割と適当な条件
         {
             StartCoroutine(WaitCoroutine(1, () =>// 1秒待つ
             {
                 _phase01ClosingEventCanvas.SetActive(true);
+                _nowPhase = NowPhase.Phase02;
             }));
 
             if (_textControllerScript.GetTextEnd())//text読み上げ終了時
@@ -497,9 +601,8 @@ public class ResultData : StrixBehaviour
         _phase02CameraList[strixMyEntryNumber() - 1].SetActive(true);
         //CameraFocus後にイベントで_phaseUiList[1].SetActive(true);を行う
 
-        var key_B = _keyboard.bKey;
-
-        if (key_B.wasPressedThisFrame)
+       
+        if (Input.GetKeyDown(KeyCode.Return))
         {
             _nowPhase = NowPhase.Phase03;
         }
@@ -510,13 +613,33 @@ public class ResultData : StrixBehaviour
         _phaseUiList[2].SetActive(true);
 
         //ボタン入力処理
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            phase03_ResultDetailsButton();
+        }
     }
     private void stepPhase04()
     {
         _phaseUiList[2].SetActive(false);
         _phaseUiList[3].SetActive(true);
 
+        bool test = false;
         //ボタン入力処理
+        if (Input.GetKeyDown(KeyCode.Return)&& !test)
+        {
+            phase04_RoomExitButton();
+            test = true;
+        }
+
+        if (test)
+        {
+            if (Input.GetKeyDown(KeyCode.Return))
+            {
+                phase04_Information_NO_Button();
+                test = false;
+            }
+            
+        }
     }
 
 
@@ -546,7 +669,7 @@ public class ResultData : StrixBehaviour
 
     public void phase04_Information_YES_Button()
     {
-        if (!LocalTestDebug)
+        if (!LocalPlay)
         {
             //ルームから抜けて、メインメニューシーンに遷移
             StrixNetwork.instance.LeaveRoom(handler: deleteRoomResult => Debug.Log("退室しました。：" + (StrixNetwork.instance.room == null)),
