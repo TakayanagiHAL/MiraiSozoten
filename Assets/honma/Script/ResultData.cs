@@ -373,17 +373,16 @@ public class ResultData : StrixBehaviour
     {
         if (!OnlyResultPlay)
         {
-           
-            _phase01PlayerNameTextLists[0].text = _playerScript[0].playerName;
-            _phase01PlayerNameTextLists[1].text = _playerScript[1].playerName;
-            _phase01PlayerNameTextLists[2].text = _playerScript[2].playerName;
-            _phase01PlayerNameTextLists[3].text = _playerScript[3].playerName;
 
+            for (int i = 0; i < _phase01PlayerNameTextLists.Count; i++)
+            {
+                _phase01PlayerNameTextLists[i].text = _playerScript[i].playerName;
+            }
 
-            _phase02PlayerName.text = strixMyPlayerName(MyPlayerRank(0));
+                _phase02PlayerName.text = strixMyPlayerName(MyPlayerRank(0));
             _phase03PlayerName.text = strixMyPlayerName(MyPlayerRank(0));
 
-           for(int i=0;i<_playerScript.Count;i++)
+            for (int i = 0; i < _playerScript.Count; i++)
             {
                 _phase04PlayerNameList[i].text = _phase01PlayerNameTextLists[MyPlayerRank(i)].text;
             }
@@ -400,11 +399,10 @@ public class ResultData : StrixBehaviour
             _phase02PlayerName.text = strixMyPlayerName(MyPlayerRank(0));
             _phase03PlayerName.text = strixMyPlayerName(MyPlayerRank(0));
 
-
-            _phase04PlayerNameList[0].text = _phase01PlayerNameTextLists[MyPlayerRank(0)].text;
-            _phase04PlayerNameList[1].text = _phase01PlayerNameTextLists[MyPlayerRank(1)].text;
-            _phase04PlayerNameList[2].text = _phase01PlayerNameTextLists[MyPlayerRank(2)].text;
-            _phase04PlayerNameList[3].text = _phase01PlayerNameTextLists[MyPlayerRank(3)].text;
+            for (int i = 0; i < _phase04PlayerNameList.Count; i++)
+            {
+                _phase04PlayerNameList[i].text = _phase01PlayerNameTextLists[MyPlayerRank(i)].text;
+            }
         }
     }
 
