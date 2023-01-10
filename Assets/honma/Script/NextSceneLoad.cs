@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.Events;
 
 public class NextSceneLoad : MonoBehaviour
 {
     [SerializeField][Header("ロード画面中に表示するUI")]
-    private GameObject _nowLoadingUi;
+    private GameObject BlackBoardPanel;
     
     [SerializeField][Header("ロード画面中に表示するSlider")]
     private Slider _nowLodingSlider;
@@ -18,7 +19,8 @@ public class NextSceneLoad : MonoBehaviour
     [SerializeField][Header("ピリオド描画カウンタ(大きいと遅くなる)")]
     private int _textCnt;
 
-    [SerializeField][Header("画像のPOP演出用")]
+    [SerializeField]
+    [Header("画像のPOP演出用")]
     private Image _imageTexture;
 
     [SerializeField][Header("画像のPOP高さ")]
@@ -40,7 +42,7 @@ public class NextSceneLoad : MonoBehaviour
         _nextSceneName = SceneName;
 
         //ロード用のUI表示
-        _nowLoadingUi.SetActive(true);
+        BlackBoardPanel.SetActive(true);
 
         //シーン読み込みを開始するコルーチン
         StartCoroutine(NowLoadScene());
@@ -74,6 +76,7 @@ public class NextSceneLoad : MonoBehaviour
             //座標更新
             _transform.position = Vector3.Lerp(_startPos, _endPos, _lerp);
 
+            
             yield return null;
         }
     }
@@ -85,7 +88,7 @@ public class NextSceneLoad : MonoBehaviour
         _endPos = _imageTexture.transform.position;
         _endPos.y = _endPos.y + _imagePopHeight;
 
-        _nowLoadingUi.SetActive(false);
+        BlackBoardPanel.SetActive(false);
     }
 
     //  確認用
