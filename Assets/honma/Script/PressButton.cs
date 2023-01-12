@@ -8,7 +8,12 @@ public class PressButton : MonoBehaviour
     [SerializeField][Header("ClickLoadScene‚Ìscript‚ðŽ‚Á‚Ä‚­‚é")]
     private NextSceneLoad _nextSceneLoadScript;
 
+    [SerializeField]
+    private GameObject TitleUi;
+
     Keyboard _keyboard;
+
+    private float _uiTimer;
 
     // Start is called before the first frame update
     void Start()
@@ -23,6 +28,9 @@ public class PressButton : MonoBehaviour
             // Keyboard.current‚ªnull‚É‚È‚é
             return;
         }
+
+        _uiTimer = 0.0f;
+        TitleUi.SetActive(true);
     }
 
     // Update is called once per frame
@@ -35,6 +43,29 @@ public class PressButton : MonoBehaviour
         {
             Debug.Log("Go");
             _nextSceneLoadScript.LoadSceneStart("Scenes/OpeningCreate");//ƒV[ƒ“–¼“ü—Í
+        }
+
+        UiSpawn();
+    }
+
+    private void UiSpawn()
+    {
+        _uiTimer += Time.deltaTime;
+
+        if (_uiTimer >= 120.0f)
+        {
+            TitleUi.SetActive(!TitleUi.activeSelf);
+        }
+        if(_uiTimer >= 180.0f)
+        {
+            TitleUi.SetActive(!TitleUi.activeSelf);
+            _uiTimer = 0.0f;
+        }
+
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            TitleUi.SetActive(!TitleUi.activeSelf);
+            _uiTimer = 0.0f;
         }
     }
 }
