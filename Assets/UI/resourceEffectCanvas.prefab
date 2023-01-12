@@ -67,7 +67,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: b9dc3c3251edae944a0432a83001a85d, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 4eba5987b0145f34986a552f1b6a8fe0, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -89,7 +89,7 @@ GameObject:
   - component: {fileID: 8811707488816956971}
   - component: {fileID: 5913266229331670357}
   m_Layer: 5
-  m_Name: seafood
+  m_Name: seaborn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -144,7 +144,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: b1d3b05dd772b1044bdc19b727196af2, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 6ad86396f9f221746ae877b9bd31854d, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -221,7 +221,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: c213a50d937679d48b19c54d0850563e, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 19bc174f4ed3a334cac20828348574e3, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -298,7 +298,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 0f1edea81da20cf42bdacfca8ee42d78, type: 3}
+  m_Sprite: {fileID: 21300000, guid: b430f2fb07a7b61408fad74d121c04fe, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -983,7 +983,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 45692e038f004764694739639b22d602, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 82365807e7b44d24eab8f02d941e62cc, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
