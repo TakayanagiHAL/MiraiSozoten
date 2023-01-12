@@ -7057,6 +7057,11 @@ MonoBehaviour:
   - {fileID: 1035049978319582664}
   - {fileID: 1035049978515565489}
   - {fileID: 1035049978855180923}
+  _phase01PlayerIconList:
+  - {fileID: 1035049978960404661}
+  - {fileID: 1035049978902165464}
+  - {fileID: 1035049978275867619}
+  - {fileID: 1035049977803667180}
   _phase02RankCrownImage: {fileID: 1035049979674091872}
   _phase02RankNumberImage: {fileID: 1035049979656417633}
   _phase02PlayerName: {fileID: 1035049978089705044}
@@ -7071,10 +7076,12 @@ MonoBehaviour:
   - {fileID: 5532643422185513085}
   - {fileID: 3704192542470538610}
   - {fileID: 6982144938123556120}
+  _phase02PlayerIcon: {fileID: 1035049977817271217}
   _phase03CrownImage: {fileID: 1035049978921578648}
   _phase03NumberImage: {fileID: 1035049977831400842}
   _phase03PlayerName: {fileID: 1035049979163193161}
   _phase03OrderCount: {fileID: 1035049979076324959}
+  _phase03PlayerIcon: {fileID: 1035049977867479674}
   _phase04PlayerNameList:
   - {fileID: 1035049978293232607}
   - {fileID: 1035049977742458904}
@@ -7090,6 +7097,11 @@ MonoBehaviour:
   - {fileID: 1035049978285608786}
   - {fileID: 1035049978810751686}
   - {fileID: 1035049978208880744}
+  _phase04PlayerIconList:
+  - {fileID: 1035049978236293579}
+  - {fileID: 1035049978702963877}
+  - {fileID: 1035049977958295169}
+  - {fileID: 1035049978359235274}
   _phase04InformationUi: {fileID: 1035049978198849406}
   _stayButton: {fileID: 1035049979658599807}
   _exitButton: {fileID: 1035049979635954242}
@@ -7103,6 +7115,11 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 2d2d11605724cf1499628b15de2fa735, type: 3}
   - {fileID: 21300000, guid: 89c274822e5dce24290308b8e2e2fa77, type: 3}
   - {fileID: 21300000, guid: 92aca561b0e03364b9915be5e37bf1d6, type: 3}
+  PlayerIconList:
+  - {fileID: 21300000, guid: fd72ca3b1a241a6409a4c81d3bfbb393, type: 3}
+  - {fileID: 21300000, guid: e1bedf690b83adc42a06a2ca2f6cc589, type: 3}
+  - {fileID: 21300000, guid: b6bf6b86175dba84d9f11af2cb88ab11, type: 3}
+  - {fileID: 21300000, guid: 53ced8fc0befc1549b3abf29b891eed1, type: 3}
 --- !u!1 &1035049978786710682
 GameObject:
   m_ObjectHideFlags: 0
@@ -7171,7 +7188,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: f7d40b800e1045a47acd824059d2938a, type: 3}
+  m_Sprite: {fileID: 21300000, guid: b6bf6b86175dba84d9f11af2cb88ab11, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -7329,7 +7346,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: f7d40b800e1045a47acd824059d2938a, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 53ced8fc0befc1549b3abf29b891eed1, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -7735,7 +7752,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 885f12eb7058a754cb309d433cc52f1c, type: 3}
+  m_Sprite: {fileID: 21300000, guid: e1bedf690b83adc42a06a2ca2f6cc589, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -8381,7 +8398,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 885f12eb7058a754cb309d433cc52f1c, type: 3}
+  m_Sprite: {fileID: 21300000, guid: fd72ca3b1a241a6409a4c81d3bfbb393, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

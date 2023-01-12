@@ -106,7 +106,8 @@ public class ResultData : StrixBehaviour
     private List<Text> _phase01OrderCountTextLists;
     [SerializeField]
     private List<Text> _phase01PlayerNameTextLists;
-
+    [SerializeField]
+    private List<Image> _phase01PlayerIconList;
 
     [Header("Phase02")]
     [SerializeField]
@@ -121,6 +122,8 @@ public class ResultData : StrixBehaviour
     private List<Text> _phase02OrderTextList;
     [SerializeField]
     private List<GameObject> _phase02CameraList;
+    [SerializeField]
+    private Image _phase02PlayerIcon;
 
     [Header("Phase03")]
     [SerializeField]
@@ -131,6 +134,8 @@ public class ResultData : StrixBehaviour
     private Text _phase03PlayerName;
     [SerializeField]
     private Text _phase03OrderCount;
+    [SerializeField]
+    private Image _phase03PlayerIcon;
 
     [Header("Phase04")]
     [SerializeField]
@@ -139,6 +144,9 @@ public class ResultData : StrixBehaviour
     private List<Text> _phase04OrderCountList;
     [SerializeField]
     private List<Text> _phase04MoneyCountList;
+    [SerializeField]
+    private List<Image> _phase04PlayerIconList;
+
     [SerializeField]
     [Header("ボタンが押されると表示")]
     private GameObject _phase04InformationUi;
@@ -152,6 +160,10 @@ public class ResultData : StrixBehaviour
     private List<Sprite> RankCrownImageLists;
     [SerializeField]
     private List<Sprite> RankNumberImageLists;
+
+    [Header("\nキャラクターの画像(Assetから選択)")]
+    [SerializeField]
+    private List<Sprite> PlayerIconList;
 
     Keyboard _keyboard;
 
@@ -349,6 +361,24 @@ public class ResultData : StrixBehaviour
             _phase03NumberImage.sprite = RankNumberImageLists[0];
         }
        
+    }
+
+    private void PlayerIconChange()
+    {
+
+        for (int i = 0; i < _phase01PlayerIconList.Count; i++)
+        {
+            _phase01PlayerIconList[i].sprite = PlayerIconList[i];
+        }
+
+        _phase02PlayerIcon.sprite = PlayerIconList[strixMyEntryNumber()];
+        _phase03PlayerIcon.sprite = PlayerIconList[strixMyEntryNumber()];
+
+        for (int i = 0; i < _phase04PlayerIconList.Count; i++)
+        {
+            _phase04PlayerIconList[i].sprite = _phase01PlayerIconList[MyPlayerRank(i)].sprite;
+        }
+
     }
 
     //自分の名前を取得する
@@ -558,6 +588,7 @@ public class ResultData : StrixBehaviour
         MyPlayerNameChange();
         OrderCountChange();
         MoneyCountChange();
+        PlayerIconChange();
     }
     float speed_time;
     private void stepPhase01()
