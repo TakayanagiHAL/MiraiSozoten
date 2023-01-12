@@ -39,8 +39,8 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Add: 0.1
-    - _Delay: 1.6
+    - _Add: 0.2
+    - _Delay: 1.5
     - _Float: 0.1
     - _Float_1: 0.06
     - _Float_2: 1.21
@@ -51,10 +51,10 @@ Material:
     - _QueueControl: 0
     - _QueueOffset: 0
     - _Slider: 0.421
-    - _StartPower: 25
-    - _WaveCurve: 0.83
-    - _WavePower: 0.25
-    - _WideMove: 0.01
+    - _StartPower: 22
+    - _WaveCurve: 0
+    - _WavePower: 2.73
+    - _WideMove: 0
     m_Colors: []
   m_BuildTextureStacks: []
 --- !u!114 &3485321589939136340

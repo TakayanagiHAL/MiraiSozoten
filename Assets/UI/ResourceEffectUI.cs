@@ -23,17 +23,17 @@ public class ResourceEffectUI : MonoBehaviour
     {
         if (isAction)
         {
-            panel.Translate(new Vector3(0, 1, 0));
+            panel.localPosition = (new Vector3(0.0f, panel.localPosition.y +1.5f , 0));
         }
     }
 
     public void SetAction(SeaResource seaResource)
     {
-        plasticScore.text    = "+" + seaResource.plastic.ToString();
-        ePlaScore.text       = "+" + seaResource.ePlastic.ToString();
-        woodScore.text       = "+" + seaResource.wood.ToString();
-        steelScore.text      = "+" + seaResource.steel.ToString();
-        seaFoodScore.text    = "+" + seaResource.seaFood.ToString();
+        plasticScore.text    = seaResource.plastic.ToString();
+        ePlaScore.text       = seaResource.ePlastic.ToString();
+        woodScore.text       = seaResource.wood.ToString();
+        steelScore.text      = seaResource.steel.ToString();
+        seaFoodScore.text    = seaResource.seaFood.ToString();
 
         isAction = true;
         panel.localPosition = new Vector3();

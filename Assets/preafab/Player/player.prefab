@@ -50,7 +50,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   strixBehaviours:
   - {fileID: 8410475785638066886}
-  objectType: 3
+  objectType: 5
   sendRate: 5
   syncDestroy: 1
   networkInstanceId: -1
@@ -68,24 +68,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d9725f68ebae194bbc7ad218a15029b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerName: 
   money: 1000
+  shipLevel: 0
   playerPos:
-    x: 0
-    y: 0
+    x: 15
+    y: 10
   speed: 1
   resourceStack: 1200
   getPower: 100
   getDepth: 1
   searchPower: 1
+  shipArmer: 1
+  dieselEngine: 1
+  shipBody: 1
+  whaleMouse: 1
+  crane: 1
+  sonar: 1
   seaResource:
     plastic: 0
     ePlastic: 0
     wood: 0
     steel: 0
     seaFood: 0
+  medal: 0
   nowState: 0
   nextState: 0
+  hexagonManger: {fileID: 0}
   turnContllor: {fileID: 0}
+  uiManager: {fileID: 0}
+  playerCamera: {fileID: 0}
   turnNum: 0
   isTurn: 0
   getRVol: 0

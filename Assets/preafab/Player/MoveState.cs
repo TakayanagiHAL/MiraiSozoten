@@ -23,7 +23,7 @@ public class MoveState : PlayerState
     int moveVol;
     MapIndex[] movePoints;
 
-    float speed = 0.25f;
+    float speed = 5f;
 
     MState state;
 
@@ -139,208 +139,92 @@ public class MoveState : PlayerState
             case MState.MOVE_INPUT:
                 MapIndex mapScale = hexagonManger.GetMapScale();
 
-                int newPos;
+                MapIndex newPos = player.playerPos;
 
+                bool isMove = false;
                
                 int allow = GetLStickAllow();
 
-                switch (allow)
-                {
-                    case 1:
-                        if ((player.playerPos.x % 2) == 0)
-                        {
-                            newPos = player.playerPos.x - 1;
-                            if (newPos >= 0)
-                            {
-                                player.playerPos.x = newPos;
-                                moveVol--;
-                                movePoints[moveVol] = player.playerPos;
-                            }
-                        }
-                        else
-                        {
-                            newPos = player.playerPos.y + 1;
-                            if (newPos < mapScale.y)
-                            {
-                                newPos = player.playerPos.x - 1;
-                                if (newPos >= 0)
-                                {
-                                    player.playerPos.x = newPos;
-                                    player.playerPos.y += 1;
-                                    moveVol--;
-                                    movePoints[moveVol] = player.playerPos;
-                                }
-                            }
-                        }
-                        break;
-                    case 2:
-                        newPos = player.playerPos.y + 1;
-                        if (newPos < mapScale.y)
-                        {
-                            player.playerPos.y = newPos;
-                            moveVol--;
-                            movePoints[moveVol] = player.playerPos;
-                        }
-                        break;
-                    case 3:
-                        if ((player.playerPos.x % 2) == 0)
-                        {
-                            newPos = player.playerPos.x + 1;
-                            if (newPos < mapScale.x)
-                            {
-                                player.playerPos.x = newPos;
-                                moveVol--;
-                                movePoints[moveVol] = player.playerPos;
-                            }
-                        }
-                        else
-                        {
-                            newPos = player.playerPos.y + 1;
-                            if (newPos < mapScale.y)
-                            {
-                                newPos = player.playerPos.x + 1;
-                                if (newPos < mapScale.x)
-                                {
-                                    player.playerPos.x = newPos;
-                                    player.playerPos.y += 1;
-                                    moveVol--;
-                                    movePoints[moveVol] = player.playerPos;
-                                }
-                            }
-                        }
-                        break;
-                    case 7:
-                        if ((player.playerPos.x % 2) == 0)
-                        {
-                            newPos = player.playerPos.y - 1;
-                            if (newPos >= 0)
-                            {
-                                newPos = player.playerPos.x - 1;
-                                if (newPos >= 0)
-                                {
-                                    player.playerPos.x = newPos;
-                                    player.playerPos.y -= 1;
-                                    moveVol--;
-                                    movePoints[moveVol] = player.playerPos;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            newPos = player.playerPos.x - 1;
-                            if (newPos >= 0)
-                            {
-                                player.playerPos.x = newPos;
-                                moveVol--;
-                                movePoints[moveVol] = player.playerPos;
-                            }
-                        }
-                        break;
-                    case 8:
-                        newPos = player.playerPos.y - 1;
-                        if (newPos >= 0)
-                        {
-                            player.playerPos.y = newPos;
-                            moveVol--;
-                            movePoints[moveVol] = player.playerPos;
-                        }
-                        break;
-                    case 9:
-                        if ((player.playerPos.x % 2) == 0)
-                        {
-                            newPos = player.playerPos.y - 1;
-                            if (newPos >= 0)
-                            {
-                                newPos = player.playerPos.x + 1;
-                                if (newPos < mapScale.x)
-                                {
-                                    player.playerPos.x = newPos;
-                                    player.playerPos.y -= 1;
-                                    moveVol--;
-                                    movePoints[moveVol] = player.playerPos;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            newPos = player.playerPos.x + 1;
-                            if (newPos < mapScale.x)
-                            {
-                                player.playerPos.x = newPos;
-                                moveVol--;
-                                movePoints[moveVol] = player.playerPos;
-                            }
-                        }
-                        break;
-                }
-
-                if (allow != 5 && allow != 0) state = MState.MOVING;
+                if (allow == 0) allow = GetKeyAllow();
 
                 Debug.Log("Allow:" + allow);
 
-                allow = GetKeyAllow();
+                
 
                 switch (allow)
                 {
                     case 1:
                         if ((player.playerPos.x % 2) == 0)
                         {
-                            newPos = player.playerPos.x - 1;
-                            if (newPos >= 0)
+                            newPos.x = player.playerPos.x - 1;
+                            if (newPos.x >= 0)
                             {
-                                player.playerPos.x = newPos;
+                                if (hexagonManger.GetHexagon(newPos).GetHexagonType() == HexagonType.NONE) break;
+
+                                player.playerPos = newPos;
                                 moveVol--;
                                 movePoints[moveVol] = player.playerPos;
+                                isMove = true;
                             }
                         }
                         else
                         {
-                            newPos = player.playerPos.y + 1;
-                            if (newPos < mapScale.y)
+                            newPos.y = player.playerPos.y + 1;
+                            if (newPos.y < mapScale.y)
                             {
-                                newPos = player.playerPos.x - 1;
-                                if (newPos >= 0)
+                                newPos.x = player.playerPos.x - 1;
+                                if (newPos.x >= 0)
                                 {
-                                    player.playerPos.x = newPos;
-                                    player.playerPos.y += 1;
+                                    if (hexagonManger.GetHexagon(newPos).GetHexagonType() == HexagonType.NONE) break;
+
+                                    player.playerPos = newPos;
                                     moveVol--;
                                     movePoints[moveVol] = player.playerPos;
+                                    isMove = true;
                                 }
                             }
                         }
                         break;
                     case 2:
-                        newPos = player.playerPos.y + 1;
-                        if (newPos < mapScale.y)
+                        newPos.y = player.playerPos.y + 1;
+                        if (newPos.y < mapScale.y)
                         {
-                            player.playerPos.y = newPos;
+                            if (hexagonManger.GetHexagon(newPos).GetHexagonType() == HexagonType.NONE) break;
+
+                            player.playerPos = newPos;
                             moveVol--;
                             movePoints[moveVol] = player.playerPos;
+                            isMove = true;
                         }
                         break;
                     case 3:
                         if ((player.playerPos.x % 2) == 0)
                         {
-                            newPos = player.playerPos.x + 1;
-                            if (newPos < mapScale.x)
+                            newPos.x = player.playerPos.x + 1;
+                            if (newPos.x < mapScale.x)
                             {
-                                player.playerPos.x = newPos;
+                                if (hexagonManger.GetHexagon(newPos).GetHexagonType() == HexagonType.NONE) break;
+
+                                player.playerPos = newPos;
                                 moveVol--;
                                 movePoints[moveVol] = player.playerPos;
+                                isMove = true;
                             }
                         }
                         else
                         {
-                            newPos = player.playerPos.y + 1;
-                            if (newPos < mapScale.y)
+                            newPos.y = player.playerPos.y + 1;
+                            if (newPos.y < mapScale.y)
                             {
-                                newPos = player.playerPos.x + 1;
-                                if (newPos < mapScale.x)
+                                newPos.x = player.playerPos.x + 1;
+                                if (newPos.x < mapScale.x)
                                 {
-                                    player.playerPos.x = newPos;
-                                    player.playerPos.y += 1;
+                                    if (hexagonManger.GetHexagon(newPos).GetHexagonType() == HexagonType.NONE) break;
+
+                                    player.playerPos = newPos;
                                     moveVol--;
                                     movePoints[moveVol] = player.playerPos;
+                                    isMove = true;
                                 }
                             }
                         }
@@ -348,68 +232,82 @@ public class MoveState : PlayerState
                     case 7:
                         if ((player.playerPos.x % 2) == 0)
                         {
-                            newPos = player.playerPos.y - 1;
-                            if (newPos >= 0)
+                            newPos.y = player.playerPos.y - 1;
+                            if (newPos.y >= 0)
                             {
-                                newPos = player.playerPos.x - 1;
-                                if (newPos >= 0)
+                                newPos.x = player.playerPos.x - 1;
+                                if (newPos.x >= 0)
                                 {
-                                    player.playerPos.x = newPos;
-                                    player.playerPos.y -= 1;
+                                    if (hexagonManger.GetHexagon(newPos).GetHexagonType() == HexagonType.NONE) break;
+
+                                    player.playerPos = newPos;
                                     moveVol--;
                                     movePoints[moveVol] = player.playerPos;
+                                    isMove = true;
                                 }
                             }
                         }
                         else
                         {
-                            newPos = player.playerPos.x - 1;
-                            if (newPos >= 0)
+                            newPos.x = player.playerPos.x - 1;
+                            if (newPos.x >= 0)
                             {
-                                player.playerPos.x = newPos;
+                                if (hexagonManger.GetHexagon(newPos).GetHexagonType() == HexagonType.NONE) break;
+
+                                player.playerPos = newPos;
                                 moveVol--;
                                 movePoints[moveVol] = player.playerPos;
+                                isMove = true;
                             }
                         }
                         break;
                     case 8:
-                        newPos = player.playerPos.y - 1;
-                        if (newPos >= 0)
+                        newPos.y = player.playerPos.y - 1;
+                        if (newPos.y >= 0)
                         {
-                            player.playerPos.y = newPos;
+                            if (hexagonManger.GetHexagon(newPos).GetHexagonType() == HexagonType.NONE) break;
+
+                            player.playerPos = newPos;
                             moveVol--;
                             movePoints[moveVol] = player.playerPos;
+                            isMove = true;
                         }
                         break;
                     case 9:
                         if ((player.playerPos.x % 2) == 0)
                         {
-                            newPos = player.playerPos.y - 1;
-                            if (newPos >= 0)
+                            newPos.y = player.playerPos.y - 1;
+                            if (newPos.y >= 0)
                             {
-                                newPos = player.playerPos.x + 1;
-                                if (newPos < mapScale.x)
+                                newPos.x = player.playerPos.x + 1;
+                                if (newPos.x < mapScale.x)
                                 {
-                                    player.playerPos.x = newPos;
-                                    player.playerPos.y -= 1;
+                                    if (hexagonManger.GetHexagon(newPos).GetHexagonType() == HexagonType.NONE) break;
+
+                                    player.playerPos = newPos;
                                     moveVol--;
                                     movePoints[moveVol] = player.playerPos;
+                                    isMove = true;
                                 }
                             }
                         }
                         else
                         {
-                            newPos = player.playerPos.x + 1;
-                            if (newPos < mapScale.x)
+                            newPos.x = player.playerPos.x + 1;
+                            if (newPos.x < mapScale.x)
                             {
-                                player.playerPos.x = newPos;
+                                if (hexagonManger.GetHexagon(newPos).GetHexagonType() == HexagonType.NONE) break;
+
+                                player.playerPos = newPos;
                                 moveVol--;
                                 movePoints[moveVol] = player.playerPos;
+                                isMove = true;
                             }
                         }
                         break;
                 }
-                if (allow != 5 && allow != 0) state = MState.MOVING;
+
+                
 
                 player.transform.LookAt(hexagonManger.GetMapPos(player.playerPos));
 
@@ -417,11 +315,11 @@ public class MoveState : PlayerState
 
                 diceUI.SetMoveVol(moveVol);
 
-                if(allow!=0&&allow!=5) state = MState.MOVING; 
+                if(isMove) state = MState.MOVING; 
                 break;
             case MState.MOVING:
                 Vector3 dir = hexagonManger.GetMapPos(player.playerPos) - player.transform.position;
-                player.transform.Translate(dir / dir.magnitude*speed,Space.World);
+                player.transform.Translate(dir / dir.magnitude*speed*Time.deltaTime,Space.World);
 
                 if(dir.magnitude < 0.25)
                 {

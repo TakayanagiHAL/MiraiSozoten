@@ -13,6 +13,10 @@ public enum CanvasName
     DICE_UI,
     R_EFFECT_UI,
     HAPPNING_UI,
+    YES_OR_NO_UI,
+    CRAFT_UI,
+    BACK_UI,
+    TURN_START_UI
 }
 
 [Serializable]
@@ -49,6 +53,10 @@ public class UIManager : MonoBehaviour
     {
         SetCanvas(CanvasName.DICE_UI, false);
         SetCanvas(CanvasName.HAPPNING_UI, false);
+        SetCanvas(CanvasName.YES_OR_NO_UI, false);
+        SetCanvas(CanvasName.BACK_UI, false);
+        SetCanvas(CanvasName.CRAFT_UI, false);
+        SetCanvas(CanvasName.COMMAND_UI, false);
     }
 
     // Update is called once per frame
@@ -61,6 +69,27 @@ public class UIManager : MonoBehaviour
     {
         Canvas canvas = canvasDictionary.GetCanvas(name);
         canvas.enabled = flag;
+        if (flag)
+        {
+            switch (name)
+            {
+                case CanvasName.BACK_UI:
+                    canvas.GetComponent<BackUI>().SetFirstButton();
+                    break;
+                case CanvasName.COMMAND_UI:
+                    canvas.GetComponent<CommandUI>().SetFirstButton();
+                    break;
+                case CanvasName.DICE_UI:
+                    canvas.GetComponent<DiceUI>().SetFirstButton();
+                    break;
+                case CanvasName.HAPPNING_UI:
+                    canvas.GetComponent<happningUI>().SetFirstButton();
+                    break;
+                case CanvasName.YES_OR_NO_UI:
+                    canvas.GetComponent<YorNUI>().SetFirstButton();
+                    break;
+            }
+        }
     }
 
     public Canvas GetCanvas(CanvasName name)
@@ -71,5 +100,14 @@ public class UIManager : MonoBehaviour
     public GameObject GetCanvasObject(CanvasName name)
     {
         return canvasDictionary.GetCanvas(name).gameObject;
+    }
+
+    public void SetCamera(Camera camera)
+    {
+        foreach(CanvasPair pair in canvasDictionary.keyValuePairs)
+        {
+            pair.canvas.worldCamera = camera;
+            pair.canvas.planeDistance = 1.0f;
+        }
     }
 }

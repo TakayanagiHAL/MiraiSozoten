@@ -23,17 +23,17 @@ public class WeatherChangeKey : MonoBehaviour
     [SerializeField]
     private GameObject _Rainy;
 
-    Keyboard keyboard;
+    Keyboard _keyboard;
 
 
     // Start is called before the first frame update
     void Start()
     {
         // 現在のキーボード情報
-        keyboard = Keyboard.current;
+        _keyboard = Keyboard.current;
 
         // キーボード接続チェック
-        if (keyboard == null)
+        if (_keyboard == null)
         {
             // キーボードが接続されていないと
             // Keyboard.currentがnullになる
@@ -49,11 +49,11 @@ public class WeatherChangeKey : MonoBehaviour
     void Update()
     {
         // 1キーの入力状態取得
-        var Key_ten1 = keyboard.digit1Key;
+        var Key_ten1 = _keyboard.digit1Key;
         // 1キーの入力状態取得
-        var Key_ten2 = keyboard.digit2Key;
+        var Key_ten2 = _keyboard.digit2Key;
         // 1キーの入力状態取得
-        var Key_ten3 = keyboard.digit3Key;
+        var Key_ten3 = _keyboard.digit3Key;
 
         if (Key_ten1.wasPressedThisFrame)
         {

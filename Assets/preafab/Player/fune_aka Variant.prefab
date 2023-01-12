@@ -146,7 +146,7 @@ MonoBehaviour:
   strixBehaviours:
   - {fileID: -541048417437215507}
   - {fileID: 7221598821662455282}
-  objectType: 1
+  objectType: 3
   sendRate: 5
   syncDestroy: 1
   networkInstanceId: -1
@@ -170,14 +170,27 @@ MonoBehaviour:
     y: 0
   speed: 1
   resourceStack: 1200
+  getPower: 100
+  getDepth: 1
+  searchPower: 1
+  shipArmer: 1
+  dieselEngine: 1
+  shipBody: 1
+  whaleMouse: 1
+  crane: 1
+  sonar: 1
   seaResource:
     plastic: 0
     ePlastic: 0
     wood: 0
     steel: 0
     seaFood: 0
+  medal: 0
   nowState: 0
   nextState: 0
+  hexagonManger: {fileID: 0}
+  turnContllor: {fileID: 0}
+  uiManager: {fileID: 0}
   turnNum: 0
   isTurn: 0
   getRVol: 0

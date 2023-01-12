@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public enum MoveSelect
 {
@@ -22,6 +23,15 @@ public class DiceUI : MonoBehaviour
     int moveVol;
 
     int minD, maxD;
+
+    [SerializeField] GameObject firstButton;
+    [SerializeField] GameObject nextButton;
+
+    public void SetFirstButton()
+    {
+        EventSystem.current.SetSelectedGameObject(firstButton);
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -45,6 +55,7 @@ public class DiceUI : MonoBehaviour
             diceVol.text = "あと" + moveVol.ToString()　+　"マス" ;
             stopUI.SetActive(false);
             rollButton.active = false;
+            EventSystem.current.SetSelectedGameObject(nextButton);
         }
         else if(moveVol == 0)
         {

@@ -100,11 +100,11 @@ public struct SeaResource
 public class Player : StrixBehaviour
 {
     //表示パラメータ
-    string playerName;
+    public string playerName;
     [StrixSyncField]
     public int money = 1000;
     [StrixSyncField]
-    int shipLevel;
+    public int shipLevel;
 
     public List<Item> items;
     public MapIndex playerPos;
@@ -136,8 +136,9 @@ public class Player : StrixBehaviour
     public int sonar = 1;
 
     //資源
-    [StrixSyncField]
     public SeaResource seaResource;
+
+    public int medal = 0;
 
     //内部パラメータ
 
@@ -147,14 +148,18 @@ public class Player : StrixBehaviour
     [StrixSyncField]
     public TurnState nextState;
 
-    HexagonManger hexagonManger;
+    public HexagonManger hexagonManger;
 
     public TurnContllor turnContllor;
 
-    UIManager uiManager;
+    public UIManager uiManager;
+
+    public playerCamera playerCamera;
+
+    ScoreUI scoreUI;
 
     [StrixSyncField]
-    public int turnNum;
+    public int turnNum = 0;
 
     [StrixSyncField]
     public bool isTurn;
@@ -197,15 +202,17 @@ public class Player : StrixBehaviour
         seaResource.steel = 15;
         seaResource.wood = 45;
 
-        ResourceUI resourceUI =  FindObjectOfType<ResourceUI>();
+        ResourceUI resourceUI =  uiManager.GetCanvas(CanvasName.RESOURCE_UI).GetComponent<ResourceUI>();
 
-        ScoreUI scoreUI = FindObjectOfType<ScoreUI>();
+        scoreUI = uiManager.GetCanvas(CanvasName.SCORE_UI).GetComponent<ScoreUI>();
 
         resourceUI.SetResource(seaResource);
         resourceUI.SetStack(resourceStack);
 
         scoreUI.SetMoney(money);
         scoreUI.SetOil(seaResource);
+        scoreUI.SetMedal(medal);
+
     }
 
     // Update is called once per frame
@@ -229,12 +236,19 @@ public class Player : StrixBehaviour
                     playerState = new HappningState();
                     playerState.TurnInit(this, hexagonManger, turnContllor, uiManager);
                     break;
+                case TurnState.MAP_VIEW:
+                    playerState = new MapState();
+                    playerState.TurnInit(this, hexagonManger, turnContllor, uiManager);
+                    break;
             }
             nowState = nextState;
         }
 
         if (isTurn) playerState.TurnUpdate(this);
-       
+
+        scoreUI.SetMoney(money);
+        scoreUI.SetOil(seaResource);
+        scoreUI.SetMedal(medal);
     }
 
     [StrixRpc]
@@ -244,17 +258,16 @@ public class Player : StrixBehaviour
 
         turnContllor = FindObjectOfType<TurnContllor>();
 
-        uiManager = FindObjectOfType<UIManager>();
+        //uiManager = FindObjectOfType<UIManager>();
 
         nowState = TurnState.TURN_WAIT;
         nextState = TurnState.TURN_WAIT;
 
         SetWait();
 
-        playerPos.x = 0;
-        playerPos.y = 0;
-
         transform.position = hexagonManger.GetMapPos(playerPos);
+
+        playerCamera.SetMapCamera(true);
     }
 
     public void CallRPCOwner(RpcFunctionName fName,params object[] param)
@@ -288,14 +301,14 @@ public class Player : StrixBehaviour
     public void SetTurn()
     {
         isTurn = true;
-        this.transform.GetChild(0).gameObject.SetActive(true);
+        //this.transform.GetChild(0).gameObject.SetActive(true);
     }
 
     [StrixRpc]
     public void SetWait()
     {
         isTurn = false;
-        this.transform.GetChild(0).gameObject.SetActive(false);
+        //this.transform.GetChild(0).gameObject.SetActive(false);
         nextState = TurnState.TURN_WAIT;
     }
 
@@ -309,8 +322,12 @@ public class Player : StrixBehaviour
     public void SetComandState()
     {
         nextState = TurnState.SELECT_COMAND;
+    }
 
-        Debug.Log("SetComandState");
+    [StrixRpc]
+    public void SetMapState()
+    {
+        nextState = TurnState.MAP_VIEW;
     }
 
     [StrixRpc]
@@ -358,4 +375,6 @@ public class Player : StrixBehaviour
     {
         GetComponent<Animator>().SetBool("isTornade", false);
     }
+
+    public int GetNumber() { return turnNum; }
 }
