@@ -7117,9 +7117,9 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 92aca561b0e03364b9915be5e37bf1d6, type: 3}
   PlayerIconList:
   - {fileID: 21300000, guid: fd72ca3b1a241a6409a4c81d3bfbb393, type: 3}
+  - {fileID: 21300000, guid: 53ced8fc0befc1549b3abf29b891eed1, type: 3}
   - {fileID: 21300000, guid: e1bedf690b83adc42a06a2ca2f6cc589, type: 3}
   - {fileID: 21300000, guid: b6bf6b86175dba84d9f11af2cb88ab11, type: 3}
-  - {fileID: 21300000, guid: 53ced8fc0befc1549b3abf29b891eed1, type: 3}
 --- !u!1 &1035049978786710682
 GameObject:
   m_ObjectHideFlags: 0

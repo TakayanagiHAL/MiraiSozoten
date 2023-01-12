@@ -308,6 +308,18 @@ public class ResultData : StrixBehaviour
         //降順にソート
         _medalList.Sort((a, b) => b - a);
 
+        ////１位のメダル数がデフォルトの０場合 ゲームを進行していない場合
+        //if (_medalList[0] == 0)
+        //{
+        //    //int[] array = new int[3];
+        //    int[] array ={56,32,24,14 };
+        //    for(int i=0;i<_medalList.Count;i++)
+        //    {
+        //        _medalList[i] = array[i];
+        //    }
+
+        //    Debug.Log("List:" + _medalList[0]);
+        //}
 
         int orderCount = _medalList[number];
 
@@ -338,6 +350,12 @@ public class ResultData : StrixBehaviour
         }
 
         int rank = _medalList.IndexOf(cnt);
+
+        //ゲーム進行していない数値
+        //if (PlayerOrderCount(0) == 56 && PlayerOrderCount(1) == 32 && PlayerOrderCount(2) == 24 && PlayerOrderCount(3) == 14)
+        //{
+        //    rank = _medalList.IndexOf(cnt);
+        //}
 
         return rank;
     }
