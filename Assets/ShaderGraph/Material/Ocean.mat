@@ -47,20 +47,23 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Density: 2.9
+    - _Alpha: 0.3
+    - _Density: 4
     - _MoveTimer: 0.01
     - _Noise: 130
-    - _Power: 9.32
+    - _Power: 8.2
     - _Power_1: 0.195
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _Subdivision: 100
+    - _Subdivision: 200
     - _WavePower: 0
     - _WaveTime: 0.01
+    - _alpha: 0.5
+    - _alphaClip: 0
     m_Colors:
     - _Color: {r: 0.16436446, g: 0.6155921, b: 1.528302, a: 0.30588236}
-    - _Color_1: {r: 0.9150943, g: 0.9150943, b: 0.9150943, a: 1}
-    - _Color_2: {r: 0.0037735105, g: 0.61726916, b: 1, a: 0.3137255}
+    - _Color_1: {r: 0.9245283, g: 0.9105732, b: 0.9105732, a: 1}
+    - _Color_2: {r: 0.031372547, g: 0.65878475, b: 0.8, a: 0.14117648}
     - _Multiply: {r: 1, g: 1, b: 0, a: 0}
     - _UV: {r: 0.01, g: 0.01, b: 0, a: 0}
   m_BuildTextureStacks: []
