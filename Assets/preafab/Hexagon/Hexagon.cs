@@ -25,25 +25,31 @@ public struct MapIndex
 
 public enum HexagonType
 {
+    NONE,
     COAST,
     OFFING,
     REEF,
     PORT,
-    HAPPNING
+    HAPPNING,
+    SEA_BASE,
+    SEA_BASE_OFF,
 }
 
-class HexagonMethod
+public class HexagonMethod
 {
+    Hexagon hexagon;
     public virtual void OnPassage(Player player) { }
 
     public virtual void OnReach(Player player) { }
+
+    public void SetHexagon(Hexagon hex) { hexagon = hex; }
 }
 
 [Serializable]
 public struct HexagonSpritePair
 {
     public HexagonType hexagonType;
-    public Sprite sprite;
+    public Material sprite;
 }
 
 [Serializable]
@@ -51,7 +57,7 @@ public class HexagonSpriteDictionary
 {
     public List<HexagonSpritePair> keyValuePairs;
 
-    public Sprite GetSprite(HexagonType type)
+    public Material GetSprite(HexagonType type)
     {
         for(int i = 0; i < keyValuePairs.Count; i++)
         {
@@ -71,28 +77,45 @@ public class Hexagon : MonoBehaviour
     [SerializeField] MapIndex index;
     [SerializeField] HexagonType hexagonType;
     [SerializeField] HexagonSpriteDictionary useSprites;
+    [SerializeField] GameObject hexagonObject;
     HexagonMethod hexagonMethod;
     // Start is called before the first frame update
     void Start()
     {
+    }
+
+    public void Init()
+    {
         switch (hexagonType)
         {
+            case HexagonType.NONE:
+                break;
             case HexagonType.COAST:
                 hexagonMethod = new CoastHexagon();
+                hexagonMethod.SetHexagon(this);
                 break;
             case HexagonType.OFFING:
                 hexagonMethod = new OffingHexagon();
+                hexagonMethod.SetHexagon(this);
                 break;
             case HexagonType.REEF:
                 hexagonMethod = new ReefHexagon();
+                hexagonMethod.SetHexagon(this);
                 break;
             case HexagonType.PORT:
                 hexagonMethod = new PortHexagon();
+                hexagonMethod.SetHexagon(this);
                 break;
             case HexagonType.HAPPNING:
                 hexagonMethod = new HappningHexagon();
+                hexagonMethod.SetHexagon(this);
+                break;
+            case HexagonType.SEA_BASE:
+                hexagonMethod = new SeabaseHexagon();
+                hexagonMethod.SetHexagon(this);
                 break;
         }
+
 
     }
 
@@ -110,10 +133,15 @@ public class Hexagon : MonoBehaviour
 
     public void SetSprite()
     {
-        GetComponent<SpriteRenderer>().sprite = useSprites.GetSprite(hexagonType);
+        hexagonObject.GetComponent<MeshRenderer>().material = useSprites.GetSprite(hexagonType);
     }
 
     public void SetMapindex(int X, int Y) { index.x = X; index.y = Y; }
 
+    public HexagonType GetHexagonType() { return hexagonType; }
 
+    public void SetHexagonType(HexagonType type) { hexagonType = type; }
+
+    public Type GetHexagonMethod<Type>() where Type : HexagonMethod { return hexagonMethod as Type; }
 }
+ 

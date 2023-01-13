@@ -13,7 +13,7 @@ public class HappningState : PlayerState
         EXE_HAPPNING
     }
 
-    HappningUI happningUI;
+    happningUI happningUI;
 
     int useHappning;
 
@@ -24,7 +24,7 @@ public class HappningState : PlayerState
         Debug.Log("HAPPEN");
         base.TurnInit(player, hexagon, turn,ui);
 
-        happningUI = uiManager.GetCanvas(CanvasName.HAPPNING_UI).GetComponent<HappningUI>();
+        happningUI = uiManager.GetCanvas(CanvasName.HAPPNING_UI).GetComponent<happningUI>();
 
         uiManager.SetCanvas(CanvasName.HAPPNING_UI, true);
 
@@ -48,46 +48,46 @@ public class HappningState : PlayerState
                 switch(useHappning)
                 {
                     case 0:
-                        turnContllor.players[0/*Random.Range(0, 5)*/].CallRPCOwner(Player.RpcFunctionName.START_TORNADE);
+                        turnContllor.players[Random.Range(0, 5)].CallRPCOwner(Player.RpcFunctionName.START_TORNADE);
                         uiManager.SetCanvas(CanvasName.HAPPNING_UI, false);
                         happningUI.SetSelect();
                         break;
                      case 1:
-                        //int nq = Random.Range(0, 5);
-                        //turnContllor.players[nq].CallRPCOwner(Player.RpcFunctionName.RANDAM_TELEPORT);
-                        //while (true)
-                        //{
-                        //    int ne = Random.Range(0, 5);
-                        //    if (nq != ne)
-                        //    {
-                        //        nq = ne; break;
-                        //    }
-                        //}
-                        //turnContllor.players[nq].CallRPCOwner(Player.RpcFunctionName.RANDAM_TELEPORT);
+                        int nq = Random.Range(0, 5);
+                        turnContllor.players[nq].CallRPCOwner(Player.RpcFunctionName.RANDAM_TELEPORT);
+                        while (true)
+                        {
+                            int ne = Random.Range(0, 5);
+                            if (nq != ne)
+                            {
+                                nq = ne; break;
+                            }
+                        }
+                        turnContllor.players[nq].CallRPCOwner(Player.RpcFunctionName.RANDAM_TELEPORT);
                         player.SetWait();
                         uiManager.SetCanvas(CanvasName.HAPPNING_UI, false);
                         turnContllor.SetNextTurnPlayerRPC();
                         happningUI.SetSelect();
                         break;
                      case 2:
-                        //int n = 0;
-                        //n = Random.Range(0, 5);
-                        //for(int i = 0; i < 4; i++)
-                        //{
-                        //    if (i == n) continue;
+                        int n = 0;
+                        n = Random.Range(0, 5);
+                        for (int i = 0; i < 4; i++)
+                        {
+                            if (i == n) continue;
 
-                        //    turnContllor.players[i].CallRPCOwner(Player.RpcFunctionName.RANDAM_TELEPORT);
-                        //}
+                            turnContllor.players[i].CallRPCOwner(Player.RpcFunctionName.RANDAM_TELEPORT);
+                        }
                         player.SetWait();
                         uiManager.SetCanvas(CanvasName.HAPPNING_UI, false);
                         turnContllor.SetNextTurnPlayerRPC();
                         happningUI.SetSelect();
                         break;
                      case 3:
-                        //for(int i = 0; i < 4;i++)
-                        //{
-                        //    turnContllor.players[i].CallRPCOwner(Player.RpcFunctionName.RANDAM_TELEPORT);
-                        //}
+                        for (int i = 0; i < 4; i++)
+                        {
+                            turnContllor.players[i].CallRPCOwner(Player.RpcFunctionName.RANDAM_TELEPORT);
+                        }
                         player.SetWait();
                         uiManager.SetCanvas(CanvasName.HAPPNING_UI, false);
                         turnContllor.SetNextTurnPlayerRPC();
