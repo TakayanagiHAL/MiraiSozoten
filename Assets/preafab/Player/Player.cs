@@ -376,5 +376,14 @@ public class Player : StrixBehaviour
         GetComponent<Animator>().SetBool("isTornade", false);
     }
 
+    public void StartMoving()
+    {
+        GetComponent<Animator>().SetBool("isMoving", true);
+    }
+    public void StopMoving()
+    {
+        GetComponent<Animator>().SetBool("isMoving", false);
+    }
+
     public int GetNumber() { return turnNum; }
 }
