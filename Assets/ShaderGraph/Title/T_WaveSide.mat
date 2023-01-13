@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: WaveSide
+  m_Name: T_WaveSide
   m_Shader: {fileID: -6465566751694194690, guid: 278f0b08385d4a04fbf6b80a53f780f4,
     type: 3}
   m_ValidKeywords: []
@@ -71,11 +71,17 @@ Material:
     - _Float_4: 0.03
     - _QueueControl: 0
     - _QueueOffset: 0
+    - _S_MM: 0.15
+    - _S_Mult: 31
     - _SampleGI: 0
+    - _Side: 0.3
     - _SrcBlend: 5
     - _Surface: 1
+    - _UD_MM: 0.01
+    - _UD_Mult: 31
     - _UVfloat: -1.2
     - _UVpower: 0
+    - _UpDown: 0.3
     - _ZWrite: 0
     - _sine: 0
     - _wave: 0

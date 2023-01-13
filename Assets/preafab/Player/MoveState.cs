@@ -149,7 +149,7 @@ public class MoveState : PlayerState
 
                 Debug.Log("Allow:" + allow);
 
-                
+                player.StartMoving();
 
                 switch (allow)
                 {
@@ -355,7 +355,7 @@ public class MoveState : PlayerState
 
                             hexagon.OnPassage(player);
                         }
-                        
+                        player.StopMoving();
 
                         SeaResource getResource;
 
@@ -404,7 +404,7 @@ public class MoveState : PlayerState
                         hexagonManger.GetHexagon(player.playerPos).OnReach(player);
 
                         moveVol = -1;
-
+                        
                   
 
                         diceUI.SetMoveWAIT();
