@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Ocean
+  m_Name: TitleOcean
   m_Shader: {fileID: -6465566751694194690, guid: 560c9a6f85fd1d5469533724ae6d8f40,
     type: 3}
   m_ValidKeywords: []

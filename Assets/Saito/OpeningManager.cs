@@ -92,6 +92,7 @@ public class OpeningManager : MonoBehaviour
         {
             Debug.Log("シーンチェンジ");
             OpeningEnd();
+            EventNum++;
         }
     }
 

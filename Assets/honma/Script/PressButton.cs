@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class PressButton : MonoBehaviour
 {
@@ -39,7 +40,8 @@ public class PressButton : MonoBehaviour
         if (/*Gamepad.current.bButton.wasPressedThisFrame||*/Input.GetKeyDown(KeyCode.Return))
         {
             Debug.Log("Go");
-            _nextSceneLoadScript.LoadSceneStart("Scenes/OpeningCreate");//シーン名入力
+            _nextSceneLoadScript.LoadSceneStart("Scenes/OpeningCreate");//シーン名入力    Scenes/SampleScene
+            //SceneManager.LoadScene("Scenes/SampleScene");
         }
 
     }
