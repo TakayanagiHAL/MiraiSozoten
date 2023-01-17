@@ -89,7 +89,7 @@ public class TextController : MonoBehaviour
     void Update()
     {
         // Enterキーで文章を進ませる
-        if (Input.GetKeyDown(KeyCode.Return) || Gamepad.current.bButton.wasPressedThisFrame)
+        if (Input.GetKeyDown(KeyCode.Return) /*|| Gamepad.current.bButton.wasPressedThisFrame*/)
         {
             // 表示内容を初期化
             TextClear();

@@ -984,6 +984,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: diceCanvas
       objectReference: {fileID: 0}
+    - target: {fileID: 8026766213306613161, guid: eaa2a6d05b5ff5044ada3d6e1b6fa87d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: eaa2a6d05b5ff5044ada3d6e1b6fa87d, type: 3}
 --- !u!224 &1958879076327981321 stripped
